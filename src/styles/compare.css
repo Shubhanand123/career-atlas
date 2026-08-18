@@ -1,0 +1,275 @@
+.compare-page {
+  min-height: 100vh;
+  background: #0a0a0f;
+  color: #f0f0f5;
+  padding-bottom: 5rem;
+}
+
+.compare-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 6rem 2rem 2rem;
+}
+
+.compare-hero {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 3rem;
+}
+
+.compare-selector-bar {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.search-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+}
+
+.search-wrap input {
+  width: 100%;
+  background: #141420;
+  border: 1px solid #28283e;
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem 0.85rem 2.85rem;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-wrap input:focus {
+  border-color: #00d4ff;
+}
+
+.search-wrap .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7a7a95;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #151524;
+  border: 1px solid #2a2a40;
+  border-radius: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 50;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  cursor: pointer;
+  border-bottom: 1px solid #202030;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #202038;
+}
+
+.dropdown-item .career-name {
+  color: #fff;
+  font-weight: 600;
+}
+
+.dropdown-item .career-family {
+  color: #8888a0;
+  font-size: 0.85rem;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.career-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #141422;
+  border: 1px solid;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: #8888a0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.remove-btn:hover {
+  color: #ff4466;
+}
+
+.radar-section-card {
+  background: #101019;
+  border: 1px solid #20202e;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.radar-wrapper {
+  margin-top: 1rem;
+}
+
+.matrix-section {
+  background: #101019;
+  border: 1px solid #20202e;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.matrix-table-wrap {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.compare-table th {
+  background: #141422;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #222234;
+}
+
+.th-career-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.th-family {
+  font-size: 0.8rem;
+  color: #8888a0;
+  margin-top: 0.2rem;
+}
+
+.metric-header {
+  width: 260px;
+  color: #8a8aa2;
+  font-weight: 600;
+}
+
+.compare-table td {
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid #1c1c2b;
+}
+
+.metric-cell-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #b0b0c5;
+}
+
+.metric-cell-val {
+  font-size: 0.95rem;
+  color: #e0e0f0;
+}
+
+.stat-pill {
+  font-weight: 700;
+  background: #181828;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.compare-bottom-cta {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(20, 20, 32, 0.9) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.cta-box h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.cta-box p {
+  color: #a0a0b5;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: #00d4ff;
+  color: #000;
+  font-weight: 700;
+  padding: 0.85rem 1.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: opacity 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: #181828;
+  border: 1px solid #2a2a40;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.85rem 1.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: #00d4ff;
+}

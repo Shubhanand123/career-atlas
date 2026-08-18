@@ -1,0 +1,22 @@
+export const countries = [
+  { code: 'US', name: 'United States', currency: 'USD', currencySymbol: '$', flag: '🇺🇸' },
+  { code: 'IN', name: 'India', currency: 'INR', currencySymbol: '₹', flag: '🇮🇳' },
+  { code: 'UK', name: 'United Kingdom', currency: 'GBP', currencySymbol: '£', flag: '🇬🇧' },
+  { code: 'DE', name: 'Germany', currency: 'EUR', currencySymbol: '€', flag: '🇩🇪' },
+  { code: 'CA', name: 'Canada', currency: 'CAD', currencySymbol: '$', flag: '🇨🇦' },
+  { code: 'AU', name: 'Australia', currency: 'AUD', currencySymbol: '$', flag: '🇦🇺' },
+  { code: 'FR', name: 'France', currency: 'EUR', currencySymbol: '€', flag: '🇫🇷' },
+  { code: 'JP', name: 'Japan', currency: 'JPY', currencySymbol: '¥', flag: '🇯🇵' },
+  { code: 'CN', name: 'China', currency: 'CNY', currencySymbol: '¥', flag: '🇨🇳' },
+  { code: 'BR', name: 'Brazil', currency: 'BRL', currencySymbol: 'R$', flag: '🇧🇷' },
+  { code: 'ZA', name: 'South Africa', currency: 'ZAR', currencySymbol: 'R', flag: '🇿🇦' },
+  { code: 'AE', name: 'United Arab Emirates', currency: 'AED', currencySymbol: 'د.إ', flag: '🇦🇪' },
+  { code: 'SG', name: 'Singapore', currency: 'SGD', currencySymbol: '$', flag: '🇸🇬' },
+  { code: 'CH', name: 'Switzerland', currency: 'CHF', currencySymbol: 'CHF', flag: '🇨🇭' },
+  { code: 'NL', name: 'Netherlands', currency: 'EUR', currencySymbol: '€', flag: '🇳🇱' },
+  { code: 'SE', name: 'Sweden', currency: 'SEK', currencySymbol: 'kr', flag: '🇸🇪' },
+  { code: 'NZ', name: 'New Zealand', currency: 'NZD', currencySymbol: '$', flag: '🇳🇿' },
+  { code: 'MX', name: 'Mexico', currency: 'MXN', currencySymbol: '$', flag: '🇲🇽' },
+  { code: 'KR', name: 'South Korea', currency: 'KRW', currencySymbol: '₩', flag: '🇰🇷' },
+  { code: 'IT', name: 'Italy', currency: 'EUR', currencySymbol: '€', flag: '🇮🇹' }
+];
