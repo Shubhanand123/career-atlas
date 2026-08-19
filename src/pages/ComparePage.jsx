@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Search, X, Check, ArrowRight, ShieldCheck, Sparkles, Building2, AlertTriangle, Layers } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import Navbar from '../components/Navbar';
 import { sampleCareers } from '../data/sampleCareers';
+import { getEnrichedCareer } from '../data/careers';
+import { careerRegistry } from '../data/careerRegistry';
 import { collegePlacementReports } from '../data/placementReports';
 import { salaryCombos } from '../data/salaryCombos';
 import { careerTwinsData } from '../data/careerTwins';
@@ -27,20 +29,24 @@ const DETAILED_METRICS = [
 export default function ComparePage() {
   const [search, setSearch] = useState('');
   const [selectedCareers, setSelectedCareers] = useState([
-    sampleCareers.find(c => c.id === 'software-engineer') || sampleCareers[0],
-    sampleCareers.find(c => c.id === 'data-scientist') || sampleCareers[1],
-    sampleCareers.find(c => c.id === 'investment-banker') || sampleCareers[2]
+    getEnrichedCareer('software-engineer'),
+    getEnrichedCareer('carpenter'),
+    getEnrichedCareer('physician')
   ].filter(Boolean));
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const filteredCareers = sampleCareers.filter(c => 
-    c.name.toLowerCase().includes(search.toLowerCase()) && 
-    !selectedCareers.find(sc => sc.id === c.id)
-  );
+  const filteredCareers = useMemo(() => {
+    if (!search.trim()) return sampleCareers.filter(sc => !selectedCareers.some(s => s.id === sc.id)).slice(0, 10);
+    const q = search.toLowerCase();
+    return careerRegistry
+      .filter(c => (c.name.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)) && !selectedCareers.some(sc => sc.id === c.id))
+      .slice(0, 15);
+  }, [search, selectedCareers]);
 
   const handleSelect = (career) => {
     if (selectedCareers.length < 4) {
-      setSelectedCareers([...selectedCareers, career]);
+      const enriched = getEnrichedCareer(career.id);
+      setSelectedCareers([...selectedCareers, enriched]);
       setSearch('');
       setShowDropdown(false);
     }

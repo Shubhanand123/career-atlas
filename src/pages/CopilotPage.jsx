@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Bot, User } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { careerRegistry } from '../data/careerRegistry';
+import { getEnrichedCareer } from '../data/careers';
 import '../styles/copilot.css';
 
 const SUGGESTIONS = [
@@ -34,8 +37,40 @@ export default function CopilotPage() {
   }, [messages, isTyping]);
 
   const generateResponse = (query) => {
-    const q = query.toLowerCase();
+    const q = query.toLowerCase().trim();
     
+    // Check if query is asking about a specific career from the registry
+    const words = q.replace(/[^a-z0-9 ]/g, '').split(' ').filter(w => w.length > 2 && !['what', 'about', 'how', 'tell', 'the', 'does', 'much', 'many', 'become', 'like', 'role', 'jobs', 'work'].includes(w));
+    let matchedCareer = null;
+
+    if (words.length > 0) {
+      const searchKey = words.join(' ');
+      matchedCareer = careerRegistry.find(c => c.name.toLowerCase().includes(searchKey) || c.id === searchKey);
+    }
+
+    if (matchedCareer) {
+      const enriched = getEnrichedCareer(matchedCareer.id);
+      return (
+        <div className="ai-content">
+          <p>Here is the career intelligence dossier for <strong>{enriched.name}</strong>:</p>
+          <ul>
+            <li><strong>Sector & Cluster:</strong> {enriched.category} ({enriched.subcategory})</li>
+            <li><strong>Typical Education:</strong> {enriched.education?.typical || enriched.typicalEducation}</li>
+            <li><strong>Cognitive Toughness:</strong> {enriched.difficulty?.overall || 7.0}/10</li>
+            <li><strong>US Mid Salary:</strong> ${(enriched.salaryUSD?.mid || 110000).toLocaleString()} / year</li>
+            <li><strong>India Benchmark CTC:</strong> ₹{((enriched.salaryINR?.entry || 600000) / 100000).toFixed(1)} Lakhs+ per annum</li>
+            <li><strong>AI Resilience Index:</strong> {(10 - (Number(enriched.aiRisk) || 3.5)).toFixed(1)}/10</li>
+          </ul>
+          <p>{enriched.shortDescription}</p>
+          <p style={{ marginTop: '0.75rem' }}>
+            <Link to={`/career/${enriched.id}`} style={{ color: '#00d4ff', fontWeight: 600, textDecoration: 'underline' }}>
+              Open Full {enriched.name} Profile, EMI Calculator & Practitioner Stories →
+            </Link>
+          </p>
+        </div>
+      );
+    }
+
     if (q.includes('suit') || q.includes('best for me') || q.includes('quiz')) {
       return (
         <div className="ai-content">
@@ -46,7 +81,7 @@ export default function CopilotPage() {
             <li>Risk tolerance and Stability needs</li>
             <li>Leadership and Communication styles</li>
           </ul>
-          <p>Would you like me to direct you to the quiz?</p>
+          <p><Link to="/quiz" style={{ color: '#00d4ff', textDecoration: 'underline' }}>Take the 60-Question Career DNA Assessment →</Link></p>
         </div>
       );
     } else if (q.includes('compare') || q.includes('vs')) {
@@ -59,60 +94,32 @@ export default function CopilotPage() {
             <li>Education duration & cost</li>
             <li>AI automation exposure</li>
           </ul>
-          <p>You can head over to the Compare page to select up to 5 careers at once!</p>
+          <p><Link to="/compare" style={{ color: '#00d4ff', textDecoration: 'underline' }}>Launch Career Side-by-Side Comparison Tool →</Link></p>
         </div>
       );
-    } else if (q.includes('how to become') || q.includes('path') || q.includes('data scientist')) {
+    } else if (q.includes('ai') || q.includes('automation') || q.includes('layoff')) {
       return (
         <div className="ai-content">
-          <p>Here is a typical roadmap for becoming a <strong>Data Scientist</strong>:</p>
+          <p>We track structural contraction and automation risks across 380,000+ data points:</p>
           <ul>
-            <li><strong>Step 1 (Education):</strong> Bachelor's in CS, Statistics, or Math. (Alternative: Data Science Bootcamp)</li>
-            <li><strong>Step 2 (Skills):</strong> Master Python, SQL, and Machine Learning libraries (scikit-learn, TensorFlow).</li>
-            <li><strong>Step 3 (Portfolio):</strong> Build 2-3 end-to-end projects demonstrating data cleaning, EDA, and predictive modeling.</li>
-            <li><strong>Step 4 (Entry Role):</strong> Start as a Data Analyst or Junior Data Scientist to gain industry experience.</li>
+            <li><strong>High Automation Risk:</strong> Repetitive data entry, standard copywriting, basic coding boilerplate.</li>
+            <li><strong>AI Resilient Niches:</strong> Low-latency C++, neurosurgery, specialized trades (electricians, master plumbers), high-empathy healthcare, and hardware robotics.</li>
           </ul>
+          <p><Link to="/layoffs" style={{ color: '#00d4ff', textDecoration: 'underline' }}>Explore Live Layoffs & AI Risk Tracker →</Link></p>
         </div>
       );
-    } else if (q.includes('ai') || q.includes('automation') || q.includes('accounting')) {
+    } else if (q.includes('college') || q.includes('placement') || q.includes('roi') || q.includes('iit') || q.includes('bits')) {
       return (
         <div className="ai-content">
-          <p>The impact of AI on fields like <strong>Accounting</strong> is significant but mostly augmenting rather than replacing entirely.</p>
-          <ul>
-            <li><strong>Routine Tasks:</strong> Data entry, basic tax prep, and bookkeeping are highly exposed to automation.</li>
-            <li><strong>Augmentation:</strong> AI tools help accountants detect fraud, analyze financial trends, and generate reports much faster.</li>
-            <li><strong>Future Outlook:</strong> The role will shift from "number crunching" to "strategic financial advisory."</li>
-          </ul>
-        </div>
-      );
-    } else if (q.includes('cost') || q.includes('cheap') || q.includes('software engineer')) {
-      return (
-        <div className="ai-content">
-          <p>There are several cost-effective ways to become a <strong>Software Engineer</strong> today:</p>
-          <ul>
-            <li><strong>Self-Taught (Free - $500):</strong> Using resources like FreeCodeCamp, Odin Project, and Udemy. Requires high discipline.</li>
-            <li><strong>Bootcamps ($5k - $15k):</strong> Accelerated 3-6 month programs. Good for structured learning and career services.</li>
-            <li><strong>Community College ($2k - $8k):</strong> Associate's degree in CS, often transferable to a 4-year university.</li>
-          </ul>
-        </div>
-      );
-    } else if (q.includes('demand') || q.includes('highest')) {
-      return (
-        <div className="ai-content">
-          <p>Based on current labor market data, the careers with the highest projected growth over the next decade are:</p>
-          <ul>
-            <li><strong>Information Security Analysts:</strong> +32% growth (driven by cyber threats).</li>
-            <li><strong>Nurse Practitioners:</strong> +40% growth (driven by healthcare demands).</li>
-            <li><strong>Data Scientists:</strong> +35% growth (driven by big data and AI).</li>
-            <li><strong>Wind Turbine Service Technicians:</strong> +44% growth (driven by renewable energy shifts).</li>
-          </ul>
+          <p>Our <strong>Institutional Placement Audit</strong> covers verified branch-wise placement percentages, tuition fee recovery, and recruiter tiers across IITs, BITS, IIMs, AIIMS, Stanford, and MIT.</p>
+          <p><Link to="/placements" style={{ color: '#00d4ff', textDecoration: 'underline' }}>View College Placement Reports & ROI Rankings →</Link></p>
         </div>
       );
     } else {
       return (
         <div className="ai-content">
-          <p>That's an interesting question about your career journey.</p>
-          <p>As an AI Copilot, I can help you analyze specific roles, compare industries, or map out educational requirements. Could you provide a bit more detail about which field or aspect you're curious about?</p>
+          <p>I have access to our database of <strong>10,000+ verified occupational profiles</strong>, college ROI audits, and compensation multipliers.</p>
+          <p>You can ask me about any career (e.g. <em>"tell me about carpenter"</em>, <em>"how to become a quant"</em>, <em>"neurosurgeon salary"</em>, <em>"AI impact on accounting"</em>) or ask for college placement benchmarks!</p>
         </div>
       );
     }

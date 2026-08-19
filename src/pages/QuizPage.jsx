@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, RotateCcw, Compass } from 'lucide-react';
+import { ChevronRight, ChevronLeft, RotateCcw, Compass, Activity, ArrowRight } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import Navbar from '../components/Navbar';
 import '../styles/quiz.css';
@@ -253,7 +254,9 @@ export default function QuizPage() {
                     <Compass size={16} color="var(--accent-green)" /> {m.salary}
                   </div>
                 </div>
-                <button className="btn-explore">Explore This Career</button>
+                <Link to={`/explore?search=${encodeURIComponent(m.name)}`} className="btn-explore" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                  Explore This Career <ArrowRight size={14} />
+                </Link>
               </div>
             ))}
           </div>

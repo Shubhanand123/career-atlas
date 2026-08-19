@@ -6,7 +6,7 @@ import {
   GraduationCap, DollarSign, Activity, Play, HelpCircle, Layers, Check
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import { sampleCareers } from '../data/sampleCareers';
+import { getEnrichedCareer } from '../data/careers';
 import { careerTwinsData, getTwinsForCareer } from '../data/careerTwins';
 import { getPlacementReportsForCareer } from '../data/placementReports';
 import '../styles/career-profile.css';
@@ -25,7 +25,7 @@ export default function CareerProfile() {
   const [interestRate, setInterestRate] = useState(9.5);
 
   useEffect(() => {
-    const foundCareer = sampleCareers.find(c => c.id === careerId) || sampleCareers[0];
+    const foundCareer = getEnrichedCareer(careerId);
     setCareer(foundCareer);
     window.scrollTo(0, 0);
   }, [careerId]);
@@ -42,7 +42,7 @@ export default function CareerProfile() {
     );
   }
 
-  const twins = getTwinsForCareer(career.id);
+  const twins = getTwinsForCareer(career.id, career.name);
   const linkedColleges = getPlacementReportsForCareer(career.id);
 
   // Calculate EMI
