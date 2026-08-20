@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, Calculator, HelpCircle } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, Calculator, HelpCircle, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { getEnrichedCareerAsync } from '../data/careers';
 import { searchCareerCatalog } from '../data/careerCatalog';
@@ -24,7 +24,7 @@ export default function CopilotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "Hello! I am your Career Atlas Intelligence Copilot. I can assist you with career exploration, university selection, True-Cost study calculations, CV improvements, interview preparation, sports career pathways, and country-to-country comparisons. What would you like to explore today?"
+      text: "Hello! I am your Career Atlas Intelligence Copilot. I can assist you with career discovery, university selection, True-Cost study calculations, CV enhancements, interview preparation, sports career pathways, and country-to-country comparisons. What would you like to explore today?"
     }
   ]);
   const [input, setInput] = useState('');
@@ -46,39 +46,38 @@ export default function CopilotPage() {
     if (q.includes('sport') || q.includes('athlete') || q.includes('coach') || q.includes('fitness') || q.includes('physio')) {
       return (
         <div className="ai-content">
-          <p><strong>Sports is a complete economic ecosystem.</strong> Beyond playing professionally, there are high-demand technical, medical, analytical, and legal pathways:</p>
+          <p><strong>Sports is a multi-billion dollar economic ecosystem.</strong> Beyond playing professionally on the field, there are high-demand technical, medical, analytical, and legal pathways:</p>
           <ul>
-            <li><strong>Sports Science & Medicine:</strong> Sports Physiotherapist, Sports Medicine Physician, Nutritionist.</li>
-            <li><strong>Analytics & Tactics:</strong> Performance Video Analyst, Quantitative Sports Data Scientist.</li>
-            <li><strong>Business & Law:</strong> Licensed Sports Agent, Sports Lawyer (CAS Arbitrator), Event Director.</li>
-            <li><strong>Engineering & AI:</strong> Computer Vision Tracking Engineer (Hawk-Eye / VAR), Wearable Sensor Specialist.</li>
+            <li><strong>Sports Science & Medicine:</strong> Sports Physiotherapist, Orthopedic Sports Surgeon, Performance Nutritionist.</li>
+            <li><strong>Analytics & Tactics:</strong> Performance Video Analyst, Quantitative Sports Data Scientist, GPS Tracking Specialist.</li>
+            <li><strong>Business & Law:</strong> Licensed FIFA/CAS Sports Agent, Sports Regulatory Lawyer, Global Event Director.</li>
+            <li><strong>Engineering & AI:</strong> Computer Vision Tracking Engineer (Hawk-Eye / VAR), Biomechanical Wearable Sensor Specialist.</li>
           </ul>
-          <p style={{ marginTop: '0.75rem' }}>
-            <Link to="/explore?family=sports" style={{ color: '#d49658', fontWeight: 600, textDecoration: 'underline' }}>
-              Explore All 35+ Dedicated Sports Careers & Disciplines →
+          <div className="ai-action-link-box">
+            <Link to="/explore?family=sports" className="ai-action-link">
+              Explore All 35+ Dedicated Sports Careers & Disciplines <ArrowRight size={14} />
             </Link>
-          </p>
+          </div>
         </div>
       );
     }
 
     // 2. Check Study Abroad / True Cost query
     if (q.includes('cost') || q.includes('germany') || q.includes('canada') || q.includes('uk') || q.includes('tuition') || q.includes('study abroad') || q.includes('living')) {
-      const de = countryIntelligence.find(c => c.code === 'DE');
       return (
         <div className="ai-content">
-          <p><strong>True Cost of Study Analysis:</strong></p>
-          <p>When studying abroad, tuition is only one part of the equation. We calculate <strong>Tuition + Accommodation + Food + Transport + Health Insurance</strong>:</p>
+          <p><strong>True Cost of Study Economic Breakdown:</strong></p>
+          <p>When evaluating degrees worldwide, tuition is only one part of the equation. We calculate <strong>Tuition + Rent + Food + Transport + Health Insurance</strong>:</p>
           <ul>
-            <li><strong>Germany 🇩🇪:</strong> Public university tuition is ~€300/sem (€600/yr). True student living cost is ~€950-€1,200/month (€13,000-€15,000/yr). Students can work 140 full days/year.</li>
-            <li><strong>Canada 🇨🇦:</strong> International tuition is ~CA$35k-CA$60k/yr. Living cost is ~CA$1,800-CA$2,500/month. Eligible for up to 3-year PGWP work permit.</li>
-            <li><strong>United Kingdom 🇬🇧:</strong> International tuition is ~£25k-£40k/yr. Living cost in London is ~£1,850/mo; regional UK is ~£1,250/mo.</li>
+            <li><strong>Germany 🇩🇪:</strong> Public university tuition is ~€300/sem (€600/yr). True student living cost is ~€950–€1,200/month (€13,000–€15,000/yr). Students can work 140 full days/year.</li>
+            <li><strong>Canada 🇨🇦:</strong> International tuition is ~CA$35k–CA$60k/yr. Living cost is ~CA$1,800–CA$2,500/month. Eligible for up to 3-year PGWP work permit.</li>
+            <li><strong>United Kingdom 🇬🇧:</strong> International tuition is ~£25k–£40k/yr. Living cost in London is ~£1,850/mo; regional UK is ~£1,250/mo.</li>
           </ul>
-          <p style={{ marginTop: '0.75rem' }}>
-            <Link to="/placements" style={{ color: '#d49658', fontWeight: 600, textDecoration: 'underline' }}>
-              Launch Interactive True-Cost Calculator for 5,000+ Universities →
+          <div className="ai-action-link-box">
+            <Link to="/placements" className="ai-action-link">
+              Launch Interactive True-Cost Calculator for 10,000+ Universities <ArrowRight size={14} />
             </Link>
-          </p>
+          </div>
         </div>
       );
     }
@@ -87,19 +86,19 @@ export default function CopilotPage() {
     if (q.includes('cv') || q.includes('resume') || q.includes('interview') || q.includes('job') || q.includes('application') || q.includes('tracker')) {
       return (
         <div className="ai-content">
-          <p><strong>Career Ops Command Center:</strong></p>
-          <p>Our student workspace provides specialized tools adapted for modern hiring:</p>
+          <p><strong>Student Career Ops Command Center:</strong></p>
+          <p>Our workspace provides specialized tools adapted for modern hiring pipelines:</p>
           <ul>
-            <li><strong>Targeted CV Builder:</strong> Maintain multiple CV versions with distinct project and sports achievements sections.</li>
-            <li><strong>CV-to-Job Matching:</strong> Evaluates your qualifications against job postings without fabricating skills.</li>
-            <li><strong>8-Stage Application Kanban:</strong> Manage applications across Saved, Interested, Preparing, Applied, Interview, Offer, Rejected, and Accepted states.</li>
-            <li><strong>Interview Prep Question Bank:</strong> Role-specific, behavioral, and technical questions with answer frameworks.</li>
+            <li><strong>Targeted ATS CV Builder:</strong> Maintain multiple tailored CV versions with distinct project and sports leadership achievements.</li>
+            <li><strong>CV-to-Job Matching Engine:</strong> Evaluates your qualifications against real job postings with verifiable evidence mapping.</li>
+            <li><strong>8-Stage Application Kanban:</strong> Manage active applications across Saved, Preparing, Applied, Interview, and Offer states.</li>
+            <li><strong>Role-Specific Interview Prep:</strong> Technical question banks with structured STAR response frameworks.</li>
           </ul>
-          <p style={{ marginTop: '0.75rem' }}>
-            <Link to="/workspace" style={{ color: '#d49658', fontWeight: 600, textDecoration: 'underline' }}>
-              Open Student Career Workspace →
+          <div className="ai-action-link-box">
+            <Link to="/workspace" className="ai-action-link">
+              Open Student Career Ops Workspace <ArrowRight size={14} />
             </Link>
-          </p>
+          </div>
         </div>
       );
     }
@@ -120,20 +119,30 @@ export default function CopilotPage() {
       return (
         <div className="ai-content">
           <p>Here is the career intelligence dossier for <strong>{enriched.name}</strong>:</p>
-          <ul>
-            <li><strong>Sector & Subcategory:</strong> {enriched.category} ({enriched.subcategory})</li>
-            <li><strong>Typical Education:</strong> {enriched.education?.typical || enriched.typicalEducation}</li>
-            <li><strong>Cognitive Toughness:</strong> {enriched.difficulty?.overall || 7.0}/10</li>
-            <li><strong>US Mid Salary:</strong> ${(enriched.salary?.mid?.max || 110000).toLocaleString()} / year</li>
-            <li><strong>India Benchmark CTC:</strong> ₹{((enriched.salary?.byCountry?.IN?.entry?.[0] || 600000) / 100000).toFixed(1)} Lakhs+ per annum</li>
-            <li><strong>AI Resilience Index:</strong> {(10 - (Number(enriched.aiImpact?.automationExposure) || 3.5)).toFixed(1)}/10</li>
-          </ul>
-          <p>{enriched.shortDescription}</p>
-          <p style={{ marginTop: '0.75rem' }}>
-            <Link to={`/career/${enriched.id}`} style={{ color: '#d49658', fontWeight: 600, textDecoration: 'underline' }}>
-              Open Full {enriched.name} Profile, Pay Comparison Table & Verified Twins →
+          <div className="ai-dossier-grid">
+            <div className="dossier-item">
+              <span className="d-lbl">Sector & Cluster</span>
+              <span className="d-val text-cyan">{enriched.category} ({enriched.subcategory})</span>
+            </div>
+            <div className="dossier-item">
+              <span className="d-lbl">India CTC Benchmark</span>
+              <span className="d-val text-green">₹{((enriched.salary?.byCountry?.IN?.entry?.[0] || 600000) / 100000).toFixed(1)} LPA+</span>
+            </div>
+            <div className="dossier-item">
+              <span className="d-lbl">US Mid Salary</span>
+              <span className="d-val text-green">${(enriched.salary?.mid?.max || 110000).toLocaleString()} / yr</span>
+            </div>
+            <div className="dossier-item">
+              <span className="d-lbl">AI Resilience Index</span>
+              <span className="d-val text-purple">{(10 - (Number(enriched.aiImpact?.automationExposure) || 3.5)).toFixed(1)} / 10</span>
+            </div>
+          </div>
+          <p className="mt-2">{enriched.shortDescription}</p>
+          <div className="ai-action-link-box">
+            <Link to={`/career/${enriched.id}`} className="ai-action-link">
+              Open Full {enriched.name} Profile, Pay Table & Verified Twins <ArrowRight size={14} />
             </Link>
-          </p>
+          </div>
         </div>
       );
     }
@@ -142,35 +151,35 @@ export default function CopilotPage() {
     if (q.includes('suit') || q.includes('best for me') || q.includes('quiz') || q.includes('what should i study')) {
       return (
         <div className="ai-content">
-          <p>Based on your interest in discovering the best fit, I recommend taking our <strong>Exact 30-Question Career Assessment</strong>.</p>
+          <p>Based on your interest in discovering your strongest fit, I recommend taking our <strong>Exact 30-Question Career Assessment</strong>.</p>
           <p>It evaluates your traits across 25 distinct dimensions (analytical, creative, hands-on, risk tolerance, people-orientation, sports interest) and delivers:</p>
           <ul>
             <li>Personal Trait Radar Chart</li>
             <li>Top Recommended Career Fields with explicit 'WHY' explanations</li>
             <li>Relevant degrees, branches, institutions, and immediate skill-gap actions</li>
           </ul>
-          <p style={{ marginTop: '0.75rem' }}>
-            <Link to="/quiz" style={{ color: '#d49658', fontWeight: 600, textDecoration: 'underline' }}>
-              Take the Exact 30-Question Career Assessment (1/30 to 30/30) →
+          <div className="ai-action-link-box">
+            <Link to="/quiz" className="ai-action-link">
+              Take the 30-Question Career Assessment <ArrowRight size={14} />
             </Link>
-          </p>
+          </div>
         </div>
       );
     }
 
     return (
       <div className="ai-content">
-        <p>Career Atlas provides comprehensive data across 15,000+ careers, 5,000+ institutions, and 35+ sports professions. You can explore:</p>
+        <p>Career Atlas provides comprehensive data across 15,000+ careers, 10,000+ institutions, and 35+ sports professions. You can explore:</p>
         <ul>
           <li><strong>Career Search:</strong> Browse normalized career trees and cross-country pay comparison tables.</li>
           <li><strong>True-Cost University Engine:</strong> Calculate real tuition, accommodation, and living costs worldwide.</li>
           <li><strong>Career Ops Tools:</strong> Use our targeted CV builder, 8-stage application tracker, and interview question banks.</li>
         </ul>
-        <p style={{ marginTop: '0.75rem' }}>
-          <Link to="/explore" style={{ color: '#d49658', fontWeight: 600, textDecoration: 'underline' }}>
-            Explore All Careers & Pathways in Career City →
+        <div className="ai-action-link-box">
+          <Link to="/explore" className="ai-action-link">
+            Explore 15,000+ Careers in the Multi-Dimensional Atlas <ArrowRight size={14} />
           </Link>
-        </p>
+        </div>
       </div>
     );
   };
@@ -202,7 +211,7 @@ export default function CopilotPage() {
           <div className="badge-pill">✦ Career Intelligence Copilot</div>
           <h1 className="copilot-title">AI Career & University Advisor</h1>
           <p className="copilot-subtitle">
-            Grounded in 15,000+ occupations, 5,000+ universities, sports ecosystems, and real-world true-cost economic data.
+            Grounded in 15,000+ occupations, 10,000+ universities, sports ecosystems, and real-world true-cost economic data.
           </p>
         </div>
 
