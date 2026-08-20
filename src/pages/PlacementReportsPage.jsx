@@ -9,12 +9,14 @@ import Navbar from '../components/Navbar';
 import { globalInstitutions, calculateTrueCostOfStudy } from '../data/institutionsDatabase';
 import { searchInstitutionsCatalog } from '../data/institutionsCatalog';
 import { convertCurrency, formatCurrency } from '../utils/currencyConverter';
+import { useCurrency } from '../context/CurrencyContext';
 import { getStoredFeedback, submitFeedback, voteFeedback } from '../data/feedbackStore';
 import '../styles/placements.css';
 
 const ITEMS_PER_PAGE = 25;
 
 export default function PlacementReportsPage() {
+  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
@@ -30,7 +32,11 @@ export default function PlacementReportsPage() {
   // True Cost Calculator State
   const [costScenario, setCostScenario] = useState('average'); // 'low', 'average', 'high'
   const [isInternationalStudent, setIsInternationalStudent] = useState(true);
-  const [targetCurrency, setTargetCurrency] = useState('USD');
+  const [targetCurrency, setTargetCurrency] = useState(globalCurrency);
+
+  useEffect(() => {
+    setTargetCurrency(globalCurrency);
+  }, [globalCurrency]);
 
   // Student Review Form State
   const [showReviewModal, setShowReviewModal] = useState(false);

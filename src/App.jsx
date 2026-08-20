@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { lazy, Suspense } from 'react';
 import Ambient3DBackground from './components/Ambient3DBackground';
 import { ThemeProvider } from './context/ThemeContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 import './index.css';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -62,25 +63,27 @@ function GlobalLayout({ children }) {
 export default function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <GlobalLayout>
-          <Suspense fallback={<LoadingScreen />}>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/explore" element={<ExplorePage />} />
-              <Route path="/explore/:familyId" element={<ExplorePage />} />
-              <Route path="/career/:careerId" element={<CareerProfile />} />
-              <Route path="/placements" element={<PlacementReportsPage />} />
-              <Route path="/combos" element={<CombosPage />} />
-              <Route path="/layoffs" element={<LayoffsPage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/compare" element={<ComparePage />} />
-              <Route path="/copilot" element={<CopilotPage />} />
-              <Route path="/workspace" element={<WorkspacePage />} />
-            </Routes>
-          </Suspense>
-        </GlobalLayout>
-      </Router>
+      <CurrencyProvider>
+        <Router>
+          <GlobalLayout>
+            <Suspense fallback={<LoadingScreen />}>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/explore" element={<ExplorePage />} />
+                <Route path="/explore/:familyId" element={<ExplorePage />} />
+                <Route path="/career/:careerId" element={<CareerProfile />} />
+                <Route path="/placements" element={<PlacementReportsPage />} />
+                <Route path="/combos" element={<CombosPage />} />
+                <Route path="/layoffs" element={<LayoffsPage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/compare" element={<ComparePage />} />
+                <Route path="/copilot" element={<CopilotPage />} />
+                <Route path="/workspace" element={<WorkspacePage />} />
+              </Routes>
+            </Suspense>
+          </GlobalLayout>
+        </Router>
+      </CurrencyProvider>
     </ThemeProvider>
   );
 }

@@ -5,6 +5,7 @@ import {
   MessageSquare, Search, Bookmark, UserRound, BriefcaseBusiness, Sun, Moon
 } from 'lucide-react';
 import LanguagePicker from './LanguagePicker';
+import CurrencyPicker from './CurrencyPicker';
 import { useLanguage } from '../i18n';
 import { useTheme } from '../context/ThemeContext';
 import '../styles/navbar.css';
@@ -60,6 +61,9 @@ export default function Navbar() {
         </div>
         
         <div className="d-flex items-center gap-2 desktop-only">
+          {/* Global Currency Picker */}
+          <CurrencyPicker />
+
           {/* Theme Toggle Button */}
           <button 
             className="theme-toggle-btn" 
@@ -75,6 +79,8 @@ export default function Navbar() {
 
         {/* Mobile controls */}
         <div className="d-flex items-center gap-2 mobile-only">
+          <CurrencyPicker />
+
           <button 
             className="theme-toggle-btn" 
             onClick={toggleTheme}
@@ -98,43 +104,28 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div className="mobile-nav-dropdown">
-          {navLinks.map(link => {
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Icon size={18} />
-                <span>{link.name}</span>
-              </Link>
-            );
-          })}
-          <div className="mobile-lang-picker-wrapper">
+          <div className="mobile-nav-links">
+            {navLinks.map(link => {
+              const Icon = link.icon;
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`mobile-nav-link ${isActive ? 'active' : ''}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Icon size={18} />
+                  <span>{link.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mobile-nav-footer">
             <LanguagePicker />
           </div>
         </div>
       )}
-
-      {/* Mobile Bottom Navigation Bar */}
-      <div className="mobile-bottom-nav mobile-only" aria-label="Primary Mobile Navigation">
-        {[
-          [copy.explore || 'Explore', '/explore', Globe],
-          [copy.institutions || 'Colleges', '/placements', GraduationCap],
-          [copy.workspace || 'Workspace', '/workspace', BriefcaseBusiness],
-          [copy.combos || 'Combos', '/combos', Zap]
-        ].map(([label, path, Icon]) => {
-          const isActive = location.pathname === path;
-          return (
-            <Link key={path} to={path} className={isActive ? 'active' : ''}>
-              <Icon size={18} />
-              <span>{label}</span>
-            </Link>
-          );
-        })}
-      </div>
     </nav>
   );
 }

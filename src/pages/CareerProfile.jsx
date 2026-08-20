@@ -13,6 +13,7 @@ import { getStoredFeedback, submitFeedback, voteFeedback } from '../data/feedbac
 import { getTwinsForCareer } from '../data/careerTwins';
 import { getPlacementReportsForCareer } from '../data/placementReports';
 import { convertCurrency, formatCurrency, CURRENCY_SYMBOLS, CONVERSION_METADATA } from '../utils/currencyConverter';
+import { useCurrency } from '../context/CurrencyContext';
 import { getInterviewPrepForCareer } from '../data/interviewQuestions';
 import '../styles/career-profile.css';
 
@@ -23,20 +24,26 @@ const COUNTRIES_PAY_BENCHMARKS = [
   { code: 'DE', name: 'Germany', flag: '🇩🇪', currency: 'EUR', factor: 0.86, source: 'Statistisches Bundesamt (Destatis Entgeltatlas)', status: 'Official Government' },
   { code: 'CA', name: 'Canada', flag: '🇨🇦', currency: 'CAD', factor: 0.92, source: 'Statistics Canada Job Bank Benchmark', status: 'Official Government' },
   { code: 'AU', name: 'Australia', flag: '🇦🇺', currency: 'AUD', factor: 0.95, source: 'Australian Bureau of Statistics (ABS)', status: 'Official Government' },
-  { code: 'SG', name: 'Singapore', flag: '🇸🇬', currency: 'SGD', factor: 0.88, source: 'Ministry of Manpower (MOM Singapore)', status: 'Official Government' },
-  { code: 'JP', name: 'Japan', flag: '🇯🇵', currency: 'JPY', factor: 0.72, source: 'Ministry of Health, Labour and Welfare Japan', status: 'Official Government' },
-  { code: 'AE', name: 'UAE / Dubai', flag: '🇦🇪', currency: 'AED', factor: 0.96, source: 'Gulf Labor & Compensation Survey', status: 'Verified Regional' }
+  { code: 'SG', name: 'Singapore', flag: '🇸🇬', currency: 'SGD', factor: 0.90, source: 'Ministry of Manpower Singapore (MOM)', status: 'Official Government' },
+  { code: 'JP', name: 'Japan', flag: '🇯🇵', currency: 'JPY', factor: 0.78, source: 'Ministry of Health, Labour and Welfare (MHLW)', status: 'Official Government' },
+  { code: 'AE', name: 'United Arab Emirates', flag: '🇦🇪', currency: 'AED', factor: 0.88, source: 'Ministry of Human Resources & Emiratisation (MOHRE)', status: 'Official Government' },
+  { code: 'CH', name: 'Switzerland', flag: '🇨🇭', currency: 'CHF', factor: 1.32, source: 'Federal Statistical Office (FSO Switzerland)', status: 'Official Government' }
 ];
 
 export default function CareerProfile() {
   const { careerId } = useParams();
+  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency();
   const [career, setCareer] = useState(null);
   const [activeSection, setActiveSection] = useState('overview');
   
   // Pay Comparison State
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency);
   const [payFrequency, setPayFrequency] = useState('annual'); // 'annual', 'monthly', 'hourly'
   const [selectedCountryTab, setSelectedCountryTab] = useState('US');
+
+  useEffect(() => {
+    setSelectedCurrency(globalCurrency);
+  }, [globalCurrency]);
 
   // Interactive Feedback & Review State
   const [reviews, setReviews] = useState([]);
