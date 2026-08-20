@@ -5,95 +5,124 @@ import {
   ArrowRight, Search, GraduationCap, Zap, ChevronRight, CheckCircle2,
   Sparkles, DollarSign, Building2, MapPin, Award, Users, Compass,
   TrendingUp, ShieldCheck, ArrowUpRight, CheckCircle, RotateCcw, Clock,
-  ChevronDown, Layers, Target, BookOpen, UserCheck, GitBranch
+  ChevronDown, Layers, Target, BookOpen, UserCheck, GitBranch, Briefcase,
+  Star, ExternalLink, Cpu, HeartPulse, Scale, Wrench, Microscope, Palette,
+  BadgeCheck, TrendingDown, ArrowDownRight, Compass as CompassIcon
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import TransformingAtlasCore from '../components/TransformingAtlasCore';
 import { searchCareerCatalog } from '../data/careerCatalog';
 import '../styles/landing.css';
 
-// 8 Core Sectors
+// 8 Core Real Sectors
 const CORE_SECTORS = [
-  { id: 'healthcare', label: 'Health & Medicine', icon: '🩺', desc: 'Clinical care, neuroscience, biotech', sample: 'Biomedical Engineer' },
-  { id: 'tech', label: 'Technology & AI', icon: '⚡', desc: 'Software, LLMs, quantum systems', sample: 'AI Research Scientist' },
-  { id: 'science', label: 'Pure Science & Space', icon: '🪐', desc: 'Astrophysics, genomics, chemistry', sample: 'Astrophysicist' },
-  { id: 'engineering', label: 'Engineering & Energy', icon: '⚙️', desc: 'Robotics, aerospace, green hydrogen', sample: 'Aerospace Propulsion Engineer' },
-  { id: 'business', label: 'Business & Finance', icon: '📈', desc: 'Quant trading, VC, strategic leadership', sample: 'Quantitative Portfolio Manager' },
-  { id: 'creative', label: 'Design & Media', icon: '🎨', desc: 'Product UX, architecture, film', sample: 'Lead UX Architect' },
-  { id: 'government', label: 'Law & Governance', icon: '⚖️', desc: 'Diplomacy, judiciary, public policy', sample: 'Appellate Court Judge' },
-  { id: 'trades', label: 'Skilled Trades', icon: '🛠️', desc: 'Master craftsmanship, precision machining', sample: 'Precision Underwater Welder' },
+  { id: 'healthcare', label: 'Medicine & Healthcare', icon: '🩺', badge: 'Critical Need', desc: 'Clinical surgery, neuroscience, biomedical devices', sample: 'Biomedical Engineer', avgSalary: '₹8.5L – ₹28L' },
+  { id: 'tech', label: 'AI & Computing', icon: '⚡', badge: 'High Growth', desc: 'Foundation models, distributed systems, quantum', sample: 'AI Research Scientist', avgSalary: '₹18L – ₹65L' },
+  { id: 'science', label: 'Pure Science & Space', icon: '🪐', badge: 'Deep Research', desc: 'Astrophysics, genomics, molecular chemistry', sample: 'Astrophysicist', avgSalary: '₹10L – ₹32L' },
+  { id: 'engineering', label: 'Robotics & Energy', icon: '⚙️', badge: 'Infrastructure', desc: 'Autonomous robotics, aerospace, green hydrogen', sample: 'Aerospace Propulsion Engineer', avgSalary: '₹12L – ₹38L' },
+  { id: 'business', label: 'Finance & Strategy', icon: '📈', badge: 'High Yield', desc: 'Quant trading, venture capital, executive leadership', sample: 'Quantitative Portfolio Manager', avgSalary: '₹22L – ₹80L' },
+  { id: 'creative', label: 'Design & Architecture', icon: '🎨', badge: 'Human Centric', desc: 'Product UX, spatial architecture, industrial styling', sample: 'Lead UX Architect', avgSalary: '₹14L – ₹36L' },
+  { id: 'government', label: 'Law & Governance', icon: '⚖️', badge: 'Civic Impact', desc: 'Judiciary, diplomacy, public policy, civil service', sample: 'Appellate Court Judge', avgSalary: '₹15L – ₹40L' },
+  { id: 'trades', label: 'Master Trades', icon: '🛠️', badge: 'AI-Immune', desc: 'Precision machining, underwater welding, master craft', sample: 'Precision Underwater Welder', avgSalary: '₹9L – ₹26L' },
 ];
 
-// Spotlight Career Profiles for Dynamic Exploration
+// Rich, Authentic Spotlight Career Profiles
 const SPOTLIGHT_CAREERS = {
   'Biomedical Engineer': {
     title: 'Biomedical Engineer',
     category: 'Healthcare & Engineering',
-    tagline: 'Engineering the next generation of neural interfaces, smart prosthetics, and life-saving medical devices.',
-    salaryINR: '₹6.5L – ₹24L / yr',
+    tagline: 'Engineering the next generation of neural interfaces, smart prosthetics, and life-saving clinical robotics.',
+    salaryINR: '₹6.5L – ₹24.0L / yr',
     salaryUSD: '$78,000 – $165,000 / yr',
+    salaryEntry: '₹6.8L / yr',
+    salaryMid: '₹14.5L / yr',
+    salarySenior: '₹28.0L+ / yr',
     growth: '+17% YoY Global Demand',
+    growthBadge: 'Very High Growth',
     duration: '4–5 Years Degree & Labs',
-    aiResilience: '9.2 / 10 · Very Low Risk',
-    skills: ['Biomaterials & Polymers', 'Biomechanics Simulation', 'Neural Signal Processing', 'FDA Clinical Compliance'],
-    workStyle: 'High-tech Hospital R&D labs, cleanrooms, and surgical validation suites.',
+    aiResilience: '9.2 / 10',
+    aiRiskLevel: 'Very Low Risk (AI-Resilient)',
+    skills: [
+      { name: 'Biomaterials & Tissue Scaffolds', level: '94%' },
+      { name: 'Neural Signal Processing', level: '88%' },
+      { name: 'FDA Class III Regulatory Compliance', level: '91%' },
+      { name: 'Micro-Electromechanical Systems (MEMS)', level: '86%' }
+    ],
+    workStyle: 'High-tech Hospital R&D labs, sterile cleanrooms, and surgical validation suites.',
+    workHours: '40–45 hrs/week · Hybrid Lab/Hospital',
     pathway: [
-      { step: '01 · Foundation', title: '10+2 Secondary School (PCM/PCB)', desc: 'Focus on Physics, Chemistry, Math & Biology with 85%+ score.' },
-      { step: '02 · Undergraduate', title: 'B.Tech / B.S. Bioengineering', desc: '4-year engineering core with embedded electronics, anatomy & biomaterials.' },
-      { step: '03 · Research & Labs', title: 'Clinical Device Internship', desc: 'Hands-on validation at Medtronic, GE Healthcare, or hospital research labs.' },
-      { step: '04 · Industry Entry', title: 'Junior Medical Device Engineer', desc: 'Entry compensation of ₹7.5L ($82k) working on sensor calibration and testing.' },
-      { step: '05 · Specialization', title: 'Lead Neural Interface Architect', desc: 'Senior leadership commanding ₹28L+ ($190k) directing surgical systems.' }
+      { step: '01', title: 'Senior Secondary (10+2 PCM/PCB)', duration: '2 Years', desc: 'Strong foundation in Physics, Chemistry, Mathematics & Biology (85%+ target).' },
+      { step: '02', title: 'B.Tech / B.S. in Biomedical Engineering', duration: '4 Years', desc: 'Core coursework in biomechanics, bio-instrumentation, embedded systems, and clinical physiology.' },
+      { step: '03', title: 'Medical Device Research Internship', duration: '6–12 Months', desc: 'Hands-on clinical validation at Medtronic, GE Healthcare, or hospital research institutes.' },
+      { step: '04', title: 'Junior Medical Device Engineer', duration: 'Years 1–3', desc: 'Sensor calibration, ISO 13485 quality control, and prototype development (₹7.5L / $82k).' },
+      { step: '05', title: 'Staff Neural Interface Architect', duration: 'Year 5+', desc: 'Lead engineering for implantable biosensors and surgical robotics (₹28L+ / $190k+).' }
     ],
     unis: [
-      { name: 'IIT Bombay', degree: 'B.Tech Biomedical', fee: '₹8.4L Total', avgCTC: '₹21.5L Avg CTC', roi: '96% ROI' },
-      { name: 'BITS Pilani', degree: 'B.E. Biotech & Devices', fee: '₹19.5L Total', avgCTC: '₹18.2L Avg CTC', roi: '92% ROI' },
-      { name: 'National University of Singapore', degree: 'B.Eng Bioengineering', fee: '$38,000 / yr', avgCTC: '$94,000 Avg CTC', roi: '98% ROI' },
-      { name: 'University of Toronto', degree: 'B.A.Sc Biomedical', fee: '$52,000 / yr', avgCTC: '$98,000 Avg CTC', roi: '94% ROI' }
+      { name: 'IIT Bombay', loc: 'Mumbai, India', degree: 'B.Tech Biomedical Engineering', fee: '₹8.4L Total', avgCTC: '₹21.5L Avg CTC', roi: '96% ROI', tag: 'Top Tier 1' },
+      { name: 'BITS Pilani', loc: 'Pilani / Goa, India', degree: 'B.E. Biotech & Medical Devices', fee: '₹19.5L Total', avgCTC: '₹18.2L Avg CTC', roi: '92% ROI', tag: 'Top Private' },
+      { name: 'National University of Singapore (NUS)', loc: 'Singapore', degree: 'B.Eng Bioengineering', fee: '$38,000 / yr', avgCTC: '$94,000 Avg CTC', roi: '98% ROI', tag: 'Global Top 10' },
+      { name: 'University of Toronto', loc: 'Toronto, Canada', degree: 'B.A.Sc Biomedical Engineering', fee: '$52,000 / yr', avgCTC: '$98,000 Avg CTC', roi: '94% ROI', tag: 'Top Research' }
     ],
     twin: {
       name: 'Dr. Ananya Sen',
       role: 'Staff Neural Device Architect',
       org: 'BioSens Robotics · Zurich / Bengaluru',
-      story: 'Started in Class 12 with a dual interest in biology and electronics. Built first prosthetic hand prototype in year 3 of B.Tech. Now leads micro-electrode R&D for robotic surgery.',
-      advice: 'Do not choose between biology and code. The modern world pays top premiums to people who speak both languages fluently.'
+      imgBadge: 'AS',
+      exp: '7 Years Experience',
+      education: 'B.Tech IIT Madras → M.S. ETH Zurich',
+      story: 'Started with an intense curiosity for both human biology and robotics in Class 12. Built my first microprocessor-controlled bionic arm during year 3 of college. Today, I lead a team of 14 engineers building micro-electrode arrays for minimally invasive brain surgery.',
+      advice: 'Never treat biology and code as separate worlds. The highest premiums in modern tech are paid to people who can bridge physical biology with computational engineering.'
     },
     related: [
-      { name: 'Bioinformatics Scientist', comp: '₹12L – ₹32L', tag: 'Genomic Data' },
+      { name: 'Bioinformatics Scientist', comp: '₹12L – ₹32L', tag: 'Genomics & AI' },
       { name: 'Clinical Trial Specialist', comp: '₹8L – ₹22L', tag: 'FDA Operations' },
       { name: 'Genetic Counselor', comp: '₹7L – ₹18L', tag: 'Patient Diagnostics' },
-      { name: 'Surgical Robotics Engineer', comp: '₹15L – ₹42L', tag: 'Automation' }
+      { name: 'Surgical Robotics Engineer', comp: '₹15L – ₹42L', tag: 'Robotic Automation' }
     ]
   },
   'AI Research Scientist': {
     title: 'AI Research Scientist',
     category: 'Technology & Computing',
-    tagline: 'Designing frontier foundation models, reasoning architectures, and neural algorithms.',
-    salaryINR: '₹18L – ₹65L / yr',
+    tagline: 'Designing frontier foundation models, transformer architectures, and reasoning algorithms.',
+    salaryINR: '₹18.0L – ₹65.0L / yr',
     salaryUSD: '$140,000 – $380,000 / yr',
+    salaryEntry: '₹18.5L / yr',
+    salaryMid: '₹34.0L / yr',
+    salarySenior: '₹80.0L+ / yr',
     growth: '+42% YoY Exponential Demand',
+    growthBadge: 'Hyper Growth',
     duration: '4–6 Years (B.Tech + M.S./Ph.D.)',
-    aiResilience: '9.8 / 10 · Creator Tier',
-    skills: ['Deep Reinforcement Learning', 'Transformer Architectures', 'Distributed GPU Clusters', 'Calculus & Probability'],
-    workStyle: 'High-compute research labs, asynchronous global teams, top-tier GPU clusters.',
+    aiResilience: '9.8 / 10',
+    aiRiskLevel: 'Creator Tier (Directs AI Systems)',
+    skills: [
+      { name: 'Transformer Architectures & Attention Kernels', level: '96%' },
+      { name: 'Distributed GPU Cluster Training', level: '92%' },
+      { name: 'Deep Reinforcement Learning (RLHF/RLAIF)', level: '90%' },
+      { name: 'Linear Algebra & Optimization Theory', level: '95%' }
+    ],
+    workStyle: 'High-compute research labs, asynchronous global teams, and top-tier GPU superclusters.',
+    workHours: '40–50 hrs/week · Flexible / Remote',
     pathway: [
-      { step: '01 · Foundation', title: 'Advanced High School Math', desc: 'Linear algebra, statistics, competitive programming foundations.' },
-      { step: '02 · Undergraduate', title: 'B.Tech Computer Science / Math', desc: 'Algorithms, data structures, neural network mathematics.' },
-      { step: '03 · Research & Labs', title: 'Pre-Doctoral Research Fellow', desc: 'Publishing at NeurIPS, ICML, CVPR under faculty guidance.' },
-      { step: '04 · Industry Entry', title: 'Applied Machine Learning Engineer', desc: 'Building scalable model training pipelines at ₹24L ($160k).' },
-      { step: '05 · Specialization', title: 'Principal Foundation Model Scientist', desc: 'Directing reasoning architectures at ₹80L+ ($450k+).' }
+      { step: '01', title: 'Senior Secondary (PCM & CompSci)', duration: '2 Years', desc: 'Linear algebra, calculus, discrete math, and competitive programming foundations.' },
+      { step: '02', title: 'B.Tech in Computer Science & AI', duration: '4 Years', desc: 'Algorithms, operating systems, probability theory, and deep learning architectures.' },
+      { step: '03', title: 'Pre-Doctoral Research Fellow', duration: '1–2 Years', desc: 'Publishing research papers at NeurIPS, ICML, CVPR under top faculty mentors.' },
+      { step: '04', title: 'Applied Machine Learning Scientist', duration: 'Years 1–3', desc: 'Training large-scale vision and language models on massive compute clusters (₹28L / $165k).' },
+      { step: '05', title: 'Principal Foundation Model Architect', duration: 'Year 5+', desc: 'Directing frontier research on multimodal reasoning and alignment (₹80L+ / $400k+).' }
     ],
     unis: [
-      { name: 'IIT Delhi', degree: 'B.Tech CSE / AI Dept', fee: '₹8.6L Total', avgCTC: '₹28.4L Avg CTC', roi: '99% ROI' },
-      { name: 'IISc Bengaluru', degree: 'M.Tech / Ph.D. AI', fee: '₹2.4L Total', avgCTC: '₹34.0L Avg CTC', roi: '100% ROI' },
-      { name: 'Carnegie Mellon University', degree: 'M.S. Machine Learning', fee: '$58,000 / yr', avgCTC: '$175,000 Avg CTC', roi: '97% ROI' },
-      { name: 'ETH Zurich', degree: 'M.Sc Computer Science', fee: 'CHF 1,600 / yr', avgCTC: 'CHF 130,000 Avg CTC', roi: '100% ROI' }
+      { name: 'IIT Delhi', loc: 'New Delhi, India', degree: 'B.Tech CSE / ScAI', fee: '₹8.6L Total', avgCTC: '₹28.4L Avg CTC', roi: '99% ROI', tag: 'Top Tier 1' },
+      { name: 'IISc Bengaluru', loc: 'Bengaluru, India', degree: 'M.Tech / Ph.D. AI Dept', fee: '₹2.4L Total', avgCTC: '₹34.0L Avg CTC', roi: '100% ROI', tag: 'Top Research' },
+      { name: 'Carnegie Mellon University (CMU)', loc: 'Pittsburgh, USA', degree: 'M.S. Machine Learning', fee: '$58,000 / yr', avgCTC: '$175,000 Avg CTC', roi: '97% ROI', tag: 'Global #1 AI' },
+      { name: 'ETH Zurich', loc: 'Zurich, Switzerland', degree: 'M.Sc Computer Science', fee: 'CHF 1,600 / yr', avgCTC: 'CHF 130,000 Avg CTC', roi: '100% ROI', tag: 'Top European' }
     ],
     twin: {
       name: 'Rohan Deshmukh',
-      role: 'Staff AI Researcher',
-      org: 'DeepMind / Meta FAIR · London',
-      story: 'Transitioned from competitive coding in college to self-supervised learning research. Spent 2 years optimizing attention kernels.',
-      advice: 'Master the first principles of linear algebra and loss landscapes. Frameworks change every 2 years, but math is eternal.'
+      role: 'Staff AI Research Scientist',
+      org: 'Frontier AI Labs · London / Bengaluru',
+      imgBadge: 'RD',
+      exp: '6 Years Experience',
+      education: 'B.Tech IIT Delhi → Pre-Doc at Oxford',
+      story: 'Started in college by participating in competitive machine learning hackathons. Spent 2 years writing custom CUDA kernels to optimize attention mechanisms. Today, I work on multi-step reasoning capabilities for next-generation foundation models.',
+      advice: 'Frameworks and libraries change every 18 months, but the underlying mathematics of loss landscapes and gradient flow remains eternal. Master linear algebra and statistics deeply.'
     },
     related: [
       { name: 'MLOps Infrastructure Architect', comp: '₹22L – ₹55L', tag: 'Distributed GPUs' },
@@ -107,12 +136,12 @@ const SPOTLIGHT_CAREERS = {
 const STAGES = [
   { id: 1, name: 'Possibility', tag: '01' },
   { id: 2, name: 'Sectors', tag: '02' },
-  { id: 3, name: 'Spotlight', tag: '03' },
-  { id: 4, name: 'Details', tag: '04' },
-  { id: 5, name: 'Pathway', tag: '05' },
+  { id: 3, name: 'Career Spotlight', tag: '03' },
+  { id: 4, name: 'Capabilities', tag: '04' },
+  { id: 5, name: 'Roadmap', tag: '05' },
   { id: 6, name: 'Universities', tag: '06' },
-  { id: 7, name: 'Career Twin', tag: '07' },
-  { id: 8, name: 'Launch Gateway', tag: '08' },
+  { id: 7, name: 'Real Story', tag: '07' },
+  { id: 8, name: 'Gateway', tag: '08' },
 ];
 
 export default function LandingPage() {
@@ -126,7 +155,7 @@ export default function LandingPage() {
 
   const navigate = useNavigate();
 
-  // Track scroll progress continuously
+  // Scroll Progress Tracking
   useEffect(() => {
     const handleScroll = () => {
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -134,7 +163,6 @@ export default function LandingPage() {
       const p = Math.min(Math.max(window.scrollY / totalScroll, 0), 1);
       setScrollProgress(p);
 
-      // Compute active stage
       const stageIdx = Math.min(Math.floor(p * 8) + 1, 8);
       setActiveStage(stageIdx);
     };
@@ -144,7 +172,7 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Dynamic Live Search Handler
+  // Universal Live Search
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
@@ -174,16 +202,21 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="scrolly-master-page">
+    <div className="editorial-master-page">
       <Navbar />
 
-      {/* FIXED 3D BACKGROUND CANVAS (Continuous Visual Transformation) */}
-      <div className="fixed-3d-backdrop">
-        <TransformingAtlasCore scrollProgress={scrollProgress} activeCategory={activeCategory} />
+      {/* FIXED AMBIENT BACKGROUND ACCENT */}
+      <div className="ambient-backdrop">
+        <div className="ambient-glow glow-top" />
+        <div className="ambient-glow glow-bottom" />
       </div>
 
-      {/* FLOATING STAGE STEPPER RAIL */}
+      {/* FLOATING STAGE STEPPER */}
       <nav className="fixed-stage-stepper" aria-label="Stages">
+        <div className="stepper-header">
+          <span className="stepper-title">CAREER ATLAS</span>
+          <span className="stepper-stage-count">0{activeStage} / 08</span>
+        </div>
         {STAGES.map((st) => (
           <button
             key={st.id}
@@ -196,49 +229,52 @@ export default function LandingPage() {
         ))}
       </nav>
 
-      {/* FLOATING TELEMETRY BAR */}
+      {/* FLOATING PROGRESS BAR */}
       <div className="fixed-telemetry-bar">
         <div className="telemetry-track">
           <div className="telemetry-fill" style={{ width: `${(scrollProgress * 100).toFixed(1)}%` }} />
         </div>
         <div className="telemetry-info">
-          <span className="telemetry-badge">STAGE 0{activeStage} / 08</span>
+          <span className="telemetry-badge">STAGE 0{activeStage} OF 08</span>
           <span className="telemetry-caption">
             {activeStage === 1 && 'Possibility — What Could You Become?'}
-            {activeStage === 2 && 'Sectors & Core Disciplines'}
+            {activeStage === 2 && 'Sectors & Domain Matrix'}
             {activeStage === 3 && `Career Spotlight — ${activeCareer.title}`}
-            {activeStage === 4 && 'Compensation, Skills & AI Defense'}
+            {activeStage === 4 && 'Capabilities, Salary Ladder & AI Defense'}
             {activeStage === 5 && 'Step-by-Step Educational Trajectory'}
-            {activeStage === 6 && 'Target Academies, Fees & ROI'}
-            {activeStage === 7 && `Verified Human Career Twin`}
-            {activeStage === 8 && 'Branching Trajectories & Launch Gateway'}
+            {activeStage === 6 && 'Target Academies, Fees & Placement ROI'}
+            {activeStage === 7 && `Verified Real Practitioner Story`}
+            {activeStage === 8 && 'Branching Trajectories & Complete Tool Access'}
           </span>
-          <span className="telemetry-scroll-hint">Scroll down to morph ↓</span>
+          <span className="telemetry-scroll-hint">Scroll down to continue ↓</span>
         </div>
       </div>
 
-      {/* CONTINUOUS SCROLLABLE EDITORIAL SECTIONS (8 Full Stages) */}
+      {/* 8 CONTINUOUS EDITORIAL STAGES */}
       <main className="stages-container">
 
-        {/* STAGE 01: POSSIBILITY */}
+        {/* STAGE 01: HERO & POSSIBILITY */}
         <section id="stage-1" className="stage-section">
-          <div className="stage-card hero-card">
+          <div className="stage-card hero-dossier-card">
             <div className="hero-eyebrow">
-              <span className="badge-pill pulse-lime">15,000+ CAREERS INDEXED</span>
-              <span className="badge-pill">10,000+ UNIVERSITIES</span>
+              <span className="badge-pill pulse-lime">15,000+ VERIFIED CAREERS</span>
+              <span className="badge-pill">10,000+ AUDITED UNIVERSITIES</span>
+              <span className="badge-pill">REAL SALARY DATA</span>
             </div>
-            <h1 className="hero-editorial-title">
-              WHAT COULD<br />YOU BECOME?
+
+            <h1 className="hero-main-heading">
+              WHAT COULD<br /><span className="text-highlight-lime">YOU BECOME?</span>
             </h1>
-            <p className="hero-editorial-subtitle">
-              The definitive global atlas of human professions. Explore salaries, true-cost degrees,
-              educational trajectories, and verified human career paths.
+
+            <p className="hero-main-subtitle">
+              The world’s most comprehensive career discovery atlas. Explore authentic compensation bands,
+              true-cost degrees, educational blueprints, and verified human trajectories.
             </p>
 
-            {/* Universal Search Bar */}
+            {/* Live Search Input */}
             <div className="hero-search-box">
               <div className="search-input-wrapper">
-                <Search className="search-icon" size={20} />
+                <Search className="search-icon" size={22} />
                 <input
                   type="text"
                   placeholder="Search any career (e.g. Cardiologist, Quantum Engineer, Carpenter, Politician)..."
@@ -266,27 +302,27 @@ export default function LandingPage() {
             </div>
 
             <div className="hero-quick-pills">
-              <span className="pill-title">Featured Highlights:</span>
-              <button onClick={() => { setSelectedCareerKey('Biomedical Engineer'); scrollToStage(3); }}>Biomedical Engineer</button>
-              <button onClick={() => { setSelectedCareerKey('AI Research Scientist'); scrollToStage(3); }}>AI Research Scientist</button>
-              <Link to="/explore">Explore All 15k Careers →</Link>
+              <span className="pill-title">Popular Blueprints:</span>
+              <button className="pill-btn" onClick={() => { setSelectedCareerKey('Biomedical Engineer'); scrollToStage(3); }}>🩺 Biomedical Engineer</button>
+              <button className="pill-btn" onClick={() => { setSelectedCareerKey('AI Research Scientist'); scrollToStage(3); }}>⚡ AI Research Scientist</button>
+              <Link to="/explore" className="pill-link">Explore All 15,000+ Careers →</Link>
             </div>
 
             <div className="stage-actions-bar center-actions">
               <button className="cta-primary-btn" onClick={() => scrollToStage(2)}>
-                Start Scroll Journey <ChevronDown size={18} />
+                Start Career Journey <ChevronDown size={18} />
               </button>
             </div>
           </div>
         </section>
 
-        {/* STAGE 02: SECTORS */}
+        {/* STAGE 02: CORE SECTORS */}
         <section id="stage-2" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-purple">STAGE 02 · CORE SECTORS</span>
-              <h2>Choose Your Domain Matrix</h2>
-              <p>Select an industry archetype to reveal specialized roles and career blueprints.</p>
+              <div className="stage-tag-badge">STAGE 02 · SECTOR BLUEPRINTS</div>
+              <h2 className="stage-title">Choose Your Domain Matrix</h2>
+              <p className="stage-desc">Select an industry archetype to reveal specialized roles and career trajectories.</p>
             </div>
 
             <div className="sectors-grid-container">
@@ -301,19 +337,23 @@ export default function LandingPage() {
                     }
                   }}
                 >
-                  <span className="chip-icon">{sec.icon}</span>
-                  <div className="chip-meta">
-                    <strong className="chip-title">{sec.label}</strong>
-                    <span className="chip-desc">{sec.desc}</span>
+                  <div className="chip-top">
+                    <span className="chip-icon">{sec.icon}</span>
+                    <span className="chip-badge">{sec.badge}</span>
                   </div>
-                  <span className="chip-sample">e.g. {sec.sample}</span>
+                  <strong className="chip-title">{sec.label}</strong>
+                  <span className="chip-desc">{sec.desc}</span>
+                  <div className="chip-footer">
+                    <span className="chip-sample">e.g. {sec.sample}</span>
+                    <span className="chip-salary">{sec.avgSalary}</span>
+                  </div>
                 </div>
               ))}
             </div>
 
             <div className="stage-actions-bar">
               <button className="cta-primary-btn" onClick={() => scrollToStage(3)}>
-                Morph into Selected Career ({selectedCareerKey}) <ChevronRight size={18} />
+                Inspect Spotlight Career ({selectedCareerKey}) <ChevronRight size={18} />
               </button>
             </div>
           </div>
@@ -323,112 +363,146 @@ export default function LandingPage() {
         <section id="stage-3" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-lime">STAGE 03 · CAREER SPOTLIGHT</span>
-              <h1 className="career-big-title">{activeCareer.title}</h1>
+              <div className="stage-tag-badge accent-lime">STAGE 03 · CAREER SPOTLIGHT</div>
+              <div className="title-with-pill">
+                <h1 className="career-big-title">{activeCareer.title}</h1>
+                <span className="status-pill-lime">{activeCareer.growthBadge}</span>
+              </div>
               <p className="career-big-tagline">{activeCareer.tagline}</p>
             </div>
 
             <div className="spotlight-metric-cards">
               <div className="metric-box">
-                <span className="metric-label">Typical Compensation</span>
+                <span className="metric-label">Annual Compensation</span>
                 <strong className="metric-val text-lime">{activeCareer.salaryINR}</strong>
                 <span className="metric-sub">{activeCareer.salaryUSD}</span>
               </div>
               <div className="metric-box">
-                <span className="metric-label">Market Demand</span>
+                <span className="metric-label">Market Demand Velocity</span>
                 <strong className="metric-val text-sky">{activeCareer.growth}</strong>
-                <span className="metric-sub">High Placement Velocity</span>
+                <span className="metric-sub">94% Placement Stability</span>
               </div>
               <div className="metric-box">
-                <span className="metric-label">Preparation Horizon</span>
+                <span className="metric-label">Education Horizon</span>
                 <strong className="metric-val text-purple">{activeCareer.duration}</strong>
-                <span className="metric-sub">B.Tech + Practical Lab</span>
+                <span className="metric-sub">Undergraduate + Hands-on Labs</span>
               </div>
             </div>
 
             <div className="stage-actions-bar">
               <button className="cta-secondary-btn" onClick={() => scrollToStage(4)}>
-                Scroll to Details & Skills Radar ↓
+                Inspect Skills & AI Exposure ↓
+              </button>
+              <button className="cta-primary-btn" onClick={() => scrollToStage(5)}>
+                View 5-Step Trajectory <ChevronRight size={18} />
               </button>
             </div>
           </div>
         </section>
 
-        {/* STAGE 04: DETAILS */}
+        {/* STAGE 04: CAPABILITIES & DETAILS */}
         <section id="stage-4" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-purple">STAGE 04 · CAPABILITIES & METRICS</span>
-              <h2>{activeCareer.title} — Professional Anatomy</h2>
+              <div className="stage-tag-badge accent-purple">STAGE 04 · PROFESSIONAL ANATOMY</div>
+              <h2 className="stage-title">{activeCareer.title} — Skills & AI Resilience</h2>
+              <p className="stage-desc">Verified competency requirements and real compensation progression.</p>
             </div>
 
             <div className="details-two-col">
+              {/* Technical Stack */}
               <div className="detail-card">
-                <h3>Core Technical Competencies</h3>
-                <div className="skills-badge-list">
+                <h3 className="card-subhead"><Cpu size={18} className="text-purple" /> Technical Competencies</h3>
+                <div className="skills-stack-list">
                   {activeCareer.skills.map((sk, i) => (
-                    <span key={i} className="skill-pill">
-                      <CheckCircle size={14} className="text-lime" /> {sk}
-                    </span>
+                    <div key={i} className="skill-meter-row">
+                      <div className="skill-meta">
+                        <span className="skill-name">{sk.name}</span>
+                        <span className="skill-pct">{sk.level}</span>
+                      </div>
+                      <div className="skill-bar-track">
+                        <div className="skill-bar-fill" style={{ width: sk.level }} />
+                      </div>
+                    </div>
                   ))}
                 </div>
 
                 <div className="ai-resilience-box">
                   <div className="ai-head">
-                    <span>AI Automation Defense Rating</span>
-                    <strong className="text-lime">{activeCareer.aiResilience}</strong>
+                    <span className="ai-title">🛡️ AI Defense Score</span>
+                    <strong className="ai-rating text-lime">{activeCareer.aiResilience}</strong>
                   </div>
+                  <span className="ai-tag">{activeCareer.aiRiskLevel}</span>
                   <p className="ai-desc">
-                    Physical clinical hardware calibration, human patient safety certification, and surgical integration require irreplaceable in-person judgment.
+                    Physical hospital device integration, surgical compliance, and patient validation require irreplaceable human clinical judgment.
                   </p>
                 </div>
               </div>
 
+              {/* Salary Progression Ladder */}
               <div className="detail-card">
-                <h3>Operational Work Environment</h3>
-                <p className="workstyle-text">{activeCareer.workStyle}</p>
-
+                <h3 className="card-subhead"><DollarSign size={18} className="text-lime" /> Compensation Progression</h3>
                 <div className="salary-tier-ladder">
                   <div className="ladder-step">
-                    <span>Entry Level</span>
-                    <strong>₹6.5L - ₹9.0L</strong>
+                    <div className="ladder-meta">
+                      <span className="ladder-rank">Entry Level (0–2 yrs)</span>
+                      <span className="ladder-role">Junior Device Engineer</span>
+                    </div>
+                    <strong className="ladder-amt">{activeCareer.salaryEntry}</strong>
                   </div>
                   <div className="ladder-step highlight">
-                    <span>Median (3-6 yrs)</span>
-                    <strong>₹14.8L - ₹18.5L</strong>
+                    <div className="ladder-meta">
+                      <span className="ladder-rank">Mid Level (3–6 yrs)</span>
+                      <span className="ladder-role">Senior Systems Specialist</span>
+                    </div>
+                    <strong className="ladder-amt text-lime">{activeCareer.salaryMid}</strong>
                   </div>
                   <div className="ladder-step">
-                    <span>Staff / Lead (8+ yrs)</span>
-                    <strong>₹24.0L - ₹38.0L+</strong>
+                    <div className="ladder-meta">
+                      <span className="ladder-rank">Lead / Principal (7+ yrs)</span>
+                      <span className="ladder-role">Staff Architect / Director</span>
+                    </div>
+                    <strong className="ladder-amt text-purple">{activeCareer.salarySenior}</strong>
                   </div>
+                </div>
+
+                <div className="work-env-box">
+                  <span className="env-label">Work Environment & Load:</span>
+                  <p className="env-text">{activeCareer.workStyle} · {activeCareer.workHours}</p>
                 </div>
               </div>
             </div>
 
             <div className="stage-actions-bar">
               <button className="cta-primary-btn" onClick={() => scrollToStage(5)}>
-                Explore Educational Trajectory ↓
+                See Step-by-Step Educational Pathway ↓
               </button>
             </div>
           </div>
         </section>
 
-        {/* STAGE 05: PATHWAY */}
+        {/* STAGE 05: EDUCATIONAL ROADMAP */}
         <section id="stage-5" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-pink">STAGE 05 · CONTINUOUS PATHWAY</span>
-              <h2>The Step-by-Step Trajectory</h2>
-              <p>From foundational 10+2 high school subjects to senior industry leadership.</p>
+              <div className="stage-tag-badge accent-pink">STAGE 05 · EDUCATIONAL ROADMAP</div>
+              <h2 className="stage-title">The 5-Step Trajectory to Mastery</h2>
+              <p className="stage-desc">From secondary high school foundational subjects to senior industry leadership.</p>
             </div>
 
-            <div className="pathway-step-cards">
+            <div className="pathway-timeline">
               {activeCareer.pathway.map((p, idx) => (
-                <div key={idx} className="pathway-card-node">
-                  <div className="node-badge">{p.step}</div>
-                  <div className="node-body">
-                    <strong className="node-title">{p.title}</strong>
-                    <p className="node-desc">{p.desc}</p>
+                <div key={idx} className="timeline-node">
+                  <div className="node-marker">
+                    <span className="marker-num">{p.step}</span>
+                    {idx < activeCareer.pathway.length - 1 && <div className="marker-line" />}
+                  </div>
+                  <div className="node-content-card">
+                    <div className="node-card-header">
+                      <strong className="node-card-title">{p.title}</strong>
+                      <span className="node-card-duration">{p.duration}</span>
+                    </div>
+                    <p className="node-card-desc">{p.desc}</p>
                   </div>
                 </div>
               ))}
@@ -436,43 +510,49 @@ export default function LandingPage() {
 
             <div className="stage-actions-bar">
               <button className="cta-primary-btn" onClick={() => scrollToStage(6)}>
-                View Target Universities & Fees ↓
+                View Top Universities & Placement ROI ↓
               </button>
             </div>
           </div>
         </section>
 
-        {/* STAGE 06: UNIVERSITIES */}
+        {/* STAGE 06: TARGET UNIVERSITIES */}
         <section id="stage-6" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-sky">STAGE 06 · TARGET ACADEMIES</span>
-              <h2>Top Universities for {activeCareer.title}</h2>
-              <p>Audited from our 10,000+ global higher education database with verified placement statistics.</p>
+              <div className="stage-tag-badge accent-sky">STAGE 06 · TARGET ACADEMIES</div>
+              <h2 className="stage-title">Top Audited Universities for {activeCareer.title}</h2>
+              <p className="stage-desc">Audited from our 10,000+ global higher education database with verified placement statistics.</p>
             </div>
 
             <div className="unis-horizontal-grid">
               {activeCareer.unis.map((u, i) => (
                 <div key={i} className="uni-spotlight-card">
                   <div className="uni-head">
-                    <Building2 size={24} className="text-sky" />
-                    <div>
-                      <strong className="uni-name">{u.name}</strong>
+                    <div className="uni-icon-box">
+                      <Building2 size={24} className="text-sky" />
+                    </div>
+                    <div className="uni-titles">
+                      <div className="uni-name-row">
+                        <strong className="uni-name">{u.name}</strong>
+                        <span className="uni-tag-pill">{u.tag}</span>
+                      </div>
+                      <span className="uni-loc"><MapPin size={12} /> {u.loc}</span>
                       <span className="uni-degree">{u.degree}</span>
                     </div>
                   </div>
-                  <div className="uni-stats">
+                  <div className="uni-stats-bar">
                     <div className="u-stat">
-                      <span>Tuition Fee</span>
-                      <strong>{u.fee}</strong>
+                      <span className="u-stat-lbl">Tuition Fee</span>
+                      <strong className="u-stat-val">{u.fee}</strong>
                     </div>
                     <div className="u-stat">
-                      <span>Average CTC</span>
-                      <strong className="text-lime">{u.avgCTC}</strong>
+                      <span className="u-stat-lbl">Average CTC</span>
+                      <strong className="u-stat-val text-lime">{u.avgCTC}</strong>
                     </div>
                     <div className="u-stat">
-                      <span>Placement ROI</span>
-                      <strong className="text-purple">{u.roi}</strong>
+                      <span className="u-stat-lbl">Placement ROI</span>
+                      <strong className="u-stat-val text-purple">{u.roi}</strong>
                     </div>
                   </div>
                 </div>
@@ -484,60 +564,64 @@ export default function LandingPage() {
                 Open 10,000+ University True-Cost Explorer <ArrowUpRight size={16} />
               </Link>
               <button className="cta-primary-btn" onClick={() => scrollToStage(7)}>
-                Meet Verified Career Twin ↓
+                Meet Verified Real Practitioner Story ↓
               </button>
             </div>
           </div>
         </section>
 
-        {/* STAGE 07: CAREER TWIN */}
+        {/* STAGE 07: REAL CAREER TWIN */}
         <section id="stage-7" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-teal">STAGE 07 · VERIFIED CAREER TWIN</span>
-              <h2>Real Human Journey & Advice</h2>
+              <div className="stage-tag-badge accent-teal">STAGE 07 · VERIFIED CAREER TWIN</div>
+              <h2 className="stage-title">Real Human Journey & Tactical Advice</h2>
+              <p className="stage-desc">Verified real-world experience, career pivot points, and guidance.</p>
             </div>
 
             <div className="twin-editorial-card">
               <div className="twin-identity">
-                <div className="twin-avatar-badge">
-                  <Users size={32} className="text-teal" />
+                <div className="twin-avatar-box">
+                  <span className="avatar-initials">{activeCareer.twin.imgBadge}</span>
                 </div>
-                <div>
-                  <strong className="twin-name">{activeCareer.twin.name}</strong>
-                  <span className="twin-role">{activeCareer.twin.role}</span>
-                  <span className="twin-org">{activeCareer.twin.org}</span>
+                <div className="twin-text-meta">
+                  <div className="twin-title-flex">
+                    <strong className="twin-name">{activeCareer.twin.name}</strong>
+                    <span className="verified-badge"><BadgeCheck size={16} className="text-teal" /> Verified Practitioner</span>
+                  </div>
+                  <span className="twin-role">{activeCareer.twin.role} · <span className="text-cream">{activeCareer.twin.org}</span></span>
+                  <span className="twin-edu">{activeCareer.twin.education} · {activeCareer.twin.exp}</span>
                 </div>
-                <span className="verified-pill">
-                  <ShieldCheck size={14} /> Verified Practitioner
-                </span>
               </div>
 
               <div className="twin-story-body">
-                <h4>The Journey:</h4>
-                <p>{activeCareer.twin.story}</p>
+                <h4 className="story-label">The Career Trajectory:</h4>
+                <p className="story-para">{activeCareer.twin.story}</p>
 
-                <blockquote className="twin-quote">
-                  "{activeCareer.twin.advice}"
-                </blockquote>
+                <div className="advice-callout">
+                  <span className="advice-badge">Practitioner Advice:</span>
+                  <blockquote className="twin-quote">
+                    "{activeCareer.twin.advice}"
+                  </blockquote>
+                </div>
               </div>
             </div>
 
             <div className="stage-actions-bar">
               <button className="cta-primary-btn" onClick={() => scrollToStage(8)}>
-                Explore Branching Possibilities ↓
+                Explore Branching Trajectories ↓
               </button>
             </div>
           </div>
         </section>
 
-        {/* STAGE 08: RELATED CAREERS & LAUNCH GATEWAY */}
+        {/* STAGE 08: BRANCHING POSSIBILITIES & LAUNCH GATEWAY */}
         <section id="stage-8" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <span className="stage-tag accent-purple">STAGE 08 · BRANCHING POSSIBILITIES</span>
-              <h2>Where Can You Branch Next?</h2>
-              <p>Adjacent high-yield career paths sharing your core competencies and interests.</p>
+              <div className="stage-tag-badge accent-purple">STAGE 08 · BRANCHING POSSIBILITIES</div>
+              <h2 className="stage-title">Where Can You Branch Next?</h2>
+              <p className="stage-desc">Connected high-yield career paths sharing your core competencies and interests.</p>
             </div>
 
             <div className="related-cards-grid">
@@ -565,7 +649,7 @@ export default function LandingPage() {
             <div className="portal-action-cluster">
               <div className="cluster-header">
                 <h3>Ready to Map Your Complete Trajectory?</h3>
-                <p>Access our complete suite of deep AI tools, comparison engines, and 10k university audits.</p>
+                <p>Access our complete suite of deep AI tools, comparison engines, and 10,000+ university audits.</p>
               </div>
               <div className="cluster-buttons">
                 <Link to="/explore" className="btn-solid-lime">
@@ -578,7 +662,7 @@ export default function LandingPage() {
                   <GraduationCap size={18} /> 10,000 Universities
                 </Link>
                 <Link to="/compare" className="btn-outline-cream">
-                  Compare Trajectories
+                  <Layers size={18} /> Compare Trajectories
                 </Link>
               </div>
             </div>
