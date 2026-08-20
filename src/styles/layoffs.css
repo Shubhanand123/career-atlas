@@ -1,11 +1,12 @@
 /* ==========================================================================
-   CAREER ATLAS — Layoffs & Market Volatility (Rich Visual Cards & High Contrast)
+   CAREER ATLAS — Layoffs & Market Volatility (Executive Presentation)
    ========================================================================== */
 
 .layoffs-page {
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--text-primary);
+  font-family: var(--font-body);
   position: relative;
 }
 
@@ -17,10 +18,14 @@
   z-index: 10;
 }
 
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+
 .layoffs-hero {
   text-align: center;
-  max-width: 900px;
-  margin: 0 auto 2.5rem;
+  max-width: 920px;
+  margin: 0 auto 2.75rem;
 }
 
 .hero-title {
@@ -44,13 +49,14 @@
   justify-content: center;
   gap: 0.6rem;
   flex-wrap: wrap;
+  margin-top: 1.75rem;
 }
 
 .l-tab {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.7rem 1.25rem;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
   border-radius: 12px;
   background: var(--bg-card);
   border: 1px solid var(--border-medium);
@@ -76,202 +82,587 @@
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
-/* Sector Layout */
+/* ==========================================================================
+   TAB 1: SECTOR VULNERABILITY MATRIX
+   ========================================================================== */
+
 .layoffs-layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 1.75rem;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  align-items: flex-start;
   margin-top: 2rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .layoffs-layout {
     grid-template-columns: 1fr;
   }
 }
 
 .sector-list-sidebar {
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: 18px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .sidebar-title {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 1rem;
 }
 
 .sector-cards {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .sector-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 16px;
+  padding: 1.25rem;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .sector-card:hover {
-  border-color: var(--border-light);
-  transform: translateY(-1px);
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
 }
 
 .sector-card.active {
   background: var(--bg-card-hover);
   border-color: var(--accent-cyan);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 2px var(--accent-cyan), var(--shadow-xl);
 }
 
-.sector-detail-main {
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: 18px;
-  padding: 2rem;
-  box-shadow: var(--shadow-md);
-}
-
-/* 4-Stat Cards Row */
-.layoff-stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 2rem;
-}
-
-.layoff-stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: 16px;
-  padding: 1.4rem;
-  box-shadow: var(--shadow-md);
+.sector-top {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
 }
 
-.stat-lbl {
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.stat-num {
-  font-size: 1.7rem;
-  font-weight: 900;
+.sector-name {
+  font-size: 1.05rem;
+  font-weight: 800;
   color: var(--text-primary);
 }
 
-.stat-num.danger { color: var(--accent-red); }
-.stat-num.safe { color: var(--accent-green); }
+.risk-indicator {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent-red);
+  background: var(--accent-red-dim);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
 
-/* Table Container Box */
-.layoffs-table-container {
+.sector-cut-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.stat-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.stat-val.text-red { color: var(--accent-red); }
+
+/* Right Sector Detail Panel */
+.sector-detail-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.sector-hero-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 24px;
+  padding: 2.25rem;
+  box-shadow: var(--shadow-xl);
+}
+
+.detail-sector-name {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0.5rem 0 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.sector-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .sector-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.meta-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.meta-val {
+  font-size: 1.35rem;
+  font-weight: 900;
+  font-family: var(--font-heading);
+}
+
+.meta-val.text-red { color: var(--accent-red); }
+.meta-val.text-gold { color: #F59E0B; }
+
+.macro-drivers {
+  margin-top: 1rem;
+}
+
+.sub-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.driver-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.driver-list li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.driver-list li::before {
+  content: '•';
+  color: var(--accent-cyan);
+  position: absolute;
+  left: 0;
+  font-weight: 900;
+}
+
+/* 2-Column Vulnerable vs Resilient Roles */
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .grid-2-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.role-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+}
+
+.role-column.vulnerable {
+  border-top: 4px solid var(--accent-red);
+}
+
+.role-column.resilient {
+  border-top: 4px solid var(--accent-green);
+}
+
+.col-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.role-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.role-item-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  padding: 1.15rem;
+  transition: all 0.15s ease;
+}
+
+.role-item-card:hover {
+  border-color: var(--border-accent);
+}
+
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.role-title-text {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.risk-badge-high {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent-red);
+  background: var(--accent-red-dim);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.resilience-badge-high {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent-green);
+  background: var(--accent-green-dim);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.role-reason-text {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Strategic Survival Box */
+.survival-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-left: 4px solid #F59E0B;
+  border-radius: 18px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-md);
+}
+
+.playbook-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #F59E0B;
+  margin: 0 0 0.5rem;
+}
+
+.playbook-text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ==========================================================================
+   TAB 2: COMPANY LAYOFF & SEVERANCE TRACKER
+   ========================================================================== */
+
+.tracker-controls-card {
   background: var(--bg-card);
   border: 1px solid var(--border-medium);
   border-radius: 18px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 1.5rem;
+}
+
+.card-subheading {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem;
+}
+
+.section-subtext {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.tracker-search-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  padding: 0.65rem 1.1rem;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-family: var(--font-body);
+  outline: none;
+  min-width: 320px;
+}
+
+.tracker-search-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+}
+
+.tracker-table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
   overflow-x: auto;
-  margin-top: 1.5rem;
 }
 
-.layoffs-data-table {
+.tracker-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.layoffs-data-table th {
-  font-size: 0.76rem;
+.tracker-table th {
+  font-size: 0.74rem;
   font-weight: 800;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 0.85rem 1rem;
+  padding: 0.95rem 1rem;
   border-bottom: 1px solid var(--border-medium);
 }
 
-.layoffs-data-table td {
+.tracker-table td {
   padding: 1rem;
   border-bottom: 1px solid var(--border-subtle);
   font-size: 0.88rem;
+  vertical-align: middle;
 }
 
-.layoffs-data-table tr:hover td {
+.tracker-table tr:hover td {
   background: var(--bg-secondary);
 }
 
-.co-cell-name {
-  font-weight: 800;
-  color: var(--text-primary);
-  display: block;
-}
-
-.co-cell-ind {
-  font-size: 0.74rem;
-  color: var(--text-muted);
-}
-
-.sev-pill {
+.sector-tag-sm {
   font-size: 0.74rem;
   font-weight: 700;
   background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border-medium);
+  padding: 0.25rem 0.6rem;
   border-radius: 6px;
   color: var(--text-secondary);
 }
 
-/* AI TIMELINE GRID */
-.timeline-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+.badge-pct {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #F59E0B;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
 }
 
-.timeline-card {
+.text-dim { color: var(--text-secondary); }
+.text-sm { font-size: 0.82rem; }
+
+/* ==========================================================================
+   TAB 3: AI AUTOMATION TIMELINE
+   ========================================================================== */
+
+.timeline-main-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+
+.timeline-subtitle {
+  font-size: 0.96rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.timeline-phases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+.timeline-phase-card {
   background: var(--bg-card);
   border: 1px solid var(--border-medium);
-  border-radius: 18px;
-  padding: 1.5rem;
+  border-radius: 20px;
+  padding: 1.75rem;
   box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.t-phase-badge {
+.phase-badge {
   font-size: 0.74rem;
   font-weight: 800;
   color: var(--accent-cyan);
   background: var(--accent-cyan-dim);
   border: 1px solid var(--border-accent);
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
   display: inline-block;
+  align-self: flex-start;
   margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.t-card-title {
+.phase-title {
   font-size: 1.25rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.4rem;
 }
 
-.t-card-desc {
+.phase-desc {
   font-size: 0.86rem;
   color: var(--text-secondary);
   line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.phase-grid-winners-losers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.win-box,
+.lose-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.win-box { border-left: 3px solid var(--accent-green); }
+.lose-box { border-left: 3px solid var(--accent-red); }
+
+.win-lbl,
+.lose-lbl {
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.win-lbl { color: var(--accent-green); }
+.lose-lbl { color: var(--accent-red); }
+
+.win-list,
+.lose-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.win-list li,
+.lose-list li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   TAB 4: LAYOFF SURVIVAL & PIVOT PLAYBOOK
+   ========================================================================== */
+
+.playbook-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+.playbook-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.p-card-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.p-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.p-list li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.p-list li strong {
+  color: var(--text-primary);
+  font-weight: 800;
 }
