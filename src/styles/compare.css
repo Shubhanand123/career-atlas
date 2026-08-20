@@ -1,13 +1,14 @@
 /* ==========================================================================
-   CAREER ATLAS — Compare Engine (Rich Visual Cards & High Contrast)
+   CAREER ATLAS — Compare Matrix & Multidimensional Studio (Executive Grade)
    ========================================================================== */
 
 .compare-page {
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--text-primary);
-  padding-bottom: 5rem;
+  font-family: var(--font-body);
   position: relative;
+  padding-bottom: 6rem;
 }
 
 .compare-container {
@@ -18,10 +19,29 @@
   z-index: 10;
 }
 
+/* ==========================================================================
+   HERO & CAREER SELECTOR BAR
+   ========================================================================== */
+
 .compare-hero {
   text-align: center;
   max-width: 900px;
-  margin: 0 auto 3rem;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin: 0.6rem 0 0.85rem;
+  color: var(--text-primary);
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .compare-selector-bar {
@@ -43,12 +63,13 @@
   background: var(--bg-card);
   border: 1px solid var(--border-medium);
   border-radius: 14px;
-  padding: 0.95rem 1.25rem 0.95rem 2.85rem;
+  padding: 0.95rem 1.25rem 0.95rem 3rem;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-family: var(--font-body);
   outline: none;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .search-wrap input:focus {
@@ -58,7 +79,7 @@
 
 .search-wrap .search-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.1rem;
   top: 50%;
   transform: translateY(-50%);
   color: var(--accent-cyan);
@@ -66,25 +87,27 @@
 
 .dropdown-list {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   left: 0;
   right: 0;
   background: var(--bg-secondary);
   border: 1px solid var(--accent-cyan);
-  border-radius: 12px;
+  border-radius: 14px;
   max-height: 280px;
   overflow-y: auto;
-  z-index: 50;
+  z-index: 60;
   box-shadow: var(--shadow-xl);
+  padding: 0.35rem;
 }
 
 .dropdown-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.85rem 1.25rem;
+  align-items: center;
+  padding: 0.85rem 1.15rem;
   cursor: pointer;
-  border-bottom: 1px solid var(--border-subtle);
-  transition: background 0.15s;
+  border-radius: 8px;
+  transition: all 0.15s ease;
 }
 
 .dropdown-item:hover {
@@ -93,78 +116,234 @@
 
 .dropdown-item .career-name {
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 0.9rem;
 }
 
 .dropdown-item .career-family {
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-/* Side by Side Comparison Grid */
-.comparison-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2.5rem;
+/* Active Selected Tags Bar */
+.selected-tags {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.career-compare-card {
+.career-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: 18px;
-  padding: 1.75rem;
-  box-shadow: var(--shadow-md);
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  transition: all 0.2s ease;
+  border: 1.5px solid var(--border-medium);
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
 }
 
-.career-compare-card:hover {
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-xl);
+.career-pill:hover {
+  transform: translateY(-1px);
 }
 
-.compare-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--border-subtle);
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
-.compare-title {
-  font-size: 1.35rem;
+.career-pill .name {
+  font-size: 0.88rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0;
 }
 
-.compare-metric-box {
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.remove-btn:hover {
+  color: var(--accent-red);
+  background: var(--accent-red-dim);
+}
+
+/* ==========================================================================
+   MULTIDIMENSIONAL RADAR SECTION
+   ========================================================================== */
+
+.radar-section-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 24px;
+  padding: 2.25rem;
+  box-shadow: var(--shadow-xl);
+  margin: 2.5rem 0;
+}
+
+.section-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.radar-wrapper {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* ==========================================================================
+   DEEP COMPARISON MATRIX GRID & TABLE
+   ========================================================================== */
+
+.matrix-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 24px;
+  padding: 2.25rem;
+  box-shadow: var(--shadow-xl);
+  margin-bottom: 2.5rem;
+}
+
+.matrix-table-wrap {
+  overflow-x: auto;
+  margin-top: 1.25rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-medium);
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: var(--bg-card);
+}
+
+.compare-table th {
+  padding: 1.25rem 1.35rem;
   background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  border-bottom: 1px solid var(--border-medium);
+  vertical-align: top;
 }
 
-.comp-metric-label {
-  font-size: 0.72rem;
+.metric-header {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 220px;
+}
+
+.th-career-name {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.th-family {
+  font-size: 0.74rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
 }
 
-.comp-metric-val {
-  font-size: 1.15rem;
+.compare-table td {
+  padding: 1.1rem 1.35rem;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.compare-table tr:hover td {
+  background: var(--bg-secondary);
+}
+
+.metric-cell-label {
   font-weight: 800;
+  color: var(--text-primary) !important;
+  font-size: 0.86rem;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-medium);
+}
+
+.metric-cell-val {
+  font-weight: 700;
   color: var(--text-primary);
 }
 
-.comp-metric-val.salary { color: var(--accent-green); }
-.comp-metric-val.ai { color: var(--accent-gold); }
-.comp-metric-val.rigor { color: var(--accent-cyan); }
+.stat-pill {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.84rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+}
+
+.stat-pill.text-cyan {
+  color: var(--accent-cyan);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.stat-pill.text-gold {
+  color: #F59E0B;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* ==========================================================================
+   BOTTOM CTA SECTION
+   ========================================================================== */
+
+.compare-bottom-cta {
+  margin-top: 3rem;
+}
+
+.cta-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  border-radius: 24px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+}
+
+.cta-box h3 {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.cta-box p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
