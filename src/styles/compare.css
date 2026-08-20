@@ -1,11 +1,11 @@
 /* ==========================================================================
-   CAREER ATLAS — Compare Engine (Gen Z Minimalist / Obsidian Dark)
+   CAREER ATLAS — Compare Engine (Rich Visual Cards & High Contrast)
    ========================================================================== */
 
 .compare-page {
   min-height: 100vh;
-  background: var(--bg-primary, #080809);
-  color: var(--text-primary, #FAFAFA);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   padding-bottom: 5rem;
   position: relative;
 }
@@ -40,20 +40,20 @@
 
 .search-wrap input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
   border-radius: 14px;
   padding: 0.95rem 1.25rem 0.95rem 2.85rem;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 1rem;
+  font-family: var(--font-body);
   outline: none;
   transition: all 0.2s ease;
 }
 
 .search-wrap input:focus {
-  border-color: var(--accent-cyan, #6366F1);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px var(--accent-cyan-dim);
 }
 
 .search-wrap .search-icon {
@@ -61,7 +61,7 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--accent-cyan, #6366F1);
+  color: var(--accent-cyan);
 }
 
 .dropdown-list {
@@ -69,13 +69,13 @@
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  background: #181822;
-  border: 1px solid var(--border-accent, rgba(99, 102, 241, 0.35));
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent-cyan);
   border-radius: 12px;
   max-height: 280px;
   overflow-y: auto;
   z-index: 50;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: var(--shadow-xl);
 }
 
 .dropdown-item {
@@ -83,111 +83,88 @@
   justify-content: space-between;
   padding: 0.85rem 1.25rem;
   cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border-subtle);
   transition: background 0.15s;
 }
 
 .dropdown-item:hover {
-  background: rgba(99, 102, 241, 0.15);
+  background: var(--accent-cyan-dim);
 }
 
 .dropdown-item .career-name {
-  color: #fff;
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .dropdown-item .career-family {
-  color: var(--text-muted, #64748B);
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
-.selected-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-.tag-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid var(--accent-cyan, #6366F1);
-  padding: 0.45rem 0.9rem;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.tag-pill button {
-  background: none;
-  border: none;
-  color: var(--text-muted, #64748B);
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-}
-
-.tag-pill button:hover {
-  color: #F87171;
-}
-
-.compare-matrix-grid {
+/* Side by Side Comparison Grid */
+.comparison-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
   margin-top: 2.5rem;
 }
 
-.compare-column-card {
-  background: var(--bg-card, #111116);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+.career-compare-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
   border-radius: 18px;
   padding: 1.75rem;
+  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  transition: all 0.2s ease;
 }
 
-.col-header-top {
+.career-compare-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-xl);
+}
+
+.compare-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.col-title {
-  font-size: 1.4rem;
+.compare-title {
+  font-size: 1.35rem;
   font-weight: 800;
-  color: #fff;
-  margin-bottom: 0.2rem;
+  color: var(--text-primary);
+  margin: 0;
 }
 
-.col-cat {
-  font-size: 0.8rem;
-  color: var(--accent-gold, #A78BFA);
-  font-weight: 600;
-}
-
-.metric-section {
-  background: rgba(255, 255, 255, 0.03);
+.compare-metric-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 
-.m-label {
+.comp-metric-label {
   font-size: 0.72rem;
-  color: var(--text-muted, #64748B);
-  text-transform: uppercase;
   font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.m-val {
-  font-size: 1.1rem;
+.comp-metric-val {
+  font-size: 1.15rem;
   font-weight: 800;
+  color: var(--text-primary);
 }
+
+.comp-metric-val.salary { color: var(--accent-green); }
+.comp-metric-val.ai { color: var(--accent-gold); }
+.comp-metric-val.rigor { color: var(--accent-cyan); }

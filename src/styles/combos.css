@@ -1,11 +1,11 @@
 /* ==========================================================================
-   CAREER ATLAS — Combos & Multiplier Studio (Gen Z Minimalist / Obsidian Dark)
+   CAREER ATLAS — Combos & Multiplier Studio (Rich Visual Cards & High Contrast)
    ========================================================================== */
 
 .combos-page {
   min-height: 100vh;
-  background: var(--bg-primary, #080809);
-  color: var(--text-primary, #FAFAFA);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   position: relative;
 }
 
@@ -29,65 +29,69 @@
   letter-spacing: -0.04em;
   line-height: 1.05;
   margin: 0.6rem 0 0.85rem;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .hero-subtitle {
   font-size: 1.05rem;
-  color: var(--text-secondary, #94A3B8);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
-/* Custom Skill Stacker Header Card */
+/* Custom Skill Stacker Header Card Box */
 .stacker-header-card {
-  background: var(--bg-card, #111116);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2rem;
 }
 
 .stacker-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: var(--text-primary);
   margin: 0.35rem 0;
 }
 
 .stacker-subtitle {
   font-size: 0.92rem;
-  color: var(--text-secondary, #94A3B8);
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .live-multiplier-badge {
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid var(--border-accent, rgba(99, 102, 241, 0.35));
-  border-radius: 14px;
-  padding: 0.75rem 1.4rem;
+  background: var(--accent-cyan-dim);
+  border: 1px solid var(--border-accent);
+  border-radius: 16px;
+  padding: 0.85rem 1.6rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  box-shadow: var(--shadow-sm);
 }
 
 .live-num {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 900;
-  color: var(--accent-cyan, #6366F1);
+  color: var(--accent-cyan);
 }
 
 .live-sub {
-  font-size: 0.75rem;
-  color: var(--accent-green, #4ADE80);
+  font-size: 0.76rem;
+  color: var(--accent-green);
   font-weight: 700;
 }
 
-/* Custom Results Dashboard */
+/* Custom Results Dashboard Box */
 .custom-results-dashboard {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  margin: 1.5rem 0;
 }
 
 .res-card-top {
@@ -97,395 +101,242 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .archetype-label {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-muted, #64748B);
+  color: var(--text-muted);
   font-weight: 700;
 }
 
 .archetype-name {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 800;
   margin: 0.2rem 0 0;
-  color: var(--accent-gold, #A78BFA);
+  color: var(--accent-gold);
 }
 
 .domains-pill {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--accent-green, #4ADE80);
-  background: rgba(74, 222, 128, 0.12);
+  color: var(--accent-green);
+  background: var(--accent-green-dim);
   border: 1px solid rgba(74, 222, 128, 0.3);
   padding: 0.35rem 0.85rem;
   border-radius: 9999px;
 }
 
-.comp-projection-grid {
+/* 3-Column Metrics Row */
+.synergy-metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
-.comp-item {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
-  border-radius: 12px;
-  padding: 1rem;
+@media (max-width: 768px) {
+  .synergy-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
+  gap: 0.35rem;
 }
 
-.c-lbl {
-  font-size: 0.7rem;
-  color: var(--text-muted, #64748B);
-  text-transform: uppercase;
-  margin-bottom: 0.35rem;
-}
-
-.c-val {
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-
-.insight-text {
-  font-size: 0.88rem;
-  color: var(--text-secondary, #94A3B8);
-  line-height: 1.55;
-}
-
-/* Active Chips */
-.active-skills-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.active-label {
-  font-size: 0.82rem;
-  color: var(--text-muted, #64748B);
+.stat-label {
+  font-size: 0.72rem;
   font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.chips-wrap {
+.stat-val {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.stat-val.salary { color: var(--accent-green); }
+.stat-val.multiplier { color: var(--accent-cyan); }
+.stat-val.resilience { color: var(--accent-gold); }
+
+/* Skill Category Selector Grid */
+.skills-category-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin: 1.25rem 0;
+}
+
+.cat-tab-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.cat-tab-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.cat-tab-btn.active {
+  background: var(--accent-cyan);
+  color: #FFFFFF;
+  border-color: var(--accent-cyan);
+}
+
+/* Interactive Skill Chips Pool */
+.skills-pool-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  margin-top: 1rem;
 }
 
-.active-chip {
+.skill-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  padding: 0.5rem 0.95rem;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid var(--accent-cyan, #6366F1);
-  color: #FAFAFA;
-  padding: 0.35rem 0.85rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-chip:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+.skill-chip.selected {
+  background: var(--accent-cyan);
+  color: #FFFFFF;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+/* CURATED COMBO BLUEPRINTS SECTION */
+.blueprints-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.combo-blueprint-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.combo-blueprint-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl);
+}
+
+.blueprint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.blueprint-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 0.2rem;
+}
+
+.blueprint-synergy-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+  border: 1px solid var(--border-accent);
+  padding: 0.25rem 0.65rem;
   border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
 }
 
-.chip-remove {
-  background: none;
-  border: none;
-  color: var(--text-muted, #64748B);
-  font-size: 1.1rem;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.chip-remove:hover {
-  color: #F87171;
-}
-
-/* Skill Matrix Controls */
-.cat-filter-tabs {
+.blueprint-formula-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin: 0.75rem 0 1rem;
   display: flex;
-  gap: 0.4rem;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
 }
 
-.cat-tab {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  color: var(--text-secondary, #94A3B8);
-  padding: 0.4rem 0.85rem;
-  border-radius: 8px;
+.formula-skill-pill {
   font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.15s ease;
-}
-
-.cat-tab:hover {
-  background: rgba(99, 102, 241, 0.12);
-  color: #fff;
-}
-
-.cat-tab.active {
-  background: var(--accent-cyan, #6366F1);
-  color: #fff;
-}
-
-.skill-search-input {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: 10px;
-  padding: 0.5rem 0.9rem;
-  color: #fff;
-  font-size: 0.85rem;
-  outline: none;
-  min-width: 260px;
-}
-
-.skill-search-input:focus {
-  border-color: var(--accent-cyan, #6366F1);
-}
-
-.skills-selectable-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.85rem;
-  margin-top: 1rem;
-  max-height: 380px;
-  overflow-y: auto;
-}
-
-.skill-pick-card {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
-  border-radius: 12px;
-  padding: 0.85rem;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  transition: all 0.15s ease;
-}
-
-.skill-pick-card:hover {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.3);
-}
-
-.skill-pick-card.selected {
-  background: rgba(99, 102, 241, 0.18);
-  border-color: var(--accent-cyan, #6366F1);
-}
-
-.s-card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.s-icon { font-size: 1.2rem; }
-.s-check {
-  font-size: 0.75rem;
-  font-weight: 800;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted, #64748B);
-}
-
-.s-check.checked {
-  background: var(--accent-cyan, #6366F1);
-  color: #fff;
-}
-
-.s-name { font-size: 0.82rem; color: #fff; line-height: 1.35; }
-.s-cat { font-size: 0.7rem; color: var(--text-muted, #64748B); }
-.s-time { font-size: 0.68rem; color: var(--accent-green, #4ADE80); font-weight: 600; margin-top: 0.2rem; }
-
-/* Curated Blueprints Section */
-.combos-layout {
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 1.75rem;
-}
-
-.combos-sidebar {
-  background: var(--bg-card, #111116);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: 18px;
-  padding: 1.25rem;
-}
-
-.sidebar-title {
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: var(--text-muted, #64748B);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 1rem;
-}
-
-.combo-card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.combo-select-card {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
-  border-radius: 12px;
-  padding: 1rem;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.combo-select-card:hover {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.3);
-}
-
-.combo-select-card.active {
-  background: rgba(99, 102, 241, 0.15);
-  border-color: var(--accent-cyan, #6366F1);
-}
-
-.combo-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.4rem;
-}
-
-.combo-multiplier-pill {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--accent-cyan, #6366F1);
-  background: rgba(99, 102, 241, 0.12);
-  padding: 0.15rem 0.55rem;
-  border-radius: 4px;
-}
-
-.combo-diff-tag {
-  font-size: 0.7rem;
-  color: var(--text-muted, #64748B);
-}
-
-.combo-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
-.combo-base { font-size: 0.75rem; color: var(--text-muted, #64748B); margin: 0; }
-.combo-target-box { display: flex; justify-content: space-between; margin-top: 0.6rem; font-size: 0.78rem; }
-
-.combo-detail-panel {
-  background: var(--bg-card, #111116);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: 18px;
-  padding: 2rem;
-}
-
-.detail-title { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 0.2rem 0; }
-.detail-base-text { font-size: 0.9rem; color: var(--text-secondary, #94A3B8); }
-
-.multiplier-badge-box {
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid var(--border-accent, rgba(99, 102, 241, 0.35));
-  border-radius: 12px;
-  padding: 0.65rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.multiplier-num { font-size: 1.6rem; font-weight: 900; color: var(--accent-cyan, #6366F1); }
-.multiplier-label { font-size: 0.68rem; color: var(--text-muted, #64748B); text-transform: uppercase; }
-
-.salary-target-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.85rem;
-  margin-top: 1.5rem;
-}
-
-.sal-box {
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
-  border-radius: 10px;
-  padding: 0.85rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.sal-label { font-size: 0.65rem; color: var(--text-muted, #64748B); text-transform: uppercase; margin-bottom: 0.25rem; }
-.sal-val { font-size: 0.98rem; font-weight: 800; }
-
-.synergy-insight-card {
-  background: rgba(99, 102, 241, 0.06);
-  border-left: 3px solid var(--accent-cyan, #6366F1);
-  padding: 1.25rem 1.5rem;
-  border-radius: 0 12px 12px 0;
-  margin: 1.5rem 0;
-}
-
-.synergy-text { font-size: 0.92rem; color: #FAFAFA; line-height: 1.6; margin: 0; }
-
-.skills-stacked-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.85rem;
-  margin-top: 0.85rem;
-}
-
-.stacked-skill-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
-  border-radius: 10px;
-  padding: 0.85rem;
-  display: flex;
-  gap: 0.75rem;
-}
-
-.skill-num { font-size: 1.1rem; font-weight: 900; color: var(--accent-cyan, #6366F1); }
-.skill-name { font-size: 0.84rem; font-weight: 700; color: #fff; }
-.skill-domain { font-size: 0.72rem; color: var(--text-muted, #64748B); }
-.skill-time { font-size: 0.7rem; color: var(--accent-green, #4ADE80); font-weight: 600; margin-top: 0.2rem; }
-
-.roadmap-steps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  margin-top: 1rem;
-}
-
-.roadmap-step-item {
-  display: flex;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
-  border-radius: 12px;
-  padding: 1rem;
-}
-
-.step-badge {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--accent-cyan, #6366F1);
-  background: rgba(99, 102, 241, 0.12);
+  font-weight: 700;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
   padding: 0.25rem 0.6rem;
   border-radius: 6px;
-  height: fit-content;
-  white-space: nowrap;
 }
 
-.step-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0 0 0.35rem; }
-.step-dur { font-size: 0.78rem; color: var(--accent-gold, #A78BFA); font-weight: 600; }
-.step-desc { font-size: 0.84rem; color: var(--text-secondary, #94A3B8); line-height: 1.5; margin: 0; }
+.formula-plus {
+  color: var(--accent-cyan);
+  font-weight: 800;
+}
 
-@media (max-width: 900px) {
-  .combos-layout, .comp-projection-grid, .salary-target-grid { grid-template-columns: 1fr; }
+.blueprint-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.blueprint-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.blueprint-salary {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent-green);
 }

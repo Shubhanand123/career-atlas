@@ -1,11 +1,11 @@
 /* ==========================================================================
-   CAREER ATLAS — AI Career Assessment Quiz (Gen Z Minimalist / Obsidian Dark)
+   CAREER ATLAS — AI Career Assessment Quiz (Rich Visual Cards & High Contrast)
    ========================================================================== */
 
 .quiz-container {
   min-height: 100vh;
-  background-color: var(--bg-primary, #080809);
-  color: var(--text-primary, #FAFAFA);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   padding: 90px 20px 60px;
   font-family: var(--font-body);
   position: relative;
@@ -23,13 +23,11 @@
   font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-weight: 900;
   margin-bottom: 12px;
-  background: linear-gradient(130deg, var(--accent-cyan, #6366F1), var(--accent-green, #4ADE80));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
 }
 
 .quiz-subtitle {
-  color: var(--text-secondary, #94A3B8);
+  color: var(--text-secondary);
   font-size: 1.05rem;
 }
 
@@ -44,33 +42,33 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
-  color: var(--text-secondary, #94A3B8);
+  color: var(--text-secondary);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .progress-bar-bg {
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
+  height: 6px;
+  background-color: var(--border-medium);
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-cyan, #6366F1), var(--accent-green, #4ADE80));
-  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+  border-radius: 3px;
   transition: width 0.25s ease;
 }
 
 .question-card {
   max-width: 800px;
   margin: 0 auto;
-  background: var(--bg-card, #111116);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-xl);
   position: relative;
   z-index: 10;
 }
@@ -80,7 +78,7 @@
   font-weight: 800;
   margin-bottom: 30px;
   text-align: center;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .options-grid {
@@ -91,8 +89,8 @@
 }
 
 .option-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
   border-radius: 14px;
   padding: 18px 22px;
   cursor: pointer;
@@ -103,18 +101,118 @@
 }
 
 .option-card:hover {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.3);
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
 }
 
 .option-card.selected {
-  background: rgba(99, 102, 241, 0.18);
-  border-color: var(--accent-cyan, #6366F1);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
-.quiz-actions {
+.option-indicator {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.option-card.selected .option-indicator {
+  border-color: var(--accent-cyan);
+  background-color: var(--accent-cyan);
+}
+
+.option-indicator-inner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+}
+
+.option-text {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.quiz-nav-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* RESULTS DASHBOARD */
+.results-card {
+  max-width: 850px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  z-index: 10;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.top-career-badge {
+  display: inline-block;
+  background: var(--accent-green-dim);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: var(--accent-green);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 25px;
+}
+
+.recommended-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  padding: 20px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.recommended-item:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.rec-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.rec-salary {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--accent-green);
+  margin-top: 10px;
 }
