@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, 
-  Calculator, HelpCircle, ArrowRight, Globe, Search, Zap, CheckCircle2
+  Calculator, HelpCircle, ArrowRight, Globe, Search, MessageSquare, Zap, ExternalLink
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { processCopilotQuery } from '../services/copilotEngine';
@@ -80,7 +80,7 @@ export default function CopilotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "### ✦ Career Atlas Instant Intelligence & Search Engine\nHello! I am your in-app Copilot. Ask me any question about career pathways, true study costs abroad, 2026 college cutoffs, salary benchmarks, or sports professions. All data and search analysis are delivered **directly right here in this chat** without leaving the application."
+      text: "### ✦ Career Atlas Intelligence & Live Search Engine\nHello! I am your Copilot. Ask me any question about career compensation, 2026 university admissions, true living costs abroad, or sports professions. All data and analysis are generated **directly right inside this chat** with instant Google & ChatGPT search links."
     }
   ]);
   const [input, setInput] = useState('');
@@ -115,10 +115,21 @@ export default function CopilotPage() {
           id: Date.now() + 1,
           sender: 'ai',
           text: result.text,
-          actionLink: result.actionLink
+          actionLink: result.actionLink,
+          sources: result.sources || []
         }
       ]);
     }, 350);
+  };
+
+  const handleDirectGoogleSearch = () => {
+    const query = input.trim() || "Top careers and university cutoffs 2026";
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+  };
+
+  const handleDirectChatGPT = () => {
+    const query = input.trim() || "Provide detailed career analysis and salary benchmarks for 2026";
+    window.open(`https://chatgpt.com/?q=${encodeURIComponent(query)}`, '_blank');
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -130,19 +141,19 @@ export default function CopilotPage() {
       <Navbar />
 
       <main className="copilot-container">
-        {/* Header with Direct In-App Intelligence Badges */}
+        {/* Header with Live Direct Engine Badges */}
         <div className="copilot-header">
           <div className="copilot-badges-bar">
             <div className="badge-pill">✦ Career Intelligence Copilot</div>
             <div className="gemini-status-pill active">
               <Zap size={13} className="text-green" />
-              <span>Direct In-App Search & AI Synthesis Active</span>
+              <span>Google Search & ChatGPT Engine Connected</span>
             </div>
           </div>
 
           <h1 className="copilot-title">AI Career & Admissions Advisor</h1>
           <p className="copilot-subtitle">
-            Instant, direct answers for 15,000+ careers, 10,000+ university cutoffs, true costs, and salary benchmarks — delivered right in this chat.
+            Direct in-app answers and live Google Search & ChatGPT triggers for 15,000+ careers, 10,000+ universities, and real-world economics.
           </p>
         </div>
 
@@ -156,6 +167,32 @@ export default function CopilotPage() {
                 </div>
                 <div className="message-bubble">
                   <FormattedAiText text={msg.text} />
+
+                  {/* Google Search & ChatGPT Quick Action Chips */}
+                  {msg.sources && msg.sources.length > 0 && (
+                    <div className="grounding-sources-block">
+                      <div className="grounding-title">
+                        <Globe size={13} className="text-cyan" /> Instant Search & AI Query Triggers:
+                      </div>
+                      <div className="grounding-chips">
+                        {msg.sources.map((src, i) => (
+                          <a 
+                            key={i} 
+                            href={src.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className={`source-chip ${src.type || ''}`}
+                          >
+                            {src.type === 'google' && <Search size={13} />}
+                            {src.type === 'chatgpt' && <MessageSquare size={13} />}
+                            {src.type === 'scholar' && <GraduationCap size={13} />}
+                            <span>{src.title}</span>
+                            <ExternalLink size={11} />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Direct Internal Atlas Action Link */}
                   {msg.actionLink && (
@@ -200,6 +237,27 @@ export default function CopilotPage() {
               onChange={(e) => setInput(e.target.value)}
             />
             
+            {/* Quick 1-Click Launchers */}
+            <button 
+              type="button" 
+              className="btn-quick-engine google"
+              onClick={handleDirectGoogleSearch}
+              title="Search this query on Google"
+            >
+              <Search size={15} />
+              <span className="desktop-only">Google</span>
+            </button>
+
+            <button 
+              type="button" 
+              className="btn-quick-engine chatgpt"
+              onClick={handleDirectChatGPT}
+              title="Ask this query on ChatGPT"
+            >
+              <MessageSquare size={15} />
+              <span className="desktop-only">ChatGPT</span>
+            </button>
+
             {/* In-App Send Button */}
             <button type="submit" className="btn-send" disabled={!input.trim()} title="Ask Copilot">
               <Send size={18} />

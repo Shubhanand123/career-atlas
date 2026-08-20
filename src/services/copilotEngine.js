@@ -1,5 +1,5 @@
 // Comprehensive In-App Search & Intelligence Engine for Career Atlas Copilot
-// Delivers rich, factual, comprehensive answers directly inside the chat with zero external redirects.
+// Delivers rich, factual answers in-app AND provides 1-click Google Search & ChatGPT query triggers.
 
 import { getEnrichedCareerAsync } from '../data/careers';
 import { searchCareerCatalog } from '../data/careerCatalog';
@@ -13,6 +13,25 @@ export async function processCopilotQuery(query) {
   const q = query.toLowerCase().trim();
   const rawQ = query.trim();
 
+  // Helper to build 1-click live search and ChatGPT query links
+  const createSearchLinks = (topic) => [
+    {
+      title: `Google Search: "${topic}"`,
+      url: `https://www.google.com/search?q=${encodeURIComponent(topic)}`,
+      type: 'google'
+    },
+    {
+      title: `ChatGPT Prompt: "${topic}"`,
+      url: `https://chatgpt.com/?q=${encodeURIComponent(topic)}`,
+      type: 'chatgpt'
+    },
+    {
+      title: `Google Scholar: "${topic}"`,
+      url: `https://scholar.google.com/scholar?q=${encodeURIComponent(topic)}`,
+      type: 'scholar'
+    }
+  ];
+
   // 1. College Admissions, Cutoffs & Placement ROI Queries
   if (q.includes('college') || q.includes('university') || q.includes('iit') || q.includes('bits') || q.includes('cutoff') || q.includes('admission') || q.includes('placement') || q.includes('campus') || q.includes('ranking')) {
     // Check if query mentions specific college
@@ -24,9 +43,9 @@ export async function processCopilotQuery(query) {
 
     if (matchedInst) {
       return {
-        text: `### 🏛️ Search Intelligence: ${matchedInst.name} (${matchedInst.country})
+        text: `### 🏛️ Institutional Intelligence: ${matchedInst.name} (${matchedInst.country})
 
-#### 📊 Institutional Placement & Admission Metrics (2025/2026):
+#### 📊 Placement & Admission Benchmarks (2025/2026):
 * **📍 Location & Campus:** ${matchedInst.city}, ${matchedInst.country}
 * **📈 NIRF / Global Ranking:** ${matchedInst.nirfRank ? `NIRF #${matchedInst.nirfRank}` : `Global Top ${matchedInst.qsRank || 50}`}
 * **💰 Average CTC Package:** ${matchedInst.placementStats?.avgDomesticCTC || '₹24.8 LPA / $115,000'}
@@ -39,9 +58,10 @@ export async function processCopilotQuery(query) {
 * **Tuition Benchmark:** ${matchedInst.tuitionAnnualFormatted || '₹2.2 Lakhs / yr (Govt subsidized)'}
 * **True Total Cost:** ${matchedInst.totalDegreeCostFormatted || '₹10.5 Lakhs (Full 4-Year B.Tech)'}
 
-#### 💡 Executive Campus Strategy:
-Maintain a minimum 8.5+ CGPA, publish minimum 1 peer-reviewed project, and target competitive hackathons or ACM-ICPC rounds in semesters 3–5 to lock Tier-1 international PPOs.`,
-        actionLink: { url: '/placements', label: `View Complete ${matchedInst.name} Placement & True-Cost Report` }
+#### 💡 Executive Strategy:
+Maintain a minimum 8.5+ CGPA, publish minimum 1 peer-reviewed project, and target competitive hackathons in semesters 3–5 to lock Tier-1 international PPOs.`,
+        actionLink: { url: '/placements', label: `View Complete ${matchedInst.name} Placement & True-Cost Report` },
+        sources: createSearchLinks(`${matchedInst.name} placement reports 2026`)
       };
     }
 
@@ -64,7 +84,8 @@ Maintain a minimum 8.5+ CGPA, publish minimum 1 peer-reviewed project, and targe
 
 #### 💡 Admissions Strategy:
 Balance your applications across 2 Reach, 3 Target, and 2 Safety institutions. For Indian engineering, maximize mock test speed for JEE/BITSAT; for study abroad, lock research publications and high GRE/IELTS early.`,
-      actionLink: { url: '/placements', label: 'Explore 10,000+ Indexed Campuses & True-Cost Calculator' }
+      actionLink: { url: '/placements', label: 'Explore 10,000+ Indexed Campuses & True-Cost Calculator' },
+      sources: createSearchLinks(`${rawQ} 2026 cutoffs and ranking`)
     };
   }
 
@@ -97,7 +118,8 @@ When studying abroad, **Tuition is only 40–55% of the true expense**. We calcu
 * **Tuition:** $38,000 – $72,000/year.
 * **Monthly Living Costs:** $1,400 – $2,600/month.
 * **Work Rights:** 3-Year STEM OPT extension (allows working up to 3 years without H-1B lottery).`,
-      actionLink: { url: '/placements', label: 'Launch Interactive True-Cost Calculator for 10,000+ Campuses' }
+      actionLink: { url: '/placements', label: 'Launch Interactive True-Cost Calculator for 10,000+ Campuses' },
+      sources: createSearchLinks(`${rawQ} international student costs 2026`)
     };
   }
 
@@ -124,7 +146,8 @@ The sports industry is a massive **multi-billion dollar economic engine**. Beyon
 
 #### 4. 🤖 Sports AI & Wearable Technology:
 * **Computer Vision Tracking Engineer:** Builds Hawk-Eye, VAR, and real-time player tracking neural networks.`,
-      actionLink: { url: '/explore?family=sports', label: 'Explore All 35+ Dedicated Sports Careers & Disciplines' }
+      actionLink: { url: '/explore?family=sports', label: 'Explore All 35+ Dedicated Sports Careers & Disciplines' },
+      sources: createSearchLinks(`${rawQ} career salaries 2026`)
     };
   }
 
@@ -147,7 +170,8 @@ The sports industry is a massive **multi-billion dollar economic engine**. Beyon
 
 #### 💡 Survival Blueprint:
 Stop operating as a *manual syntax executor*. Transition to an *AI-augmented systems designer* with verified physical or mathematical proof-of-work.`,
-      actionLink: { url: '/layoffs', label: 'View Sector Layoff Tracker & AI Displacement Timeline' }
+      actionLink: { url: '/layoffs', label: 'View Sector Layoff Tracker & AI Displacement Timeline' },
+      sources: createSearchLinks(`${rawQ} tech employment impact`)
     };
   }
 
@@ -176,7 +200,8 @@ Mastering a **rare intersection of two distinct domains** commands 3x–6x highe
 #### 4. 🛡️ Cloud Security + Zero-Trust Kernel Architecture:
 * **India CTC:** ₹35 LPA — ₹1.10 Cr ($180,000–$380,000 US)
 * **Core Competencies:** Kubernetes Hardening, Cryptographic Identity, SIEM, Adversarial Simulation.`,
-      actionLink: { url: '/combos', label: 'Explore High-Yield Skill Stacks & Pay Multipliers' }
+      actionLink: { url: '/combos', label: 'Explore High-Yield Skill Stacks & Pay Multipliers' },
+      sources: createSearchLinks(`${rawQ} skill stacks 2026`)
     };
   }
 
@@ -206,7 +231,8 @@ ${enriched.skills?.hard?.slice(0, 8).join(', ') || 'Systems thinking, analytical
 
 #### 🎯 Top Recruitment Campuses:
 IIT Bombay, IIT Delhi, BITS Pilani, Stanford, MIT, TU Munich, NUS Singapore.`,
-        actionLink: { url: `/career/${enriched.id}`, label: `Open Full ${enriched.name} Profile, Verified Twins & Pay Table` }
+        actionLink: { url: `/career/${enriched.id}`, label: `Open Full ${enriched.name} Profile, Verified Twins & Pay Table` },
+        sources: createSearchLinks(`${enriched.name} career roadmap 2026`)
       };
     }
   }
@@ -226,6 +252,7 @@ IIT Bombay, IIT Delhi, BITS Pilani, Stanford, MIT, TU Munich, NUS Singapore.`,
    * Build **verifiable proof-of-work** (open-source contributions, clinical internships, or quantified case studies).
    * Evaluate institutional ROI with our **True-Cost Calculator** before committing to higher education degrees.
    * Take the **30-Question Assessment** to pinpoint your strongest trait matches.`,
-    actionLink: { url: '/explore', label: 'Explore 15,000+ Careers in the Quantum Universe' }
+    actionLink: { url: '/explore', label: 'Explore 15,000+ Careers in the Quantum Universe' },
+    sources: createSearchLinks(rawQ)
   };
 }
