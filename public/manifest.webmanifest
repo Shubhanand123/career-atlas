@@ -1,0 +1,10 @@
+{
+  "name": "Career Atlas",
+  "short_name": "Career Atlas",
+  "description": "A cinematic guide through careers, pathways and possibilities.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#17100b",
+  "theme_color": "#17100b",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

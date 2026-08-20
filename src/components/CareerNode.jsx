@@ -35,7 +35,7 @@ const CareerNode = ({ id, name, color, position, onClick }) => {
             document.body.style.cursor = 'auto';
           }}
         >
-          <sphereGeometry args={[0.5, 32, 32]} />
+          <boxGeometry args={[0.9, 1.5, 0.9]} />
           <meshStandardMaterial 
             color={color} 
             emissive={color}
@@ -46,7 +46,7 @@ const CareerNode = ({ id, name, color, position, onClick }) => {
         </mesh>
         
         <mesh>
-          <sphereGeometry args={[0.6, 16, 16]} />
+          <boxGeometry args={[1.1, 1.7, 1.1]} />
           <meshBasicMaterial 
             color={color} 
             transparent 

@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { 
-  Search, Filter, Layers, Globe, Eye, ArrowRight, ShieldCheck, 
-  DollarSign, Cpu, GraduationCap, Building2, Zap, ChevronLeft, ChevronRight, X
+  Search, Layers, Globe, ArrowRight, GraduationCap, Zap, ChevronLeft, ChevronRight, X,
+  Trophy, DollarSign, TrendingUp, Sparkles, Filter, ShieldCheck, Briefcase
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import CareerUniverse from '../components/CareerUniverse';
 import { careerFamilies } from '../data/sampleCareers';
-import { careerRegistry } from '../data/careerRegistry';
+import { searchCareerCatalog } from '../data/careerCatalog';
+import { parseNaturalLanguageQuery } from '../utils/naturalLanguageSearch';
 import '../styles/explore.css';
 
 const ITEMS_PER_PAGE = 24;
@@ -15,20 +16,28 @@ const ITEMS_PER_PAGE = 24;
 export default function ExplorePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
-  
+  const initialFamily = searchParams.get('family') || 'all';
+
   const [searchTerm, setSearchTerm] = useState(initialSearch);
-  const [selectedFamily, setSelectedFamily] = useState('all');
+  const [parsedQuery, setParsedQuery] = useState(() => parseNaturalLanguageQuery(initialSearch));
+  const [selectedFamily, setSelectedFamily] = useState(initialFamily);
   const [viewMode, setViewMode] = useState('3d'); // '3d' or '2d'
-  const [toughnessFilter, setToughnessFilter] = useState('all'); // 'all', 'high', 'moderate', 'accessible'
-  const [aiRiskFilter, setAiRiskFilter] = useState('all'); // 'all', 'low', 'high'
-  const [skillLevelFilter, setSkillLevelFilter] = useState('all'); // 'all', 'High', 'Medium', 'Low'
+  const [toughnessFilter, setToughnessFilter] = useState('all');
+  const [aiRiskFilter, setAiRiskFilter] = useState('all');
+  const [skillLevelFilter, setSkillLevelFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [directory, setDirectory] = useState({ items: [], total: 15000, loading: true });
 
   // Sync URL search query param if present
   useEffect(() => {
     const q = searchParams.get('search');
     if (q !== null && q !== searchTerm) {
       setSearchTerm(q);
+      setParsedQuery(parseNaturalLanguageQuery(q));
+    }
+    const f = searchParams.get('family');
+    if (f !== null && f !== selectedFamily) {
+      setSelectedFamily(f);
     }
   }, [searchParams]);
 
@@ -37,61 +46,49 @@ export default function ExplorePage() {
     setCurrentPage(1);
   }, [searchTerm, selectedFamily, toughnessFilter, aiRiskFilter, skillLevelFilter]);
 
-  const filteredCareers = useMemo(() => {
-    const q = searchTerm.toLowerCase().trim();
+  useEffect(() => {
+    let cancelled = false;
+    setDirectory(current => ({ ...current, loading: true }));
 
-    return careerRegistry.filter(career => {
-      // Substring search in name, category, subcategory, shortDescription
-      if (q) {
-        const matchesQuery = 
-          career.name.toLowerCase().includes(q) ||
-          career.subcategory.toLowerCase().includes(q) ||
-          career.category.toLowerCase().includes(q) ||
-          (career.shortDescription && career.shortDescription.toLowerCase().includes(q));
-        if (!matchesQuery) return false;
+    const queryToUse = parsedQuery.keywords || searchTerm;
+    const effectiveFamily = parsedQuery.filters.family || (selectedFamily !== 'all' ? selectedFamily : undefined);
+
+    searchCareerCatalog({
+      query: queryToUse,
+      limit: ITEMS_PER_PAGE,
+      offset: (currentPage - 1) * ITEMS_PER_PAGE,
+      filters: { 
+        family: effectiveFamily, 
+        skillLevel: skillLevelFilter, 
+        toughness: toughnessFilter, 
+        aiRisk: aiRiskFilter 
       }
-
-      // Family cluster filter
-      if (selectedFamily !== 'all' && career.family !== selectedFamily) {
-        return false;
-      }
-
-      // Skill level filter
-      if (skillLevelFilter !== 'all' && career.skillLevel.toLowerCase() !== skillLevelFilter.toLowerCase()) {
-        return false;
-      }
-
-      // Toughness filter
-      const diff = Number(career.toughness) || 7.0;
-      if (toughnessFilter === 'high' && diff < 8.0) return false;
-      if (toughnessFilter === 'moderate' && (diff < 6.0 || diff >= 8.0)) return false;
-      if (toughnessFilter === 'accessible' && diff >= 6.0) return false;
-
-      // AI Risk filter
-      const aiRisk = Number(career.aiRisk) || 3.5;
-      if (aiRiskFilter === 'low' && aiRisk > 3.5) return false;
-      if (aiRiskFilter === 'high' && aiRisk <= 6.0) return false;
-
-      return true;
+    }).then(result => {
+      if (!cancelled) setDirectory({ ...result, loading: false });
+    }).catch(() => {
+      if (!cancelled) setDirectory({ items: [], total: 0, loading: false });
     });
-  }, [searchTerm, selectedFamily, toughnessFilter, aiRiskFilter, skillLevelFilter]);
+    return () => { cancelled = true; };
+  }, [searchTerm, parsedQuery, selectedFamily, toughnessFilter, aiRiskFilter, skillLevelFilter, currentPage]);
 
-  const totalPages = Math.ceil(filteredCareers.length / ITEMS_PER_PAGE) || 1;
-  const paginatedCareers = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredCareers.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredCareers, currentPage]);
+  const totalPages = Math.ceil(directory.total / ITEMS_PER_PAGE) || 1;
+  const paginatedCareers = directory.items;
 
-  const handleNodeClick = (familyId) => {
-    setSelectedFamily(familyId);
-    const gridEl = document.getElementById('careers-directory');
-    if (gridEl) {
-      gridEl.scrollIntoView({ behavior: 'smooth' });
+  const handleSearchChange = (val) => {
+    setSearchTerm(val);
+    const parsed = parseNaturalLanguageQuery(val);
+    setParsedQuery(parsed);
+    if (parsed.filters.family) setSelectedFamily(parsed.filters.family);
+    if (val) {
+      setSearchParams({ search: val });
+    } else {
+      setSearchParams({});
     }
   };
 
   const handleClearFilters = () => {
     setSearchTerm('');
+    setParsedQuery(parseNaturalLanguageQuery(''));
     setSelectedFamily('all');
     setToughnessFilter('all');
     setAiRiskFilter('all');
@@ -102,14 +99,14 @@ export default function ExplorePage() {
   return (
     <div className="explore-page">
       <Navbar />
-      
+
       <main className="explore-main">
         {/* Hero & Search Header */}
         <section className="explore-hero">
-          <div className="badge-pill">🌌 10,000+ Canonical Occupations Knowledge Universe</div>
+          <div className="badge-pill">🌌 15,000+ Careers & Specialization Pathways</div>
           <h1 className="hero-title">Explore Every Possible Future</h1>
           <p className="hero-subtitle">
-            From manual trades, carpenters, and farmers to AI researchers, neurosurgeons, judges, and ministers. Search, compare, and inspect comprehensive compensation, education pipelines, and automation indices.
+            From manual trades, carpenters, and farmers to AI researchers, neurosurgeons, judges, and sports performance analysts. Search with natural language, compare pay benchmarks, and inspect automation indices.
           </p>
 
           <div className="explore-controls-wrapper">
@@ -118,32 +115,15 @@ export default function ExplorePage() {
               <Search size={20} className="search-icon" />
               <input
                 type="text"
-                placeholder="Search 10,000+ occupations, skills, trades (e.g. Carpenter, Quant, Neurosurgeon, Welder, Diplomat)..."
+                placeholder="Search with natural language (e.g. 'AI engineering in Germany', 'Sports careers after science', 'Carpenter')..."
                 value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  if (e.target.value) {
-                    setSearchParams({ search: e.target.value });
-                  } else {
-                    setSearchParams({});
-                  }
-                }}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
               {searchTerm && (
                 <button 
                   className="clear-search-btn"
-                  onClick={() => { setSearchTerm(''); setSearchParams({}); }}
+                  onClick={handleClearFilters}
                   title="Clear Search"
-                  style={{
-                    position: 'absolute',
-                    right: '1.25rem',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'transparent',
-                    border: 'none',
-                    color: '#7a7a95',
-                    cursor: 'pointer'
-                  }}
                 >
                   <X size={18} />
                 </button>
@@ -156,7 +136,7 @@ export default function ExplorePage() {
                 className={`mode-btn ${viewMode === '3d' ? 'active' : ''}`}
                 onClick={() => setViewMode('3d')}
               >
-                <Globe size={16} /> 3D Cosmos Mode
+                <Globe size={16} /> 3D Career City
               </button>
               <button
                 className={`mode-btn ${viewMode === '2d' ? 'active' : ''}`}
@@ -167,12 +147,31 @@ export default function ExplorePage() {
             </div>
           </div>
 
+          {/* Parsed Badges */}
+          {parsedQuery.badges.length > 0 && (
+            <div className="nl-badges-preview mt-2">
+              <span className="nl-badges-label">Parsed Filters:</span>
+              {parsedQuery.badges.map((b, idx) => (
+                <span key={idx} className="nl-badge">{b}</span>
+              ))}
+            </div>
+          )}
+
+          {/* Quick Preset Chips */}
+          <div className="search-quick-suggestions mt-2">
+            <button type="button" onClick={() => handleSearchChange('Sports careers other than athlete')}>⚽ Sports Ecosystem</button>
+            <button type="button" onClick={() => handleSearchChange('AI engineering & distributed systems')}>💻 AI & Systems</button>
+            <button type="button" onClick={() => handleSearchChange('High paying careers without coding')}>📈 High-Pay Non-Coding</button>
+            <button type="button" onClick={() => handleSearchChange('Clinical healthcare and medicine')}>🩺 Medicine & Healthcare</button>
+            <button type="button" onClick={() => handleSearchChange('Skilled trades and carpentry')}>🔨 Skilled Trades</button>
+          </div>
+
           {/* Quick Filter Bar */}
-          <div className="explore-filter-bar">
+          <div className="explore-filter-bar mt-3">
             <div className="filter-group">
               <span className="filter-label">Cluster:</span>
-              <select value={selectedFamily} onChange={(e) => setSelectedFamily(e.target.value)}>
-                <option value="all">All Clusters (10,000+ Roles)</option>
+              <select value={selectedFamily} onChange={(e) => { setSelectedFamily(e.target.value); setSearchParams({ family: e.target.value }); }}>
+                <option value="all">All Clusters (15,000+ Pathways)</option>
                 {careerFamilies.map(f => (
                   <option key={f.id} value={f.id}>{f.icon} {f.name}</option>
                 ))}
@@ -182,175 +181,140 @@ export default function ExplorePage() {
             <div className="filter-group">
               <span className="filter-label">Skill Level:</span>
               <select value={skillLevelFilter} onChange={(e) => setSkillLevelFilter(e.target.value)}>
-                <option value="all">All Skill Levels</option>
-                <option value="High">High / Professional / Executive</option>
-                <option value="Medium">Medium / Skilled Trades / Specialist</option>
-                <option value="Low">Entry Level / General Trades</option>
+                <option value="all">All Levels</option>
+                <option value="High">High (Professional / Advanced)</option>
+                <option value="Medium">Medium (Skilled / Associate)</option>
+                <option value="Low">Entry (Apprenticeship / Hands-on)</option>
               </select>
             </div>
 
             <div className="filter-group">
-              <span className="filter-label">Toughness:</span>
+              <span className="filter-label">Toughness Index:</span>
               <select value={toughnessFilter} onChange={(e) => setToughnessFilter(e.target.value)}>
-                <option value="all">All Toughness</option>
-                <option value="high">High Cognitive (8.0+)</option>
-                <option value="moderate">Moderate (6.0 - 7.9)</option>
+                <option value="all">Any Toughness</option>
+                <option value="high">High Rigor (8.0+)</option>
+                <option value="moderate">Moderate Rigor (6.0 - 7.9)</option>
                 <option value="accessible">Accessible (&lt; 6.0)</option>
               </select>
             </div>
 
             <div className="filter-group">
-              <span className="filter-label">AI Resilience:</span>
+              <span className="filter-label">AI Automation Risk:</span>
               <select value={aiRiskFilter} onChange={(e) => setAiRiskFilter(e.target.value)}>
                 <option value="all">All AI Profiles</option>
-                <option value="low">AI Resilient / Safe</option>
-                <option value="high">High Automation Exposure</option>
+                <option value="low">AI Shielded / Highly Resilient (&le; 3.5)</option>
+                <option value="high">High Automation Exposure (&gt; 6.0)</option>
               </select>
             </div>
 
             {(searchTerm || selectedFamily !== 'all' || toughnessFilter !== 'all' || aiRiskFilter !== 'all' || skillLevelFilter !== 'all') && (
-              <button className="clear-all-chip" onClick={handleClearFilters} style={{
-                background: 'rgba(255, 68, 68, 0.1)',
-                border: '1px solid rgba(255, 68, 68, 0.3)',
-                color: '#ff6666',
-                borderRadius: '8px',
-                padding: '0.4rem 0.85rem',
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem'
-              }}>
-                <X size={14} /> Reset Filters
+              <button className="clear-filters-btn" onClick={handleClearFilters}>
+                <X size={14} /> Clear
               </button>
             )}
           </div>
         </section>
 
-        {/* 3D Universe Canvas Container */}
+        {/* 3D Visualizer Canvas (when in 3D mode) */}
         {viewMode === '3d' && (
-          <section className="universe-canvas-section">
-            <div className="universe-canvas-header">
-              <span className="live-indicator">● Interactive Three.js Orbit Controls Active</span>
-              <span className="text-sm text-gray-400">Click a family star to filter catalog • Drag to rotate</span>
-            </div>
-            <div className="threejs-frame">
-              <CareerUniverse onNodeClick={handleNodeClick} />
+          <section className="universe-canvas-section" aria-label="3D Career City Navigation">
+            <CareerUniverse scrollProgress={0.45} onSelectZone={(zId) => setSelectedFamily(zId)} />
+            <div className="canvas-overlay-hint">
+              <span>Interactive 3D Career World Active</span>
             </div>
           </section>
         )}
 
-        {/* Career Grid Directory */}
-        <section id="careers-directory" className="career-grid-section">
-          <div className="grid-header-row">
-            <div>
-              <h2 className="grid-title">
-                {filteredCareers.length.toLocaleString()} Canonical Careers
-              </h2>
-              <span style={{ fontSize: '0.85rem', color: '#8a8aa2' }}>
-                Showing page {currentPage} of {totalPages}
-              </span>
-            </div>
-
-            <div className="quick-links-group">
-              <Link to="/placements" className="quick-pill"><GraduationCap size={14} /> College Placements</Link>
-              <Link to="/combos" className="quick-pill"><Zap size={14} /> Salary Combos</Link>
-              <Link to="/compare" className="quick-pill"><Layers size={14} /> Compare Careers</Link>
-            </div>
+        {/* Results Counter */}
+        <section id="careers-directory" className="results-header-section">
+          <div className="results-count-badge">
+            {directory.loading ? 'Scanning career taxonomy…' : `Showing ${directory.items.length} of ${directory.total.toLocaleString()} Mapped Occupations`}
           </div>
+        </section>
 
-          <div className="career-cards-grid">
-            {paginatedCareers.map((career) => (
-              <div key={career.id} className="career-profile-card">
-                <div className="card-top-row">
-                  <span className="family-badge">{career.family}</span>
-                  <span className="diff-pill">Toughness: {career.toughness || 7.0}/10</span>
-                </div>
+        {/* Career Directory Grid */}
+        <section className="careers-grid-section">
+          {directory.loading ? (
+            <div className="loading-state-box">
+              <div className="spinner" />
+              <p>Searching 15,000+ verified career pathways…</p>
+            </div>
+          ) : paginatedCareers.length > 0 ? (
+            <div className="careers-cards-grid">
+              {paginatedCareers.map(c => {
+                const isHighPay = (c.salaryUSD?.mid || 80000) >= 120000;
+                return (
+                  <Link key={c.id} to={`/career/${c.id}`} className="career-preview-card">
+                    <div className="cpc-header">
+                      <div>
+                        <span className="cpc-category">{c.category || c.family}</span>
+                        <h3 className="cpc-title">{c.name}</h3>
+                      </div>
+                      <span className={`cpc-skill-pill ${c.skillLevel?.toLowerCase() || 'medium'}`}>
+                        {c.skillLevel || 'Skilled'}
+                      </span>
+                    </div>
 
-                <h3 className="card-career-title">{career.name}</h3>
-                <p className="card-desc" style={{ fontSize: '0.82rem', color: '#6e6e88', marginBottom: '0.5rem' }}>
-                  <strong>{career.category}</strong> • {career.subcategory}
-                </p>
-                <p className="card-desc">{career.shortDescription}</p>
+                    <p className="cpc-desc">{c.shortDescription}</p>
 
-                <div className="card-stats-row">
-                  <div>
-                    <span className="stat-label">Mid Salary (US)</span>
-                    <span className="stat-val text-green">${((career.salaryUSD?.mid || 110000) / 1000).toFixed(0)}k</span>
-                  </div>
-                  <div>
-                    <span className="stat-label">India CTC</span>
-                    <span className="stat-val text-cyan">₹{((career.salaryINR?.entry || 600000)/100000).toFixed(1)}L</span>
-                  </div>
-                  <div>
-                    <span className="stat-label">AI Resilience</span>
-                    <span className="stat-val text-purple">{(10 - (Number(career.aiRisk) || 3.5)).toFixed(1)}/10</span>
-                  </div>
-                </div>
+                    <div className="cpc-stats-row">
+                      <div className="cpc-stat">
+                        <span className="cpc-stat-label">US Mid / Year</span>
+                        <span className={`cpc-stat-val ${isHighPay ? 'text-gold' : 'text-green'}`}>
+                          ${((c.salaryUSD?.mid || 78000) / 1000).toFixed(0)}k
+                        </span>
+                      </div>
+                      <div className="cpc-stat">
+                        <span className="cpc-stat-label">India Median</span>
+                        <span className="cpc-stat-val text-cyan">
+                          ₹{((c.salaryINR?.mid || 850000) / 100000).toFixed(1)} LPA
+                        </span>
+                      </div>
+                      <div className="cpc-stat">
+                        <span className="cpc-stat-label">Toughness</span>
+                        <span className="cpc-stat-val">{c.toughness || 7.0} / 10</span>
+                      </div>
+                    </div>
 
-                <div className="card-footer-action">
-                  <Link to={`/career/${career.id}`} className="view-profile-btn">
-                    Inspect Full Profile <ArrowRight size={14} />
+                    <div className="cpc-footer">
+                      <span className="cpc-education">{c.typicalEducation || "Bachelor's Degree"}</span>
+                      <span className="cpc-link-cta">
+                        View Profile & Pay Table <ArrowRight size={14} />
+                      </span>
+                    </div>
                   </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="empty-state-box">
+              <h3>No careers match the current filter criteria</h3>
+              <p>Try clearing some search terms or adjusting the toughness and AI risk filters.</p>
+              <button className="btn-secondary mt-3" onClick={handleClearFilters}>
+                Reset All Filters
+              </button>
+            </div>
+          )}
 
           {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="pagination-bar" style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginTop: '3rem',
-              flexWrap: 'wrap'
-            }}>
+          {totalPages > 1 && !directory.loading && (
+            <div className="pagination-bar">
               <button
-                className="page-btn"
+                className="btn-page"
                 disabled={currentPage === 1}
-                onClick={() => {
-                  setCurrentPage(p => Math.max(1, p - 1));
-                  document.getElementById('careers-directory')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                style={{
-                  background: '#141422',
-                  border: '1px solid #222234',
-                  color: currentPage === 1 ? '#444455' : '#fff',
-                  padding: '0.6rem 1rem',
-                  borderRadius: '8px',
-                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem'
-                }}
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               >
-                <ChevronLeft size={16} /> Prev
+                <ChevronLeft size={16} /> Previous
               </button>
 
-              <span style={{ fontSize: '0.9rem', color: '#8a8aa2' }}>
-                Page <strong style={{ color: '#00d4ff' }}>{currentPage}</strong> of <strong>{totalPages}</strong>
+              <span className="page-indicator">
+                Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong> ({directory.total.toLocaleString()} total careers)
               </span>
 
               <button
-                className="page-btn"
-                disabled={currentPage === totalPages}
-                onClick={() => {
-                  setCurrentPage(p => Math.min(totalPages, p + 1));
-                  document.getElementById('careers-directory')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                style={{
-                  background: '#141422',
-                  border: '1px solid #222234',
-                  color: currentPage === totalPages ? '#444455' : '#fff',
-                  padding: '0.6rem 1rem',
-                  borderRadius: '8px',
-                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem'
-                }}
+                className="btn-page"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               >
                 Next <ChevronRight size={16} />
               </button>
@@ -361,4 +325,3 @@ export default function ExplorePage() {
     </div>
   );
 }
-

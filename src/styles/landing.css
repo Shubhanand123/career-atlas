@@ -1,8 +1,8 @@
 /* Minimal 3D Scroll Landing Page Styling */
 .landing-3d-wrapper {
   position: relative;
-  background: #08080c;
-  color: #f0f0f5;
+  background: #17100b;
+  color: #fff8ec;
   min-height: 100vh;
 }
 
@@ -41,7 +41,7 @@
 
 .stage-content-card {
   pointer-events: auto;
-  background: rgba(12, 12, 18, 0.7);
+  background: rgba(38, 27, 18, 0.78);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -53,7 +53,7 @@
 }
 
 .stage-content-card:hover {
-  border-color: rgba(0, 212, 255, 0.3);
+  border-color: rgba(227, 160, 91, 0.45);
 }
 
 @media (max-width: 768px) {
@@ -67,12 +67,12 @@
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: #00d4ff;
+  color: #e3a05b;
   margin-bottom: 1.25rem;
 }
 
 .stage-num {
-  color: #ffd700;
+  color: #f0c778;
 }
 
 .stage-main-title {
@@ -82,7 +82,7 @@
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
-  background: linear-gradient(135deg, #ffffff 40%, #a5a5c0 100%);
+  background: linear-gradient(135deg, #fff8ec 40%, #d8c4aa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -90,7 +90,7 @@
 .stage-subtitle {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #00d4ff;
+  color: #f0c778;
   margin-bottom: 1rem;
 }
 
@@ -135,8 +135,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #00d4ff;
-  color: #000;
+  background: #e3a05b;
+  color: #21170f;
   font-weight: 700;
   font-size: 0.95rem;
   padding: 0.85rem 1.6rem;
@@ -166,7 +166,7 @@
 }
 
 .stage-btn-secondary:hover {
-  border-color: #00d4ff;
+  border-color: #e3a05b;
   background: rgba(0, 212, 255, 0.08);
 }
 
@@ -191,7 +191,7 @@
 }
 
 .minimal-search-bar .search-btn {
-  background: #00d4ff;
+  background: #e3a05b;
   color: #000;
   border: none;
   font-weight: 700;
@@ -239,7 +239,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background: #00d4ff;
+  background: #e3a05b;
   transition: height 0.1s ease-out;
 }
 
@@ -267,7 +267,7 @@
 }
 
 .hud-dot.active .dot-label {
-  color: #00d4ff;
+  color: #e3a05b;
   font-weight: 700;
   transform: scale(1.2);
 }
@@ -311,3 +311,90 @@
   40% { transform: translateY(-6px); }
   60% { transform: translateY(-3px); }
 }
+
+/* 3D Career City Architectural Floating Badge */
+.career-city-architectural-badge {
+  background: rgba(20, 16, 13, 0.88);
+  border: 1px solid rgba(240, 199, 120, 0.4);
+  border-radius: 8px;
+  padding: 0.4rem 0.85rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.career-city-architectural-badge.active {
+  border-color: #f0c778;
+  box-shadow: 0 0 25px rgba(240, 199, 120, 0.4);
+}
+
+.cca-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #c99a5e;
+  letter-spacing: 0.08em;
+}
+
+.cca-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff8ec;
+}
+
+/* Search Module & Natural Language Badges */
+.search-module-container {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.nl-badges-preview {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+.nl-badges-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.nl-badge {
+  font-size: 0.75rem;
+  background: rgba(240, 199, 120, 0.15);
+  border: 1px solid rgba(240, 199, 120, 0.3);
+  color: #f0c778;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+}
+
+.search-quick-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+.search-quick-suggestions button {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.search-quick-suggestions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+

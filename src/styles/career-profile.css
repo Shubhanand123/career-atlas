@@ -212,6 +212,26 @@
 .text-cyan { color: var(--accent-cyan); }
 .text-red { color: var(--accent-red); }
 
+.study-planner-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+}
+.study-cost-row { display: flex; justify-content: space-between; gap: 1rem; padding: .65rem 0; border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
+.study-cost-row strong { color: var(--text-primary); }
+.study-cost-row.total { border-bottom: 0; padding-top: 1rem; color: var(--text-primary); font-size: 1.05rem; }
+.study-cost-row.total strong { color: var(--accent-gold); }
+.scholarship-strip { margin-top: 1rem; padding: 1rem 1.25rem; background: rgba(0, 230, 138, .06); border: 1px solid rgba(0, 230, 138, .18); border-radius: 12px; display: grid; gap: .8rem; }
+.scholarship-strip strong { display: block; font-size: 1.05rem; }
+.scholarship-tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+.scholarship-tags span { padding: .3rem .55rem; border-radius: 99px; background: rgba(255,255,255,.06); color: var(--text-secondary); font-size: .78rem; }
+.pathway-grid, .feedback-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.pathway-grid > div, .feedback-grid article { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.15rem; }
+.pathway-grid span, .feedback-grid span { display: block; color: var(--accent-cyan); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .6rem; }
+.pathway-grid strong, .feedback-grid h3 { display: block; color: var(--text-primary); font-size: 1rem; margin-bottom: .5rem; }
+.pathway-grid p, .feedback-grid p { color: var(--text-secondary); font-size: .88rem; }
+@media (max-width: 720px) { .study-planner-grid, .pathway-grid, .feedback-grid { grid-template-columns: 1fr; } }
+
 /* Layout */
 .profile-layout {
   max-width: 1200px;
@@ -1280,5 +1300,457 @@
 .modal-success p {
   color: #8888a0;
   font-size: 0.9rem;
+}
+
+/* Pay Comparison Section Styles */
+.pay-comparison-section {
+  background: rgba(38, 27, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.pay-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.toggle-pill-group {
+  display: inline-flex;
+  background: #14100d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.toggle-pill-group button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-pill-group button.active {
+  background: var(--accent-gold);
+  color: #17100b;
+}
+
+.currency-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #14100d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.currency-selector-box select {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.pay-levels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.pay-level-card {
+  background: #1e1611;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pl-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.pl-val {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.pl-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pay-table-container {
+  overflow-x: auto;
+}
+
+.pay-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-size: 0.88rem;
+}
+
+.pay-comparison-table th {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  background: #14100d;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pay-comparison-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.pay-comparison-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.highlighted-row td {
+  background: rgba(240, 199, 120, 0.08) !important;
+}
+
+.source-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.table-disclaimer {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+/* Pathway Steps Grid */
+.pathway-connected-steps {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 1.5rem 0;
+}
+
+.p-step {
+  background: #1e1611;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.25rem;
+  min-width: 220px;
+  flex: 1;
+}
+
+.p-step-num {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.p-step-type {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+
+.p-step-content strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.p-step-content p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.p-step-arrow {
+  color: var(--accent-gold);
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Reverse Discovery Card */
+.reverse-discovery-card {
+  background: #1e1611;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.rd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.rd-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.rd-val {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Interview Prep Box */
+.interview-prep-box {
+  background: #1e1611;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.checklist-items {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.checklist-items li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.questions-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.interview-q-card {
+  background: #14100d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.iq-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.iq-difficulty {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  background: rgba(240, 199, 120, 0.15);
+  color: var(--accent-gold);
+  white-space: nowrap;
+}
+
+.iq-framework {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.iq-framework span {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Reviews Stack */
+.reviews-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.review-card {
+  background: #1e1611;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.75rem;
+}
+
+.rev-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.rev-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.rev-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.rev-score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.rev-score {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+}
+
+.rev-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  background: rgba(147, 179, 123, 0.2);
+  color: var(--accent-green);
+}
+
+.rev-body {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.rev-pros-cons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .rev-pros-cons-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rpc-box {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.rpc-box.pro {
+  background: rgba(147, 179, 123, 0.1);
+  border-left: 3px solid var(--accent-green);
+  color: #d8e6ce;
+}
+
+.rpc-box.con {
+  background: rgba(217, 112, 85, 0.1);
+  border-left: 3px solid var(--accent-red);
+  color: #f2cfc6;
+}
+
+.rev-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.75rem;
+}
+
+.rev-votes {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.vote-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #14100d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vote-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.rec-flag {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.notification-banner {
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notification-banner.success {
+  background: rgba(147, 179, 123, 0.18);
+  border: 1px solid var(--accent-green);
+  color: #d8e6ce;
 }
 

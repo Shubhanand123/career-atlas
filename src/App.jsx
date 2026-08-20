@@ -11,6 +11,7 @@ const LayoffsPage = lazy(() => import('./pages/LayoffsPage'));
 const QuizPage = lazy(() => import('./pages/QuizPage'));
 const ComparePage = lazy(() => import('./pages/ComparePage'));
 const CopilotPage = lazy(() => import('./pages/CopilotPage'));
+const WorkspacePage = lazy(() => import('./pages/WorkspacePage'));
 
 function LoadingScreen() {
   return (
@@ -19,7 +20,7 @@ function LoadingScreen() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#0a0a0f',
+      background: '#17100b',
       flexDirection: 'column',
       gap: '1.5rem'
     }}>
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/copilot" element={<CopilotPage />} />
+          <Route path="/workspace" element={<WorkspacePage />} />
         </Routes>
       </Suspense>
     </Router>

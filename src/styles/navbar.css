@@ -2,6 +2,19 @@
 .navbar.scrolled { background: var(--bg-glass); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
 .navbar-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
 .navbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: 0.1em; }
+.language-picker { display: inline-flex; align-items: center; gap: .3rem; color: var(--text-secondary); margin-left: .75rem; }
+.language-picker select { appearance: none; color: inherit; cursor: pointer; font-size: .74rem; min-width: 66px; }
+.language-picker option { color: #1f1611; background: #fff8eb; }
 .navbar-links { display: flex; gap: 2rem; }
 .nav-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; }
 .nav-link:hover { color: #fff; }
+.mobile-bottom-nav { display: none; }
+@media (max-width: 768px) {
+  .navbar { padding: .7rem .85rem; }
+  .navbar-container { min-height: 42px; }
+  .navbar-logo { font-size: 1rem; letter-spacing: .07em; }
+  .mobile-nav-dropdown { max-height: calc(100vh - 64px); overflow: auto; }
+  .mobile-bottom-nav { position: fixed; display: grid; grid-template-columns: repeat(4, 1fr); left: 0; right: 0; bottom: 0; padding: .55rem .35rem calc(.55rem + env(safe-area-inset-bottom)); background: rgba(31, 21, 14, .94); border-top: 1px solid var(--border-light); backdrop-filter: blur(18px); z-index: 1100; }
+  .mobile-bottom-nav a { display: grid; justify-items: center; gap: .15rem; color: var(--text-muted); font-size: .62rem; text-decoration: none; }
+  .mobile-bottom-nav a.active, .mobile-bottom-nav a:hover { color: var(--accent-cyan); }
+}

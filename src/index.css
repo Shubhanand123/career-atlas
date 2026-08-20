@@ -8,40 +8,40 @@
 /* ---------- CSS Custom Properties ---------- */
 :root {
   /* Surfaces */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #101018;
-  --bg-tertiary: #16161f;
-  --bg-card: rgba(18, 18, 28, 0.7);
-  --bg-card-hover: rgba(24, 24, 38, 0.85);
-  --bg-glass: rgba(16, 16, 26, 0.55);
-  --bg-glass-heavy: rgba(12, 12, 20, 0.8);
-  --bg-input: rgba(20, 20, 32, 0.6);
+  --bg-primary: #17100b;
+  --bg-secondary: #21170f;
+  --bg-tertiary: #2b1d12;
+  --bg-card: rgba(43, 29, 18, 0.76);
+  --bg-card-hover: rgba(61, 40, 24, 0.9);
+  --bg-glass: rgba(32, 21, 13, 0.68);
+  --bg-glass-heavy: rgba(24, 16, 10, 0.9);
+  --bg-input: rgba(54, 35, 20, 0.72);
 
   /* Text */
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0c0;
-  --text-muted: #6b6b80;
-  --text-dim: #44445a;
+  --text-primary: #fff8ec;
+  --text-secondary: #d8c4aa;
+  --text-muted: #a88f72;
+  --text-dim: #765f4c;
 
   /* Accents */
-  --accent-cyan: #00d4ff;
-  --accent-cyan-dim: rgba(0, 212, 255, 0.15);
-  --accent-blue: #3366ff;
-  --accent-blue-dim: rgba(51, 102, 255, 0.12);
-  --accent-gold: #ffd700;
-  --accent-gold-dim: rgba(255, 215, 0, 0.1);
-  --accent-green: #00e68a;
-  --accent-green-dim: rgba(0, 230, 138, 0.1);
-  --accent-red: #ff4466;
-  --accent-red-dim: rgba(255, 68, 102, 0.1);
-  --accent-purple: #8855ff;
-  --accent-purple-dim: rgba(136, 85, 255, 0.1);
+  --accent-cyan: #e3a05b;
+  --accent-cyan-dim: rgba(227, 160, 91, 0.15);
+  --accent-blue: #b9653e;
+  --accent-blue-dim: rgba(185, 101, 62, 0.14);
+  --accent-gold: #f0c778;
+  --accent-gold-dim: rgba(240, 199, 120, 0.12);
+  --accent-green: #93b37b;
+  --accent-green-dim: rgba(147, 179, 123, 0.12);
+  --accent-red: #d97055;
+  --accent-red-dim: rgba(217, 112, 85, 0.12);
+  --accent-purple: #b58a7c;
+  --accent-purple-dim: rgba(181, 138, 124, 0.12);
 
   /* Borders */
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-light: rgba(255, 255, 255, 0.1);
   --border-medium: rgba(255, 255, 255, 0.15);
-  --border-accent: rgba(0, 212, 255, 0.25);
+  --border-accent: rgba(227, 160, 91, 0.3);
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -116,6 +116,9 @@ html {
   scroll-behavior: smooth;
   color-scheme: dark;
 }
+html[dir='rtl'] { direction: rtl; }
+html[dir='rtl'] .search-icon { left: auto; right: 1rem; }
+html[dir='rtl'] .search-input { padding-left: 1.2rem; padding-right: 3rem; }
 
 body {
   font-family: var(--font-body);
@@ -600,6 +603,10 @@ h1, h2, h3, h4, h5, h6 {
   .container {
     padding: 0 var(--space-md);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
 
 /* ---------- Loading Spinner ---------- */

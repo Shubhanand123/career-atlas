@@ -1,32 +1,68 @@
 export const traits = [
-  { id: 'analytical', name: 'Analytical Thinking', description: 'Ability to break down complex problems and solve them logically.' },
-  { id: 'technical', name: 'Technical Aptitude', description: 'Comfort and proficiency with technology, tools, and software.' },
-  { id: 'creative', name: 'Creativity', description: 'Ability to generate novel ideas, designs, or solutions.' },
-  { id: 'research', name: 'Research Orientation', description: 'Desire to dig deep for information and discover new knowledge.' },
-  { id: 'leadership', name: 'Leadership', description: 'Capability to guide, motivate, and manage others effectively.' },
-  { id: 'communication', name: 'Communication', description: 'Skill in conveying information clearly, both verbally and in writing.' },
-  { id: 'handsOn', name: 'Hands-on Work', description: 'Preference for working with physical materials, tools, or environments.' },
-  { id: 'social', name: 'Social Interaction', description: 'Comfort and enjoyment in working closely with people and helping others.' },
-  { id: 'entrepreneurial', name: 'Entrepreneurship', description: 'Drive to build new ventures and take calculated business risks.' },
-  { id: 'scientific', name: 'Scientific Thinking', description: 'Reliance on empirical evidence, hypothesis testing, and rigorous methodology.' },
-  { id: 'riskTolerance', name: 'Risk Tolerance', description: 'Comfort dealing with uncertainty, high stakes, or physical danger.' },
-  { id: 'stability', name: 'Stability Preference', description: 'Desire for predictable hours, consistent income, and clear career paths.' }
+  { id: 'interests', name: 'Interests' },
+  { id: 'strengths', name: 'Strengths' },
+  { id: 'subjects', name: 'Subjects' },
+  { id: 'workStyle', name: 'Work Style' },
+  { id: 'personality', name: 'Work Preferences' },
+  { id: 'problemSolving', name: 'Problem Solving' },
+  { id: 'creative', name: 'Creativity' },
+  { id: 'communication', name: 'Communication' },
+  { id: 'leadership', name: 'Leadership' },
+  { id: 'technical', name: 'Technical Inclination' },
+  { id: 'people', name: 'People Orientation' },
+  { id: 'business', name: 'Business Orientation' },
+  { id: 'science', name: 'Science Inclination' },
+  { id: 'arts', name: 'Arts Inclination' },
+  { id: 'sports', name: 'Sports Interest' },
+  { id: 'risk', name: 'Risk Tolerance' },
+  { id: 'environment', name: 'Preferred Environment' },
+  { id: 'income', name: 'Income Priority' },
+  { id: 'stability', name: 'Job Stability' },
+  { id: 'location', name: 'Work Location' },
+  { id: 'education', name: 'Education Willingness' },
+  { id: 'handsOn', name: 'Hands-on Preference' },
+  { id: 'team', name: 'Team Preference' },
+  { id: 'competitive', name: 'Competitive Preference' },
+  { id: 'ambition', name: 'Long-term Ambition' }
 ];
 
-export const quizQuestions = Array.from({ length: 60 }, (_, i) => {
-  const traitPool = traits.map(t => t.id);
-  const trait = traitPool[i % traitPool.length];
-  
-  return {
-    id: i + 1,
-    question: `Question ${i + 1} measuring your ${trait} affinity: How much do you resonate with tasks involving this area?`,
-    trait: trait,
-    options: [
-      { text: 'I find this extremely engaging and rewarding', score: 5 },
-      { text: 'I enjoy this frequently', score: 4 },
-      { text: 'I am neutral about this', score: 3 },
-      { text: 'I prefer to avoid this if possible', score: 2 },
-      { text: 'I strongly dislike tasks related to this', score: 1 }
-    ]
-  };
-});
+export const quizQuestions = [
+  { id: 1, trait: 'interests', question: 'I want my work to connect strongly with topics I already enjoy exploring outside school.' },
+  { id: 2, trait: 'strengths', question: 'I prefer careers where I can use my strongest natural abilities every day.' },
+  { id: 3, trait: 'subjects', question: 'My school subjects give me clear signals about the fields I should pursue.' },
+  { id: 4, trait: 'workStyle', question: 'I like structured work with clear goals, milestones, and standards.' },
+  { id: 5, trait: 'personality', question: 'I work best when the role fits my personality instead of forcing me to constantly perform against it.' },
+  { id: 6, trait: 'problemSolving', question: 'I enjoy solving hard problems where the answer is not obvious at first.' },
+  { id: 7, trait: 'creative', question: 'I want room to create, design, write, perform, or imagine new possibilities.' },
+  { id: 8, trait: 'communication', question: 'I am comfortable explaining ideas, presenting, writing, or persuading others.' },
+  { id: 9, trait: 'leadership', question: 'I like taking responsibility for decisions and helping a group move forward.' },
+  { id: 10, trait: 'technical', question: 'I enjoy learning tools, systems, machines, software, or technical processes.' },
+  { id: 11, trait: 'people', question: 'I want a career where helping, teaching, healing, coaching, or advising people is central.' },
+  { id: 12, trait: 'business', question: 'I am interested in markets, money, operations, sales, management, or building organizations.' },
+  { id: 13, trait: 'science', question: 'I enjoy evidence, experiments, observation, mathematics, or understanding how the world works.' },
+  { id: 14, trait: 'arts', question: 'I am drawn toward visual arts, media, performance, writing, design, or cultural work.' },
+  { id: 15, trait: 'sports', question: 'Sports, physical performance, fitness, coaching, or sports business could be a serious career direction for me.' },
+  { id: 16, trait: 'risk', question: 'I can tolerate uncertainty if the upside, learning, or independence is meaningful.' },
+  { id: 17, trait: 'environment', question: 'The environment matters to me: campus, lab, studio, field, clinic, office, court, or remote work can change my motivation.' },
+  { id: 18, trait: 'income', question: 'High income potential is one of my most important career criteria.' },
+  { id: 19, trait: 'stability', question: 'I value predictable employment, steady progression, and reliable demand.' },
+  { id: 20, trait: 'location', question: 'Remote work, city choice, or international mobility strongly affects my career plans.' },
+  { id: 21, trait: 'education', question: 'I am willing to invest several years in education or training if the career fit is strong.' },
+  { id: 22, trait: 'handsOn', question: 'I prefer learning by building, practicing, repairing, training, making, or doing real tasks.' },
+  { id: 23, trait: 'team', question: 'I do my best work in teams with discussion, feedback, and shared goals.' },
+  { id: 24, trait: 'competitive', question: 'Competition, rankings, trials, auditions, exams, or high-performance environments motivate me.' },
+  { id: 25, trait: 'ambition', question: 'I want a path that can grow into senior, expert, founder, public-impact, or leadership roles.' },
+  { id: 26, trait: 'technical', question: 'I would enjoy building a portfolio of technical projects or practical demonstrations.' },
+  { id: 27, trait: 'people', question: 'I can stay patient when other people need support, explanation, or repeated guidance.' },
+  { id: 28, trait: 'business', question: 'I like comparing tradeoffs such as cost, demand, salary, risk, and return on investment.' },
+  { id: 29, trait: 'science', question: 'I would enjoy a career where accuracy, verification, and careful source checking matter.' },
+  { id: 30, trait: 'creative', question: 'I want my work to leave a visible output, experience, story, product, or performance.' }
+];
+
+export const quizOptions = [
+  { text: 'Strongly Disagree', score: 1 },
+  { text: 'Disagree', score: 2 },
+  { text: 'Neutral', score: 3 },
+  { text: 'Agree', score: 4 },
+  { text: 'Strongly Agree', score: 5 }
+];

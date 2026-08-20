@@ -1,13 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { Search, X, Check, ArrowRight, ShieldCheck, Sparkles, Building2, AlertTriangle, Layers } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, X } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import Navbar from '../components/Navbar';
 import { sampleCareers } from '../data/sampleCareers';
-import { getEnrichedCareer } from '../data/careers';
-import { careerRegistry } from '../data/careerRegistry';
-import { collegePlacementReports } from '../data/placementReports';
-import { salaryCombos } from '../data/salaryCombos';
-import { careerTwinsData } from '../data/careerTwins';
+import { getEnrichedCareer, getEnrichedCareerAsync } from '../data/careers';
+import { searchCareerCatalog } from '../data/careerCatalog';
 import '../styles/compare.css';
 
 const DETAILED_METRICS = [
@@ -34,18 +31,25 @@ export default function ComparePage() {
     getEnrichedCareer('physician')
   ].filter(Boolean));
   const [showDropdown, setShowDropdown] = useState(false);
+  const [filteredCareers, setFilteredCareers] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const filteredCareers = useMemo(() => {
-    if (!search.trim()) return sampleCareers.filter(sc => !selectedCareers.some(s => s.id === sc.id)).slice(0, 10);
-    const q = search.toLowerCase();
-    return careerRegistry
-      .filter(c => (c.name.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)) && !selectedCareers.some(sc => sc.id === c.id))
-      .slice(0, 15);
+  useEffect(() => {
+    let cancelled = false;
+    if (!search.trim()) {
+      setFilteredCareers(sampleCareers.filter(sc => !selectedCareers.some(s => s.id === sc.id)).slice(0, 10));
+      return undefined;
+    }
+    setIsSearching(true);
+    searchCareerCatalog({ query: search, limit: 15 }).then(({ items }) => {
+      if (!cancelled) setFilteredCareers(items.filter(item => !selectedCareers.some(selected => selected.id === item.id)));
+    }).finally(() => { if (!cancelled) setIsSearching(false); });
+    return () => { cancelled = true; };
   }, [search, selectedCareers]);
 
-  const handleSelect = (career) => {
+  const handleSelect = async (career) => {
     if (selectedCareers.length < 4) {
-      const enriched = getEnrichedCareer(career.id);
+      const enriched = await getEnrichedCareerAsync(career.id);
       setSelectedCareers([...selectedCareers, enriched]);
       setSearch('');
       setShowDropdown(false);
@@ -154,6 +158,7 @@ export default function ComparePage() {
                       <span className="career-family">{c.family}</span>
                     </div>
                   ))}
+                  {isSearching && <div className="dropdown-item">Searching the career catalogue…</div>}
                 </div>
               )}
             </div>

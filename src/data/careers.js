@@ -6,7 +6,6 @@ import { careersCreative } from './careers_creative.js';
 import { careersScience } from './careers_science.js';
 import { careersTrades } from './careers_trades.js';
 import { careersOther } from './careers_other.js';
-import { careerRegistry, getCareerFromRegistryById } from './careerRegistry.js';
 import { careerFamilies } from './careerFamilies.js';
 
 // Aggregate all hand-curated careers into a single primary export
@@ -29,8 +28,12 @@ export function getEnrichedCareer(id) {
   const foundPrimary = careers.find(c => c.id === target || c.name.toLowerCase() === target);
   if (foundPrimary) return foundPrimary;
 
-  // 2. Lookup in 10,000 career registry
-  const regItem = getCareerFromRegistryById(target);
+  return careers[0];
+}
+
+// Keep the broad occupation corpus out of the initial and curated-profile chunks.
+// Callers that need a registry record should use getEnrichedCareerAsync instead.
+export function enrichRegistryCareer(regItem) {
   if (regItem) {
     const isHigh = regItem.skillLevel === 'High';
     const isLow = regItem.skillLevel === 'Low';
@@ -154,6 +157,15 @@ export function getEnrichedCareer(id) {
   return careers[0];
 }
 
+export async function getEnrichedCareerAsync(id) {
+  const curated = getEnrichedCareer(id);
+  const target = String(id || '').toLowerCase();
+  if (curated && (curated.id === target || !id)) return curated;
+
+  const { getCareerFromCatalogById } = await import('./careerCatalog.js');
+  return enrichRegistryCareer(await getCareerFromCatalogById(id));
+}
+
 export const getCareerById = (id) => getEnrichedCareer(id);
 export const getCareersByFamily = (familyId) => careers.filter(c => c.family === familyId);
 export const searchCareers = (query) => {
@@ -164,5 +176,4 @@ export const searchCareers = (query) => {
     (c.shortDescription && c.shortDescription.toLowerCase().includes(q))
   );
 };
-export { careerFamilies, careerRegistry };
-
+export { careerFamilies };
