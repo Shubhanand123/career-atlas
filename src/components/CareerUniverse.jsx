@@ -113,10 +113,107 @@ export const GALAXY_DOMAINS = [
   }
 ];
 
+// Swirling Multi-Colored Quantum Dots moving dynamically around and through the Nucleus
+function NucleusColorDots() {
+  const pointsRef = useRef();
+
+  const { positions, colors, count, initialData } = useMemo(() => {
+    const total = 180;
+    const pos = new Float32Array(total * 3);
+    const col = new Float32Array(total * 3);
+    const init = [];
+
+    // Vibrant Multi-Color Palette
+    const palette = [
+      new THREE.Color('#38BDF8'), // Cyan
+      new THREE.Color('#4ADE80'), // Neon Lime
+      new THREE.Color('#FB7185'), // Hot Rose
+      new THREE.Color('#F59E0B'), // Gold
+      new THREE.Color('#A855F7'), // Violet
+      new THREE.Color('#6366F1'), // Electric Indigo
+      new THREE.Color('#EC4899'), // Pink
+      new THREE.Color('#2DD4BF')  // Teal
+    ];
+
+    for (let i = 0; i < total; i++) {
+      const radius = 1.2 + Math.random() * 1.6;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const speed = 0.6 + Math.random() * 1.4;
+      const orbitTilt = (Math.random() - 0.5) * Math.PI;
+
+      init.push({ radius, theta, phi, speed, orbitTilt, id: i });
+
+      // Initial positions
+      pos[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = radius * Math.cos(phi);
+
+      // Color selection
+      const c = palette[i % palette.length];
+      col[i * 3] = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
+    }
+
+    return { positions: pos, colors: col, count: total, initialData: init };
+  }, []);
+
+  useFrame((state) => {
+    if (!pointsRef.current) return;
+    const t = state.clock.getElapsedTime();
+    const posAttr = pointsRef.current.geometry.attributes.position;
+
+    for (let i = 0; i < count; i++) {
+      const d = initialData[i];
+      // Dynamic 3D swirling orbital motion
+      const currentTheta = d.theta + t * d.speed * 0.8;
+      const currentPhi = d.phi + Math.sin(t * d.speed * 0.5 + d.id) * 0.4;
+      const currentR = d.radius + Math.sin(t * 2 + d.id) * 0.15; // subtle breathing
+
+      const x = currentR * Math.sin(currentPhi) * Math.cos(currentTheta);
+      const y = currentR * Math.sin(currentPhi) * Math.sin(currentTheta);
+      const z = currentR * Math.cos(currentPhi);
+
+      // Apply tilt rotation
+      const tiltedY = y * Math.cos(d.orbitTilt) - z * Math.sin(d.orbitTilt);
+      const tiltedZ = y * Math.sin(d.orbitTilt) + z * Math.cos(d.orbitTilt);
+
+      posAttr.setXYZ(i, x, tiltedY, tiltedZ);
+    }
+
+    posAttr.needsUpdate = true;
+    pointsRef.current.rotation.y = t * 0.15;
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          args={[positions, 3]}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3]}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.075}
+        vertexColors
+        transparent
+        opacity={0.95}
+        sizeAttenuation
+      />
+    </points>
+  );
+}
+
 // Central Supermassive Atlas Core
 function SupermassiveAtlasCore() {
   const coreRef = useRef();
   const ringRef = useRef();
+  const outerRingRef = useRef();
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
@@ -125,41 +222,57 @@ function SupermassiveAtlasCore() {
       coreRef.current.rotation.z = t * 0.1;
     }
     if (ringRef.current) {
-      ringRef.current.rotation.z = -t * 0.15;
-      ringRef.current.rotation.x = Math.PI / 3 + Math.sin(t * 0.5) * 0.05;
+      ringRef.current.rotation.z = -t * 0.2;
+      ringRef.current.rotation.x = Math.PI / 3 + Math.sin(t * 0.5) * 0.08;
+    }
+    if (outerRingRef.current) {
+      outerRingRef.current.rotation.z = t * 0.15;
+      outerRingRef.current.rotation.y = Math.sin(t * 0.4) * 0.1;
     }
   });
 
   return (
     <group position={[0, 0, -8]}>
-      {/* Central Pulsing Nucleus */}
+      {/* 1. Swirling Multi-Color Quantum Nucleus Dots */}
+      <NucleusColorDots />
+
+      {/* 2. Central Pulsing Nucleus */}
       <mesh ref={coreRef}>
-        <sphereGeometry args={[1.6, 32, 32]} />
+        <sphereGeometry args={[1.5, 32, 32]} />
         <meshStandardMaterial
-          color="#0B0E17"
+          color="#080A12"
           emissive="#6366F1"
-          emissiveIntensity={1.8}
-          metalness={0.9}
-          roughness={0.1}
+          emissiveIntensity={2.0}
+          metalness={0.92}
+          roughness={0.12}
         />
       </mesh>
 
-      {/* Internal Core Halo */}
+      {/* 3. Internal Crystalline Halo */}
       <mesh>
-        <sphereGeometry args={[1.9, 24, 24]} />
+        <sphereGeometry args={[1.75, 20, 20]} />
         <meshBasicMaterial
           color="#818CF8"
           transparent
-          opacity={0.15}
+          opacity={0.2}
           wireframe
         />
       </mesh>
 
-      {/* Orbiting Gravitational Dust Ring */}
+      {/* 4. Orbiting Glowing Dust Rings */}
       <mesh ref={ringRef}>
-        <torusGeometry args={[3.2, 0.04, 16, 100]} />
+        <torusGeometry args={[2.8, 0.035, 16, 100]} />
         <meshBasicMaterial
           color="#4ADE80"
+          transparent
+          opacity={0.5}
+        />
+      </mesh>
+
+      <mesh ref={outerRingRef} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
+        <torusGeometry args={[3.4, 0.025, 16, 100]} />
+        <meshBasicMaterial
+          color="#FB7185"
           transparent
           opacity={0.4}
         />

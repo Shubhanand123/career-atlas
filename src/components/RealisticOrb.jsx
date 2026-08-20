@@ -2,13 +2,100 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
+// Swirling Multi-Colored Glowing Dots inside/around the fluid nucleus
+function OrbColorDots({ scrollProgress }) {
+  const pointsRef = useRef();
+
+  const { positions, colors, count, initialData } = useMemo(() => {
+    const total = 220;
+    const pos = new Float32Array(total * 3);
+    const col = new Float32Array(total * 3);
+    const init = [];
+
+    // Vibrant Multi-Color Palette
+    const palette = [
+      new THREE.Color('#38BDF8'), // Electric Cyan
+      new THREE.Color('#4ADE80'), // Neon Lime Green
+      new THREE.Color('#FB7185'), // Rose Pink
+      new THREE.Color('#F59E0B'), // Sun Amber
+      new THREE.Color('#A855F7'), // Bright Purple
+      new THREE.Color('#6366F1'), // Electric Indigo
+      new THREE.Color('#2DD4BF'), // Bright Teal
+      new THREE.Color('#F43F5E')  // Crimson Rose
+    ];
+
+    for (let i = 0; i < total; i++) {
+      const radius = 2.0 + Math.random() * 1.8;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const speed = 0.5 + Math.random() * 1.2;
+      const orbitTilt = (Math.random() - 0.5) * Math.PI;
+
+      init.push({ radius, theta, phi, speed, orbitTilt, id: i });
+
+      pos[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = radius * Math.cos(phi);
+
+      const c = palette[i % palette.length];
+      col[i * 3] = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
+    }
+
+    return { positions: pos, colors: col, count: total, initialData: init };
+  }, []);
+
+  useFrame((state) => {
+    if (!pointsRef.current) return;
+    const t = state.clock.getElapsedTime();
+    const p = scrollProgress;
+    const posAttr = pointsRef.current.geometry.attributes.position;
+
+    for (let i = 0; i < count; i++) {
+      const d = initialData[i];
+      // Dynamic 3D swirling orbital motion with scroll response
+      const currentTheta = d.theta + t * d.speed * 0.9 + p * 3.0;
+      const currentPhi = d.phi + Math.sin(t * d.speed * 0.6 + d.id) * 0.45;
+      const currentR = d.radius + Math.sin(t * 2.2 + d.id) * 0.2 + p * 0.3;
+
+      const x = currentR * Math.sin(currentPhi) * Math.cos(currentTheta);
+      const y = currentR * Math.sin(currentPhi) * Math.sin(currentTheta);
+      const z = currentR * Math.cos(currentPhi);
+
+      // Apply tilt rotation
+      const tiltedY = y * Math.cos(d.orbitTilt) - z * Math.sin(d.orbitTilt);
+      const tiltedZ = y * Math.sin(d.orbitTilt) + z * Math.cos(d.orbitTilt);
+
+      posAttr.setXYZ(i, x, tiltedY, tiltedZ);
+    }
+
+    posAttr.needsUpdate = true;
+    pointsRef.current.rotation.y = t * 0.12 + p * 0.8;
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.08}
+        vertexColors
+        transparent
+        opacity={0.95}
+        sizeAttenuation
+      />
+    </points>
+  );
+}
+
 // Realistic Morphing Fluid Orb — Gen Z iridescent blob
 function FluidOrb({ scrollProgress }) {
   const meshRef = useRef();
-  const geometry = useRef();
   const originalPositions = useRef();
 
-  // Store original positions after mount
   const geo = useMemo(() => {
     const g = new THREE.IcosahedronGeometry(2.2, 80);
     originalPositions.current = Float32Array.from(g.attributes.position.array);
@@ -20,7 +107,6 @@ function FluidOrb({ scrollProgress }) {
     const t = state.clock.getElapsedTime();
     const p = scrollProgress;
 
-    // Morph the sphere vertices into a fluid blob with scroll
     const pos = meshRef.current.geometry.attributes.position;
     const orig = originalPositions.current;
     const count = pos.count;
@@ -48,7 +134,6 @@ function FluidOrb({ scrollProgress }) {
     pos.needsUpdate = true;
     meshRef.current.geometry.computeVertexNormals();
 
-    // Slow drift rotation
     meshRef.current.rotation.x = t * 0.08 + p * 0.6;
     meshRef.current.rotation.y = t * 0.12 + p * 1.2;
     meshRef.current.rotation.z = t * 0.05;
@@ -57,10 +142,11 @@ function FluidOrb({ scrollProgress }) {
   return (
     <mesh ref={meshRef} geometry={geo}>
       <meshStandardMaterial
-        color="#0D0D10"
-        metalness={0.0}
-        roughness={0.0}
-        envMapIntensity={1}
+        color="#0A0A0E"
+        metalness={0.85}
+        roughness={0.15}
+        emissive="#6366F1"
+        emissiveIntensity={0.6}
       />
     </mesh>
   );
@@ -76,7 +162,6 @@ function GlassShell({ scrollProgress }) {
       shellRef.current.rotation.x = -t * 0.05 + scrollProgress * 0.4;
       shellRef.current.rotation.y = t * 0.1 + scrollProgress * 0.8;
 
-      // Subtle scale breathe
       const breathe = 1 + Math.sin(t * 0.7) * 0.02;
       shellRef.current.scale.setScalar(breathe);
     }
@@ -88,8 +173,7 @@ function GlassShell({ scrollProgress }) {
       <meshStandardMaterial
         color="#6366F1"
         transparent
-        opacity={0.1}
-        wireframe={false}
+        opacity={0.12}
         metalness={0.9}
         roughness={0.05}
         side={THREE.BackSide}
@@ -101,9 +185,9 @@ function GlassShell({ scrollProgress }) {
 // Orbit ring lines
 function OrbitRings({ scrollProgress }) {
   const rings = [
-    { radius: 3.2, color: '#6366F1', opacity: 0.18, tilt: 0.4, speed: 0.3 },
-    { radius: 3.8, color: '#4ADE80', opacity: 0.12, tilt: -0.8, speed: -0.2 },
-    { radius: 4.4, color: '#A78BFA', opacity: 0.08, tilt: 1.2, speed: 0.15 },
+    { radius: 3.2, color: '#6366F1', opacity: 0.22, tilt: 0.4, speed: 0.3 },
+    { radius: 3.8, color: '#4ADE80', opacity: 0.16, tilt: -0.8, speed: -0.2 },
+    { radius: 4.4, color: '#FB7185', opacity: 0.12, tilt: 1.2, speed: 0.15 },
   ];
 
   const ringRefs = useRef(rings.map(() => React.createRef()));
@@ -182,17 +266,14 @@ export default function RealisticOrb({ scrollProgress = 0 }) {
       dpr={[1, 2]}
       style={{ width: '100%', height: '100%' }}
     >
-      <ambientLight intensity={0.2} />
-      {/* Violet key light */}
+      <ambientLight intensity={0.25} />
       <pointLight position={[5, 6, 5]} intensity={14} color="#6366F1" />
-      {/* Neon green rim */}
       <pointLight position={[-6, -4, -4]} intensity={10} color="#4ADE80" />
-      {/* Soft white fill */}
-      <pointLight position={[0, 0, 7]} intensity={5} color="#FFFFFF" />
-      {/* Deep purple back */}
+      <pointLight position={[0, 0, 7]} intensity={6} color="#FFFFFF" />
       <pointLight position={[0, -8, -6]} intensity={8} color="#7C3AED" />
 
       <Particles />
+      <OrbColorDots scrollProgress={scrollProgress} />
       <FluidOrb scrollProgress={scrollProgress} />
       <GlassShell scrollProgress={scrollProgress} />
       <OrbitRings scrollProgress={scrollProgress} />
