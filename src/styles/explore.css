@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CAREER ATLAS — Explore Universe (Scroll-Driven 3D Journey & Gen Z Minimal)
+   CAREER ATLAS — Explore Universe (Gen Z Minimalist / Obsidian Dark)
    ========================================================================== */
 
 .explore-page {
@@ -10,215 +10,10 @@
   position: relative;
 }
 
-/* ==========================================================================
-   1. SCROLL-DRIVEN 3D UNIVERSE JOURNEY
-   ========================================================================== */
-
-.scroll-3d-universe-section {
-  position: relative;
-  height: 480vh; /* 8 continuous scroll stages */
-  width: 100%;
-}
-
-.sticky-3d-canvas-wrap {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 1;
-  overflow: hidden;
-  background: radial-gradient(ellipse 85% 75% at 50% 40%, #0D0B18 0%, #080809 85%);
-}
-
-[data-theme="light"] .sticky-3d-canvas-wrap {
-  background: radial-gradient(ellipse 85% 75% at 50% 40%, #EFF6FF 0%, #F8FAFC 85%);
-}
-
-.universe-vignette-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at center, transparent 40%, rgba(8, 8, 9, 0.75) 100%);
-}
-
-[data-theme="light"] .universe-vignette-overlay {
-  background: radial-gradient(circle at center, transparent 40%, rgba(248, 250, 252, 0.75) 100%);
-}
-
-.scroll-narrative-overlay {
-  position: relative;
-  z-index: 10;
-  margin-top: -480vh;
-  pointer-events: none;
-}
-
-.scroll-stage-block {
-  height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0 4rem;
-  max-width: 1360px;
-  margin: 0 auto;
-  opacity: 0.25;
-  transform: translateY(20px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scroll-stage-block:nth-child(even) {
-  justify-content: flex-end;
-}
-
-.scroll-stage-block.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.stage-hud-card {
-  pointer-events: auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  backdrop-filter: blur(16px);
-  border-radius: 20px;
-  padding: 1.75rem 2rem;
-  max-width: 460px;
-  box-shadow: var(--shadow-xl);
-  transition: all 0.25s ease;
-}
-
-.stage-hud-card:hover {
-  border-color: var(--border-accent);
-  transform: translateY(-3px);
-}
-
-.stage-top-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.stage-step-pill {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: var(--accent-cyan);
-  background: var(--accent-cyan-dim);
-  border: 1px solid var(--border-accent);
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  letter-spacing: 0.06em;
-}
-
-.stage-metric-badge {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: var(--accent-green);
-}
-
-.stage-title {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 0.45rem;
-  line-height: 1.2;
-}
-
-.stage-desc {
-  font-size: 0.86rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  margin-bottom: 1.25rem;
-}
-
-.stage-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.stage-metric-sub {
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-.stage-action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--accent-cyan);
-  color: #FFFFFF;
-  border: none;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.78rem;
-  padding: 0.45rem 0.95rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.stage-action-btn:hover {
-  background: var(--accent-blue);
-  transform: translateX(2px);
-}
-
-.scroll-prompter-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--text-secondary);
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  padding: 0.5rem 1.2rem;
-  border-radius: 9999px;
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-md);
-  transition: all 0.2s ease;
-}
-
-.scroll-prompter-indicator:hover {
-  color: var(--text-primary);
-  border-color: var(--accent-cyan);
-}
-
-.bounce-arrow {
-  animation: bounce 1.8s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(4px); }
-  60% { transform: translateY(2px); }
-}
-
-@media (max-width: 768px) {
-  .scroll-stage-block {
-    padding: 0 1.25rem;
-    justify-content: center !important;
-  }
-}
-
-/* ==========================================================================
-   2. MAIN FILTERABLE CAREER DIRECTORY SECTION
-   ========================================================================== */
-
 .explore-main {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 4rem 2rem 2rem;
+  padding: 6.5rem 2rem 2rem;
   position: relative;
   z-index: 10;
 }
@@ -239,7 +34,7 @@
 
 .hero-subtitle {
   font-size: 1.05rem;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #94A3B8);
   line-height: 1.6;
 }
 
@@ -260,7 +55,7 @@
 .search-bar-main input {
   width: 100%;
   background: var(--bg-card);
-  border: 1px solid var(--border-medium);
+  border: 1px solid var(--border-subtle);
   border-radius: 14px;
   padding: 1rem 1.25rem 1rem 3.2rem;
   color: var(--text-primary);
@@ -300,7 +95,7 @@
 .mode-toggle-group {
   display: flex;
   background: var(--bg-card);
-  border: 1px solid var(--border-medium);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 0.3rem;
   gap: 0.3rem;
@@ -342,10 +137,10 @@
 }
 
 .search-quick-suggestions button {
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  padding: 0.35rem 0.85rem;
+  padding: 0.35rem 0.8rem;
   border-radius: 9999px;
   font-size: 0.76rem;
   font-weight: 600;
@@ -360,20 +155,20 @@
   border-color: var(--accent-cyan);
 }
 
-/* Filter Bar & Selection Boxes */
+/* Filter Bar & Beautiful Selection Boxes */
 .explore-filter-bar {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  padding: 0.85rem 1.35rem;
+  padding: 0.75rem 1.25rem;
   background: var(--bg-card);
-  border: 1px solid var(--border-medium);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
   max-width: 1050px;
   margin: 1.5rem auto 1rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-group {
@@ -391,13 +186,54 @@
   white-space: nowrap;
 }
 
+.filter-group select {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.48rem 2.2rem 0.48rem 0.75rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23818CF8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+}
+
+.filter-group select:hover {
+  border-color: var(--border-light);
+  background-color: var(--bg-tertiary);
+}
+
+.filter-group select:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+}
+
+.filter-group select option {
+  background-color: #14141B;
+  color: #FAFAFA;
+  padding: 8px 12px;
+}
+
+[data-theme="light"] .filter-group select option {
+  background-color: #FFFFFF;
+  color: #0F172A;
+}
+
 .clear-filters-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  background: var(--accent-red-dim);
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  color: var(--accent-red);
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: #F87171;
   padding: 0.45rem 0.85rem;
   border-radius: 10px;
   font-size: 0.78rem;
@@ -407,7 +243,27 @@
 }
 
 .clear-filters-btn:hover {
-  background: rgba(220, 38, 38, 0.2);
+  background: rgba(248, 113, 113, 0.2);
+}
+
+/* 3D Universe Canvas Overlay */
+.universe-canvas-section {
+  position: relative;
+}
+
+.canvas-overlay-hint {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+  pointer-events: none;
 }
 
 /* Results Header */
@@ -429,27 +285,26 @@
 .explore-grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.35rem;
+  gap: 1.25rem;
 }
 
 .career-explore-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
   padding: 1.5rem;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
 }
 
 .career-explore-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-accent);
   transform: translateY(-3px);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .card-top-meta {
@@ -469,7 +324,7 @@
 .career-card-desc {
   font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 1.55;
+  line-height: 1.5;
   margin-bottom: 1.2rem;
 }
 
