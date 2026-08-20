@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Menu, X, Globe, GraduationCap, Zap, TrendingDown, Layers, HelpCircle, 
-  MessageSquare, Search, Bookmark, UserRound, BriefcaseBusiness
+  MessageSquare, Search, Bookmark, UserRound, BriefcaseBusiness, Sun, Moon
 } from 'lucide-react';
 import LanguagePicker from './LanguagePicker';
 import { useLanguage } from '../i18n';
+import { useTheme } from '../context/ThemeContext';
 import '../styles/navbar.css';
 
 export default function Navbar() {
@@ -13,6 +14,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { copy } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,16 +59,40 @@ export default function Navbar() {
           })}
         </div>
         
-        <div className="desktop-only"><LanguagePicker /></div>
+        <div className="d-flex items-center gap-2 desktop-only">
+          {/* Theme Toggle Button */}
+          <button 
+            className="theme-toggle-btn" 
+            onClick={toggleTheme}
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun size={17} className="text-gold" /> : <Moon size={17} className="text-cyan" />}
+          </button>
 
-        <button 
-          className="mobile-menu-toggle mobile-only"
-          aria-label={copy.menu || 'Toggle Menu'}
-          aria-expanded={mobileMenuOpen}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          <LanguagePicker />
+        </div>
+
+        {/* Mobile controls */}
+        <div className="d-flex items-center gap-2 mobile-only">
+          <button 
+            className="theme-toggle-btn" 
+            onClick={toggleTheme}
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun size={17} className="text-gold" /> : <Moon size={17} className="text-cyan" />}
+          </button>
+
+          <button 
+            className="mobile-menu-toggle"
+            aria-label={copy.menu || 'Toggle Menu'}
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
@@ -98,14 +124,16 @@ export default function Navbar() {
           [copy.explore || 'Explore', '/explore', Globe],
           [copy.institutions || 'Colleges', '/placements', GraduationCap],
           [copy.workspace || 'Workspace', '/workspace', BriefcaseBusiness],
-          [copy.quiz || 'Quiz', '/quiz', HelpCircle],
-          [copy.copilot || 'Copilot', '/copilot', MessageSquare]
-        ].map(([name, path, Icon]) => (
-          <Link key={name} to={path} className={location.pathname === path ? 'active' : ''}>
-            <Icon size={17} />
-            <span>{name}</span>
-          </Link>
-        ))}
+          [copy.combos || 'Combos', '/combos', Zap]
+        ].map(([label, path, Icon]) => {
+          const isActive = location.pathname === path;
+          return (
+            <Link key={path} to={path} className={isActive ? 'active' : ''}>
+              <Icon size={18} />
+              <span>{label}</span>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );

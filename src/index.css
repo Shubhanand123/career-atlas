@@ -1,9 +1,9 @@
 /* ================================================================
-   CAREER ATLAS — Global Design System (Plus Jakarta Sans / Gen Z Minimalist)
+   CAREER ATLAS — Universal Design System (Dark & Light Mode Support)
    ================================================================ */
 
-:root {
-  /* Surfaces */
+:root, [data-theme="dark"] {
+  /* DARK MODE (Obsidian Minimalist) */
   --bg-primary: #080809;
   --bg-secondary: #101014;
   --bg-tertiary: #16161D;
@@ -44,10 +44,56 @@
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.7);
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.8);
   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.9);
-  --shadow-glow-cyan: 0 0 25px rgba(99, 102, 241, 0.3);
-  --shadow-glow-blue: 0 0 25px rgba(129, 140, 248, 0.3);
+  --backdrop-gradient: radial-gradient(ellipse 85% 75% at 50% 40%, #0D0B18 0%, #080809 80%);
+}
 
-  /* Typography */
+[data-theme="light"] {
+  /* LIGHT MODE (Clean Editorial Porcelain & Indigo) */
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --bg-glass: rgba(0, 0, 0, 0.03);
+  --bg-glass-heavy: rgba(255, 255, 255, 0.95);
+  --bg-input: #FFFFFF;
+
+  /* Text */
+  --text-primary: #0F172A;        /* Deep Slate */
+  --text-secondary: #475569;      /* Slate Charcoal */
+  --text-muted: #64748B;
+  --text-dim: #94A3B8;
+
+  /* Accents */
+  --accent-cyan: #4F46E5;          /* Royal Indigo */
+  --accent-cyan-dim: rgba(79, 70, 229, 0.1);
+  --accent-blue: #2563EB;          /* Cobalt Blue */
+  --accent-blue-dim: rgba(37, 99, 235, 0.1);
+  --accent-gold: #7C3AED;          /* Royal Purple */
+  --accent-gold-dim: rgba(124, 58, 237, 0.1);
+  --accent-green: #059669;         /* Rich Emerald */
+  --accent-green-dim: rgba(5, 150, 105, 0.1);
+  --accent-red: #DC2626;           /* Crimson */
+  --accent-red-dim: rgba(220, 38, 38, 0.1);
+  --accent-purple: #9333EA;
+  --accent-purple-dim: rgba(147, 51, 234, 0.1);
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-light: rgba(0, 0, 0, 0.12);
+  --border-medium: rgba(0, 0, 0, 0.16);
+  --border-accent: rgba(79, 70, 229, 0.3);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.1);
+  --backdrop-gradient: radial-gradient(ellipse 85% 75% at 50% 40%, #EFF6FF 0%, #F8FAFC 80%);
+}
+
+/* Typography Tokens */
+:root {
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
   --font-heading: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -77,6 +123,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Global 3D Ambient Backdrop */
@@ -87,7 +134,7 @@ html, body {
   height: 100vh;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 85% 75% at 50% 40%, #0D0B18 0%, #080809 80%);
+  background: var(--backdrop-gradient);
 }
 
 /* Base Headings & Links */
@@ -120,9 +167,9 @@ a {
 }
 
 .badge-pill.danger {
-  color: #F87171;
-  background: rgba(248, 113, 113, 0.1);
-  border-color: rgba(248, 113, 113, 0.25);
+  color: var(--accent-red);
+  background: var(--accent-red-dim);
+  border-color: rgba(220, 38, 38, 0.25);
 }
 
 .badge.category {
@@ -147,7 +194,7 @@ a {
 .text-purple { color: var(--accent-purple); }
 .text-dim { color: var(--text-secondary); }
 .text-muted { color: var(--text-muted); }
-.text-white { color: #FFFFFF; }
+.text-white { color: var(--text-primary); }
 
 /* Buttons */
 .btn-primary {
@@ -164,17 +211,17 @@ a {
   align-items: center;
   gap: 0.45rem;
   transition: all 0.15s ease;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
   background: var(--accent-blue);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-glass);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
   padding: 0.65rem 1.3rem;
@@ -190,7 +237,7 @@ a {
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--bg-tertiary);
   border-color: var(--border-light);
 }
 
@@ -208,6 +255,27 @@ a {
   font-size: 0.88rem;
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-light);
 }
 
 /* Global Flex & Layout Utilities */
@@ -238,14 +306,14 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #080809;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--border-medium);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.5);
+  background: var(--accent-cyan);
 }
