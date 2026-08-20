@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import Ambient3DBackground from './components/Ambient3DBackground';
 import './index.css';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -20,42 +21,63 @@ function LoadingScreen() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#17100b',
+      background: '#080809',
       flexDirection: 'column',
-      gap: '1.5rem'
+      gap: '1.25rem'
     }}>
       <div style={{
         fontFamily: 'Space Grotesk, sans-serif',
-        fontSize: '1.5rem',
-        fontWeight: 700,
-        letterSpacing: '0.1em',
-        color: '#fff'
+        fontSize: '1.4rem',
+        fontWeight: 900,
+        letterSpacing: '0.08em',
+        color: '#FAFAFA'
       }}>
-        CAREER ATLAS
+        ✦ CAREER ATLAS
       </div>
-      <div className="spinner" />
+      <div style={{
+        width: '32px',
+        height: '32px',
+        border: '3px solid rgba(99, 102, 241, 0.2)',
+        borderTop: '3px solid #6366F1',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite'
+      }} />
     </div>
+  );
+}
+
+function GlobalLayout({ children }) {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
+  return (
+    <>
+      {!isLandingPage && <Ambient3DBackground />}
+      {children}
+    </>
   );
 }
 
 export default function App() {
   return (
     <Router>
-      <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/explore/:familyId" element={<ExplorePage />} />
-          <Route path="/career/:careerId" element={<CareerProfile />} />
-          <Route path="/placements" element={<PlacementReportsPage />} />
-          <Route path="/combos" element={<CombosPage />} />
-          <Route path="/layoffs" element={<LayoffsPage />} />
-          <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/compare" element={<ComparePage />} />
-          <Route path="/copilot" element={<CopilotPage />} />
-          <Route path="/workspace" element={<WorkspacePage />} />
-        </Routes>
-      </Suspense>
+      <GlobalLayout>
+        <Suspense fallback={<LoadingScreen />}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/explore/:familyId" element={<ExplorePage />} />
+            <Route path="/career/:careerId" element={<CareerProfile />} />
+            <Route path="/placements" element={<PlacementReportsPage />} />
+            <Route path="/combos" element={<CombosPage />} />
+            <Route path="/layoffs" element={<LayoffsPage />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/compare" element={<ComparePage />} />
+            <Route path="/copilot" element={<CopilotPage />} />
+            <Route path="/workspace" element={<WorkspacePage />} />
+          </Routes>
+        </Suspense>
+      </GlobalLayout>
     </Router>
   );
 }
