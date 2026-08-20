@@ -23,7 +23,7 @@ export const skillCategories = [
     name: 'Software, Distributed Systems & Cloud',
     icon: '💻',
     skills: [
-      { id: 'rust-systems', name: 'Rust High-Concurreny & Memory Safety', learningTime: { beginner: '2-4 months', professional: '8-18 months', advanced: '2+ years' } },
+      { id: 'rust-systems', name: 'Rust High-Concurrency & Memory Safety', learningTime: { beginner: '2-4 months', professional: '8-18 months', advanced: '2+ years' } },
       { id: 'distributed-consensus', name: 'Distributed Consensus Protocols (Raft, Paxos)', learningTime: { beginner: '3-6 months', professional: '1-2 years', advanced: '3+ years' } },
       { id: 'kubernetes-cloud-native', name: 'Kubernetes Operator & Cloud-Native Architecture', learningTime: { beginner: '2-4 months', professional: '6-12 months', advanced: '2+ years' } },
       { id: 'ebpf-kernel', name: 'eBPF Linux Kernel Observability & Networking', learningTime: { beginner: '3-6 months', professional: '1-2 years', advanced: '3+ years' } },
@@ -99,34 +99,33 @@ export const skillCategories = [
   },
   {
     id: 'law-policy',
-    name: 'Law, Diplomacy & Strategic Governance',
+    name: 'Law, IP, Ethics & Strategic Policy',
     icon: '⚖️',
     skills: [
-      { id: 'cross-border-m-and-a-law', name: 'Cross-Border M&A Antitrust & Regulatory Due Diligence', learningTime: { beginner: '6-12 months', professional: '2-4 years', advanced: '5+ years' } },
-      { id: 'ai-ip-patent-litigation', name: 'Patent Prosecution for AI & Synthetic Biology', learningTime: { beginner: '6-12 months', professional: '2-4 years', advanced: '4+ years' } },
-      { id: 'bilateral-treaty-negotiation', name: 'Bilateral Trade Treaty & WTO Dispute Settlement', learningTime: { beginner: '6-12 months', professional: '2-4 years', advanced: '5+ years' } },
-      { id: 'constitutional-jurisprudence', name: 'Constitutional Appellate Argumentation & Judicial Review', learningTime: { beginner: '1-2 years', professional: '3-6 years', advanced: '7+ years' } }
-    ]
-  },
-  {
-    id: 'design-spatial',
-    name: 'Product Architecture & Spatial Design',
-    icon: '🎨',
-    skills: [
-      { id: 'visionos-spatial-ui', name: 'visionOS Spatial UI & 3D Gesture Interaction Architecture', learningTime: { beginner: '2-4 months', professional: '6-12 months', advanced: '2+ years' } },
-      { id: 'design-systems-at-scale', name: 'Enterprise Design Systems & Token Architecture (Figma)', learningTime: { beginner: '1-3 months', professional: '6-12 months', advanced: '2+ years' } },
-      { id: 'computational-parametric-rhino', name: 'Parametric Architecture (Rhino + Grasshopper)', learningTime: { beginner: '3-6 months', professional: '1-2 years', advanced: '3+ years' } },
-      { id: 'industrial-cmf-design', name: 'Automotive CMF (Color, Material, Finish) Engineering', learningTime: { beginner: '3-6 months', professional: '1-2 years', advanced: '3+ years' } }
+      { id: 'patent-prosecution-tech', name: 'Patent Prosecution & USPTO/EPO Cross-Border Filings', learningTime: { beginner: '6-12 months', professional: '2-4 years', advanced: '5+ years' } },
+      { id: 'arbitration-cas-sports', name: 'Court of Arbitration for Sport (CAS) Lex Sportiva Advocacy', learningTime: { beginner: '6-12 months', professional: '2-3 years', advanced: '4+ years' } },
+      { id: 'ai-ethics-eu-act', name: 'EU AI Act & Global Regulatory Compliance Auditing', learningTime: { beginner: '2-4 months', professional: '6-12 months', advanced: '2+ years' } },
+      { id: 'cross-border-tax-structuring', name: 'International Transfer Pricing & Sovereign Tax Treaty Structuring', learningTime: { beginner: '6-12 months', professional: '2-4 years', advanced: '5+ years' } }
     ]
   }
 ];
 
-// Flat searchable list of all skills
-export const allSkillsList = skillCategories.flatMap(cat => 
-  cat.skills.map(s => ({ ...s, categoryId: cat.id, categoryName: cat.name, icon: cat.icon }))
+export const allSkillsList = skillCategories.flatMap(c => 
+  c.skills.map(s => ({
+    ...s,
+    categoryId: c.id,
+    categoryName: c.name,
+    icon: c.icon
+  }))
 );
 
-// Dynamic Skill Stacker Synergy Calculator
+function formatSalaryINR(lakhs) {
+  if (lakhs >= 100) {
+    return `₹${(lakhs / 100).toFixed(2)} Cr`;
+  }
+  return `₹${Math.round(lakhs)} LPA`;
+}
+
 export function calculateSkillSynergy(selectedSkillIds = []) {
   if (!selectedSkillIds.length) return null;
 
@@ -142,16 +141,23 @@ export function calculateSkillSynergy(selectedSkillIds = []) {
   else if (count === 2 && numDomains === 2) multiplier = 2.4;
   else if (count === 3 && numDomains >= 2) multiplier = 3.2;
   else if (count >= 4 && numDomains >= 3) multiplier = 4.5;
-  else multiplier = Math.min(5.0, 1.4 + count * 0.5 + numDomains * 0.6);
+  else multiplier = Math.min(5.2, 1.4 + count * 0.5 + numDomains * 0.6);
 
-  // Projected salary tier
-  const baseSalaryINR = 1400000; // 14 LPA base
-  const projectedINR = Math.round((baseSalaryINR * multiplier) / 100000);
-  const baseSalaryUSD = 90000;
-  const projectedUSD = Math.round((baseSalaryUSD * multiplier) / 1000) * 1000;
+  // Projected salary tier in INR and USD
+  const baseSalaryINR = 15; // 15 LPA base
+  const lowINR = baseSalaryINR * multiplier;
+  const highINR = lowINR * 1.65;
+  const projectedSalaryINR = `${formatSalaryINR(lowINR)} — ${formatSalaryINR(highINR)}`;
 
-  // AI Resilience rating
-  const aiResilience = Math.min(9.9, (8.5 + numDomains * 0.35 + count * 0.1)).toFixed(1);
+  const baseSalaryUSD = 95000;
+  const lowUSD = Math.round((baseSalaryUSD * multiplier) / 1000) * 1000;
+  const highUSD = Math.round((lowUSD * 1.55) / 1000) * 1000;
+  const projectedSalaryUSD = `$${lowUSD.toLocaleString()} — $${highUSD.toLocaleString()}`;
+
+  // AI Resilience and Risk rating
+  const aiResilienceScore = Math.min(9.9, (8.2 + numDomains * 0.4 + count * 0.12)).toFixed(1);
+  const aiRiskScore = Math.max(1.1, (10 - Number(aiResilienceScore))).toFixed(1);
+  const aiDefensibilityLabel = Number(aiResilienceScore) >= 9.2 ? 'UNTOUCHABLE DEFENSE' : Number(aiResilienceScore) >= 8.5 ? 'EXTREMELY HIGH SHIELD' : 'HIGHLY RESILIENT';
 
   // Match unlocked archetype
   let unlockedArchetype = 'Full-Stack Interdisciplinary Specialist';
@@ -173,9 +179,11 @@ export function calculateSkillSynergy(selectedSkillIds = []) {
     selectedSkills,
     multiplier: `${multiplier.toFixed(1)}x Multiplier`,
     multiplierRaw: multiplier,
-    projectedSalaryINR: `₹${projectedINR}L – ₹${Math.round(projectedINR * 1.6)}L / yr`,
-    projectedSalaryUSD: `$${projectedUSD.toLocaleString()} – $${Math.round(projectedUSD * 1.5).toLocaleString()} / yr`,
-    aiResilience: `${aiResilience} / 10`,
+    projectedSalaryINR,
+    projectedSalaryUSD,
+    aiResilience: `${aiResilienceScore} / 10`,
+    aiRiskScore,
+    aiDefensibilityLabel,
     unlockedArchetype,
     distinctDomainsCount: numDomains,
     insights: `Combining ${numDomains} distinct fields creates high market defensibility. While single-skill tasks face rapid AI commoditization, the intersection of ${selectedSkills.map(s => s.name.split(' ')[0]).join(' + ')} forms an asymmetric monopoly advantage.`

@@ -172,6 +172,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.comp-item.highlight-inr {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(56, 189, 248, 0.05) 100%);
 }
 
 .c-lbl {
@@ -192,6 +198,13 @@
 .c-val.text-green { color: var(--accent-green); }
 .c-val.text-cyan { color: var(--accent-cyan); }
 .c-val.text-purple { color: #A78BFA; }
+
+.c-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
 
 .insight-text {
   background: var(--bg-card);
@@ -438,7 +451,7 @@
 
 .combos-layout {
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 390px 1fr;
   gap: 2rem;
   align-items: flex-start;
 }
@@ -531,20 +544,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 0.65rem;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--border-subtle);
 }
 
-.tgt-label {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  font-weight: 700;
-  text-transform: uppercase;
+.tgt-inr {
+  font-size: 0.96rem;
+  font-weight: 900;
 }
 
-.tgt-val {
-  font-size: 0.95rem;
-  font-weight: 900;
+.tgt-usd {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.combo-shield-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #A78BFA;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
 }
 
 /* Right Detail Pane */
@@ -633,6 +654,11 @@
   gap: 0.35rem;
 }
 
+.sal-box.highlight-inr {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(56, 189, 248, 0.08) 100%);
+}
+
 .sal-label {
   font-size: 0.72rem;
   font-weight: 800;
@@ -651,6 +677,107 @@
 .sal-val.text-cyan { color: var(--accent-cyan); }
 .sal-val.text-gold { color: #F59E0B; }
 .sal-val.text-purple { color: #A78BFA; }
+
+/* ==========================================================================
+   AI RISK & AUTOMATION DEFENSIBILITY AUDIT CARD
+   ========================================================================== */
+
+.ai-risk-audit-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.ai-score-pill {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #A78BFA;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+}
+
+.ai-risk-meter-wrap {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.ai-risk-meter-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366F1 0%, #4ADE80 100%);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.ai-shield-explanation {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.ai-task-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 650px) {
+  .ai-task-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ai-task-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+.ai-task-box.automated {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.ai-task-box.human {
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.task-box-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.ai-task-box.automated .task-box-head { color: #F59E0B; }
+.ai-task-box.human .task-box-head { color: var(--accent-green); }
+
+.ai-task-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ai-task-box li {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
 
 /* Synergy Insight Card */
 .synergy-insight-card {
