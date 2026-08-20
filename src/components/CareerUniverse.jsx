@@ -1,441 +1,497 @@
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Html, Float, Text } from '@react-three/drei';
+import { OrbitControls, Html, Float } from '@react-three/drei';
+import { Link } from 'react-router-dom';
 import * as THREE from 'three';
+import { Sparkles, ArrowRight, Zap, TrendingUp, ShieldCheck, DollarSign } from 'lucide-react';
 
-// 12 Distinct Architectural Zones of the Knowledge City
-export const ARCHITECTURAL_ZONES = [
+// 8 Luminous Career Galaxy Domains
+export const GALAXY_DOMAINS = [
   {
-    id: 'entrance',
-    name: '01 · THE GRAND PORTAL',
-    subtitle: 'Entrance to the Career City',
-    tag: 'FOUNDATION',
-    pos: [0, 0, 0],
-    scale: [6, 1.2, 5],
-    color: '#d6c5b0',
-    stoneColor: '#2b231d',
-    accentColor: '#c99a5e',
-    height: 3.5,
-    cameraPos: [4.5, 6.5, 11],
-    cameraLook: [0, 1.5, 0],
-    description: '15,000+ normalized occupations mapped across global skill, education, and compensation space.'
+    id: 'tech',
+    name: 'AI & Distributed Systems',
+    tag: 'HIGH GROWTH',
+    color: '#6366F1',
+    emissive: '#4F46E5',
+    pos: [7.5, 1.2, -4],
+    avgCTC: '₹28.5L Avg CTC',
+    growth: '+42% YoY',
+    aiResilience: '9.8 / 10',
+    sampleCareers: ['AI Research Scientist', 'Systems Architect', 'GPU Kernel Dev', 'Security Researcher'],
+    familyId: 'technology'
   },
   {
-    id: 'streams',
-    name: '02 · STREAMS QUADRANT',
-    subtitle: 'Science · Commerce · Arts · Trades',
-    tag: 'FOUNDATIONAL STREAMS',
-    pos: [-8.5, 0.5, -12],
-    scale: [7.5, 1.4, 6],
-    color: '#9fb28b',
-    stoneColor: '#262d22',
-    accentColor: '#b4c99c',
-    height: 5.2,
-    cameraPos: [-3.8, 8.2, -4.5],
-    cameraLook: [-8.5, 2.5, -12],
-    description: 'Post-10th & Post-12th branching paths from pure sciences and mathematics to vocational trades.'
+    id: 'healthcare',
+    name: 'Medicine & Clinical Surgery',
+    tag: 'STRUCTURAL SHORTAGE',
+    color: '#38BDF8',
+    emissive: '#0284C7',
+    pos: [-7.0, 2.5, -5],
+    avgCTC: '₹24.0L Avg CTC',
+    growth: '+28% YoY',
+    aiResilience: '9.9 / 10',
+    sampleCareers: ['Biomedical Engineer', 'Cardiothoracic Surgeon', 'Neuro-Oncologist', 'Clinical Trialist'],
+    familyId: 'healthcare'
   },
   {
-    id: 'education',
-    name: '03 · ACADEMIA ROTUNDA',
-    subtitle: 'Degrees, Diplomas & Certifications',
-    tag: 'LEARNING INFRASTRUCTURE',
-    pos: [9, 1.2, -22],
-    scale: [8, 1.6, 7],
-    color: '#d4b37f',
-    stoneColor: '#30261b',
-    accentColor: '#e8c992',
-    height: 6.8,
-    cameraPos: [14, 9.5, -13],
-    cameraLook: [9, 3.2, -22],
-    description: 'Accredited degree pipelines: B.Tech, MBBS, B.Des, BBA, Vocational Apprenticeships.'
+    id: 'science',
+    name: 'Quantum Physics & Space',
+    tag: 'FRONTIER DISCOVERY',
+    color: '#4ADE80',
+    emissive: '#16A34A',
+    pos: [5.2, -3.0, -9],
+    avgCTC: '₹19.5L Avg CTC',
+    growth: '+22% YoY',
+    aiResilience: '9.7 / 10',
+    sampleCareers: ['Quantum Algorithm Scientist', 'Astrophysicist', 'Genomics Fellow', 'Spectroscopist'],
+    familyId: 'science'
   },
   {
-    id: 'institutions',
-    name: '04 · GLOBAL ACADEMIES',
-    subtitle: '5,000+ Universities Worldwide',
-    tag: 'INSTITUTIONAL AUDIT',
-    pos: [-7, 1.8, -34],
-    scale: [9, 1.8, 7.5],
-    color: '#b89068',
-    stoneColor: '#31251c',
-    accentColor: '#d6a87c',
-    height: 7.5,
-    cameraPos: [-1.5, 10.5, -24],
-    cameraLook: [-7, 3.8, -34],
-    description: 'Comprehensive benchmarks from IITs, AIIMS, and BITS to Oxford, TUM, Stanford, Toronto, and NUS.'
+    id: 'engineering',
+    name: 'Aerospace & Humanoid Robotics',
+    tag: 'EMBODIED TECH',
+    color: '#F59E0B',
+    emissive: '#D97706',
+    pos: [-6.5, -2.2, -10],
+    avgCTC: '₹22.0L Avg CTC',
+    growth: '+34% YoY',
+    aiResilience: '9.6 / 10',
+    sampleCareers: ['Aerospace Propulsion Lead', 'Bipedal Kinematics Eng', 'Avionics Architect', 'CFD Specialist'],
+    familyId: 'engineering'
   },
   {
-    id: 'true-cost',
-    name: '05 · TRUE-COST MONOLITHS',
-    subtitle: 'Tuition + Living + Foreign Currency',
-    tag: 'FINANCIAL AUDIT',
-    pos: [8, 2.4, -46],
-    scale: [8.5, 2.0, 7],
-    color: '#8d7965',
-    stoneColor: '#28221c',
-    accentColor: '#ba9e84',
-    height: 5.8,
-    cameraPos: [13.5, 11, -36],
-    cameraLook: [8, 3.5, -46],
-    description: 'Granular true cost of study: Tuition + Rent + Food + Transport + Insurance across 20+ currencies.'
+    id: 'finance',
+    name: 'Quantitative Finance & Alpha',
+    tag: 'MAXIMUM CTC',
+    color: '#A78BFA',
+    emissive: '#7C3AED',
+    pos: [8.5, 3.8, -13],
+    avgCTC: '₹65.0L Avg CTC',
+    growth: '+19% YoY',
+    aiResilience: '9.4 / 10',
+    sampleCareers: ['Quantitative Trader', 'HFT C++ Engineer', 'Portfolio Manager', 'Stochastic Modeler'],
+    familyId: 'business'
   },
   {
-    id: 'careers',
-    name: '06 · 15,000 CAREER TOWERS',
-    subtitle: 'Specializations & Deep Taxonomy',
-    tag: 'CAREER INTELLIGENCE',
-    pos: [-9, 3.2, -58],
-    scale: [10, 2.2, 8.5],
-    color: '#d49658',
-    stoneColor: '#332317',
-    accentColor: '#f0b070',
-    height: 9.5,
-    cameraPos: [-3, 13.5, -46],
-    cameraLook: [-9, 5.0, -58],
-    description: 'Hierarchical specialization trees from manual carpentry to sub-specialist electrophysiologists.'
+    id: 'creative',
+    name: 'Spatial UX & Game Engines',
+    tag: 'SPATIAL COMPUTE',
+    color: '#FB7185',
+    emissive: '#E11D48',
+    pos: [-8.2, 4.0, -14],
+    avgCTC: '₹18.0L Avg CTC',
+    growth: '+26% YoY',
+    aiResilience: '9.1 / 10',
+    sampleCareers: ['visionOS Spatial Architect', 'Lead Product Designer', 'Unreal Engine Technical Director'],
+    familyId: 'creative'
   },
   {
-    id: 'jobs',
-    name: '07 · EMPLOYMENT VIADUCT',
-    subtitle: 'Market Demand & Active Positions',
-    tag: 'OPPORTUNITIES',
-    pos: [8.5, 3.8, -70],
-    scale: [9, 2.0, 7.5],
-    color: '#c26b48',
-    stoneColor: '#321f18',
-    accentColor: '#e08865',
-    height: 7.2,
-    cameraPos: [14, 13.0, -58],
-    cameraLook: [8.5, 4.8, -70],
-    description: 'Live entry-level pipelines, internship tracks, and corporate employer research hubs.'
+    id: 'governance',
+    name: 'Law & Strategic Governance',
+    tag: 'HIGH TRUST',
+    color: '#C084FC',
+    emissive: '#9333EA',
+    pos: [2.5, 5.2, -17],
+    avgCTC: '₹20.5L Avg CTC',
+    growth: '+15% YoY',
+    aiResilience: '9.5 / 10',
+    sampleCareers: ['Appellate Judge', 'Cross-Border M&A Counsel', 'AI Patent Litigator', 'Diplomat'],
+    familyId: 'government'
   },
   {
-    id: 'sports',
-    name: '08 · SPORTS COLOSSEUM',
-    subtitle: '35+ Sports Roles · 25+ Disciplines',
-    tag: 'ATHLETIC ECOSYSTEM',
-    pos: [-8, 4.2, -82],
-    scale: [10, 2.4, 9],
-    color: '#b65f42',
-    stoneColor: '#2f1c16',
-    accentColor: '#db7858',
-    height: 6.4,
-    cameraPos: [-2, 14.5, -70],
-    cameraLook: [-8, 5.2, -82],
-    description: 'Complete sports ecosystem: Athlete, Coach, Physio, Analyst, Agent, Sports Law, and Sports Tech.'
-  },
-  {
-    id: 'people',
-    name: '09 · PRACTITIONER FORUM',
-    subtitle: 'Student Reviews & Field Feedback',
-    tag: 'PRACTITIONER VOICES',
-    pos: [7.5, 4.8, -94],
-    scale: [8.5, 2.0, 7.5],
-    color: '#94a882',
-    stoneColor: '#232a1f',
-    accentColor: '#b1c79e',
-    height: 6.0,
-    cameraPos: [13, 14.5, -82],
-    cameraLook: [7.5, 5.5, -94],
-    description: 'Unfiltered student & graduate ratings across academics, faculty, placements, and campus life.'
-  },
-  {
-    id: 'twins',
-    name: '10 · CAREER TWIN BRIDGES',
-    subtitle: 'Verified Real-World Trajectories',
-    tag: 'SECTION 150 STANDARD',
-    pos: [-7.5, 5.4, -106],
-    scale: [9, 2.2, 8],
-    color: '#a88a68',
-    stoneColor: '#2c241c',
-    accentColor: '#c7a783',
-    height: 6.8,
-    cameraPos: [-2, 15.5, -94],
-    cameraLook: [-7.5, 6.2, -106],
-    description: 'Zero fabricated stories. Genuine journeys, salary milestones, surprises, and practical advice.'
-  },
-  {
-    id: 'map',
-    name: '11 · MY CAREER LATTICE',
-    subtitle: '30-Question Assessment & Personal Map',
-    tag: 'STUDENT WORKSPACE',
-    pos: [7, 6.0, -118],
-    scale: [9.5, 2.2, 8.5],
-    color: '#c97754',
-    stoneColor: '#332018',
-    accentColor: '#e8946f',
-    height: 8.0,
-    cameraPos: [12.5, 16.5, -106],
-    cameraLook: [7, 7.0, -118],
-    description: 'Personalized trait radar, CV builder, skill-gap analysis, and application tracker.'
-  },
-  {
-    id: 'future',
-    name: '12 · THE HORIZON OBSERVATORY',
-    subtitle: 'Frontier AI, Robotics & Long-Term Compounding',
-    tag: 'HORIZON 2035',
-    pos: [0, 7.2, -132],
-    scale: [12, 2.8, 10],
-    color: '#d6b37c',
-    stoneColor: '#36291b',
-    accentColor: '#f7d399',
-    height: 11.5,
-    cameraPos: [0, 18.0, -118],
-    cameraLook: [0, 8.5, -138],
-    description: 'Synthesize rare skill combinations to insulate against automation and capture monopoly earning power.'
+    id: 'trades',
+    name: 'Master Trades & Precision Craft',
+    tag: 'ACUTE DEFICIT',
+    color: '#06B6D4',
+    emissive: '#0891B2',
+    pos: [-3.5, -4.5, -16],
+    avgCTC: '₹16.5L Avg CTC',
+    growth: '+38% YoY',
+    aiResilience: '9.9 / 10',
+    sampleCareers: ['Underwater Welder', 'Master Electrician', '5-Axis CNC Millwright', 'Cryogenic Tech'],
+    familyId: 'trades'
   }
 ];
 
-function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
-
-function getInterpolatedCamera(progress) {
-  const p = Math.max(0, Math.min(0.9999, progress));
-  const totalZones = ARCHITECTURAL_ZONES.length;
-  const rawIdx = p * (totalZones - 1);
-  const i = Math.floor(rawIdx);
-  const t = rawIdx - i;
-
-  const current = ARCHITECTURAL_ZONES[i];
-  const next = ARCHITECTURAL_ZONES[Math.min(totalZones - 1, i + 1)];
-
-  const camX = lerp(current.cameraPos[0], next.cameraPos[0], t);
-  const camY = lerp(current.cameraPos[1], next.cameraPos[1], t);
-  const camZ = lerp(current.cameraPos[2], next.cameraPos[2], t);
-
-  const lookX = lerp(current.cameraLook[0], next.cameraLook[0], t);
-  const lookY = lerp(current.cameraLook[1], next.cameraLook[1], t);
-  const lookZ = lerp(current.cameraLook[2], next.cameraLook[2], t);
-
-  return {
-    pos: new THREE.Vector3(camX, camY, camZ),
-    look: new THREE.Vector3(lookX, lookY, lookZ)
-  };
-}
-
-// Elevated Stone Skyway / Viaduct System connecting all 12 zones
-function GrandViaductSystem() {
-  const points = useMemo(() => {
-    return ARCHITECTURAL_ZONES.map(z => new THREE.Vector3(z.pos[0], z.pos[1] + 0.15, z.pos[2]));
-  }, []);
-
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points]);
-  const tubeGeometry = useMemo(() => new THREE.TubeGeometry(curve, 90, 0.45, 8, false), [curve]);
-
-  return (
-    <group>
-      <mesh geometry={tubeGeometry}>
-        <meshStandardMaterial color="#cbb89d" roughness={0.82} metalness={0.15} />
-      </mesh>
-      {ARCHITECTURAL_ZONES.slice(0, -1).map((z, idx) => {
-        const nextZ = ARCHITECTURAL_ZONES[idx + 1];
-        const midX = (z.pos[0] + nextZ.pos[0]) / 2;
-        const midY = (z.pos[1] + nextZ.pos[1]) / 2;
-        const midZ = (z.pos[2] + nextZ.pos[2]) / 2;
-        const dist = new THREE.Vector3(...z.pos).distanceTo(new THREE.Vector3(...nextZ.pos));
-        const angleY = Math.atan2(nextZ.pos[0] - z.pos[0], nextZ.pos[2] - z.pos[2]);
-
-        return (
-          <group key={`bridge-${z.id}`}>
-            {/* Bridge deck */}
-            <mesh position={[midX, midY + 0.05, midZ]} rotation={[0, angleY, 0]}>
-              <boxGeometry args={[1.4, 0.18, dist]} />
-              <meshStandardMaterial color="#4a3e35" roughness={0.9} />
-            </mesh>
-            {/* Bridge Support Piers */}
-            <mesh position={[midX, midY / 2, midZ]}>
-              <cylinderGeometry args={[0.3, 0.4, Math.max(0.5, midY), 8]} />
-              <meshStandardMaterial color="#2d251f" roughness={0.95} />
-            </mesh>
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-
-// Architectural Pavilion with Colonnades, Cantilevers, and Illuminated Spires
-function ArchitecturalPavilion({ zone, isCurrent, onSelect }) {
-  const groupRef = useRef();
+// Central Supermassive Atlas Core
+function SupermassiveAtlasCore() {
+  const coreRef = useRef();
+  const ringRef = useRef();
 
   useFrame((state) => {
-    if (!groupRef.current) return;
-    const t = state.clock.elapsedTime * 0.6 + zone.pos[2] * 0.1;
-    groupRef.current.position.y = zone.pos[1] + Math.sin(t) * 0.04;
+    const t = state.clock.getElapsedTime();
+    if (coreRef.current) {
+      coreRef.current.rotation.y = t * 0.2;
+      coreRef.current.rotation.z = t * 0.1;
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.z = -t * 0.15;
+      ringRef.current.rotation.x = Math.PI / 3 + Math.sin(t * 0.5) * 0.05;
+    }
   });
 
-  const columns = useMemo(() => {
-    const cols = [];
-    const count = 6;
-    for (let i = 0; i < count; i++) {
-      const angle = (i / count) * Math.PI * 2;
-      const rX = zone.scale[0] * 0.36;
-      const rZ = zone.scale[2] * 0.34;
-      cols.push({
-        x: Math.cos(angle) * rX,
-        z: Math.sin(angle) * rZ,
-        h: zone.height * (0.6 + (i % 3) * 0.22)
-      });
-    }
-    return cols;
-  }, [zone]);
-
   return (
-    <group ref={groupRef} position={zone.pos}>
-      {/* Heavy Plinth / Base Platform */}
-      <mesh position={[0, zone.scale[1] / 2, 0]} receiveShadow onClick={() => onSelect?.(zone.id)}>
-        <boxGeometry args={zone.scale} />
-        <meshStandardMaterial color={zone.stoneColor} roughness={0.88} metalness={0.08} />
+    <group position={[0, 0, -8]}>
+      {/* Central Pulsing Nucleus */}
+      <mesh ref={coreRef}>
+        <sphereGeometry args={[1.6, 32, 32]} />
+        <meshStandardMaterial
+          color="#0B0E17"
+          emissive="#6366F1"
+          emissiveIntensity={1.8}
+          metalness={0.9}
+          roughness={0.1}
+        />
       </mesh>
 
-      {/* Stepped Terraces */}
-      <mesh position={[0, zone.scale[1] + 0.1, 0]}>
-        <boxGeometry args={[zone.scale[0] * 0.85, 0.2, zone.scale[2] * 0.85]} />
-        <meshStandardMaterial color="#3d3229" roughness={0.85} />
+      {/* Internal Core Halo */}
+      <mesh>
+        <sphereGeometry args={[1.9, 24, 24]} />
+        <meshBasicMaterial
+          color="#818CF8"
+          transparent
+          opacity={0.15}
+          wireframe
+        />
       </mesh>
 
-      {/* Vertical Spires & Colonnade Columns */}
-      {columns.map((col, idx) => (
-        <group key={idx} position={[col.x, zone.scale[1] + col.h / 2, col.z]}>
-          <mesh castShadow>
-            <boxGeometry args={[0.7 + idx * 0.08, col.h, 0.7 + idx * 0.06]} />
-            <meshStandardMaterial
-              color={idx === 0 ? zone.accentColor : zone.color}
-              roughness={0.65}
-              metalness={0.18}
-            />
-          </mesh>
-          {/* Glowing Beacon Top */}
-          <mesh position={[0, col.h / 2 + 0.15, 0]}>
-            <boxGeometry args={[0.85, 0.2, 0.85]} />
-            <meshStandardMaterial color="#f7ecd7" emissive={zone.accentColor} emissiveIntensity={0.4} />
-          </mesh>
-        </group>
-      ))}
-
-      {/* Center Knowledge Monolith / Arch */}
-      <mesh position={[0, zone.scale[1] + zone.height * 0.55, 0]} castShadow>
-        <boxGeometry args={[zone.scale[0] * 0.38, zone.height * 1.1, zone.scale[2] * 0.38]} />
-        <meshStandardMaterial color="#f0e2cf" roughness={0.4} metalness={0.1} />
+      {/* Orbiting Gravitational Dust Ring */}
+      <mesh ref={ringRef}>
+        <torusGeometry args={[3.2, 0.04, 16, 100]} />
+        <meshBasicMaterial
+          color="#4ADE80"
+          transparent
+          opacity={0.4}
+        />
       </mesh>
-
-      {/* Floating 3D Zone Label Banner */}
-      <Float speed={1.2} floatIntensity={0.2} rotationIntensity={0.03}>
-        <group position={[0, zone.height + 2.2, 0]}>
-          <mesh>
-            <boxGeometry args={[4.2, 0.12, 1.1]} />
-            <meshStandardMaterial color="#1a1512" roughness={0.9} />
-          </mesh>
-          <Html position={[0, 0.15, 0]} center distanceFactor={22} style={{ pointerEvents: 'none' }}>
-            <div className={`career-city-architectural-badge ${isCurrent ? 'active' : ''}`}>
-              <div className="cca-tag">{zone.tag}</div>
-              <div className="cca-name">{zone.name}</div>
-            </div>
-          </Html>
-        </group>
-      </Float>
     </group>
   );
 }
 
-// Background Architectural Terrain & Horizon
-function CityWorldLandscape() {
+// Interactive Luminous Domain Node
+function DomainPlanetNode({ domain, isSelected, onSelect }) {
+  const meshRef = useRef();
+  const ringRef = useRef();
+  const [hovered, setHovered] = useState(false);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (meshRef.current) {
+      meshRef.current.rotation.y = t * 0.4;
+      // Gentle float hover
+      meshRef.current.position.y = domain.pos[1] + Math.sin(t * 1.5 + domain.pos[0]) * 0.18;
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.z = t * 0.6;
+    }
+  });
+
   return (
-    <group>
-      {/* Infinite Sandstone Valley Floor */}
-      <mesh position={[0, -0.6, -70]} receiveShadow>
-        <boxGeometry args={[70, 0.8, 190]} />
-        <meshStandardMaterial color="#17120e" roughness={0.96} metalness={0.04} />
+    <group position={domain.pos}>
+      {/* Interactive Planet Sphere */}
+      <mesh
+        ref={meshRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect(domain);
+        }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setHovered(true);
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={() => {
+          setHovered(false);
+          document.body.style.cursor = 'default';
+        }}
+        scale={isSelected || hovered ? 1.25 : 1.0}
+      >
+        <icosahedronGeometry args={[0.9, 4]} />
+        <meshStandardMaterial
+          color={domain.color}
+          emissive={domain.emissive}
+          emissiveIntensity={isSelected || hovered ? 2.5 : 1.2}
+          metalness={0.8}
+          roughness={0.2}
+        />
       </mesh>
 
-      {/* Flanking Distant Mountain Ridge / Monoliths */}
-      {[-24, 24].map((xOffset, idx) => (
-        <group key={idx} position={[xOffset, 0, -70]}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <mesh key={i} position={[0, 4 + i * 1.2, -80 + i * 22]}>
-              <boxGeometry args={[8, 12 + i * 3, 18]} />
-              <meshStandardMaterial color="#1c1612" roughness={0.98} />
-            </mesh>
-          ))}
-        </group>
-      ))}
+      {/* Orbiting Equatorial Shield Ring */}
+      <mesh ref={ringRef} rotation={[Math.PI / 4, 0, 0]}>
+        <torusGeometry args={[1.35, 0.02, 16, 64]} />
+        <meshBasicMaterial
+          color={domain.color}
+          transparent
+          opacity={hovered || isSelected ? 0.8 : 0.35}
+        />
+      </mesh>
+
+      {/* Floating 3D Text Label */}
+      <Html position={[0, -1.4, 0]} center distanceFactor={14}>
+        <div 
+          onClick={() => onSelect(domain)}
+          style={{
+            background: isSelected ? 'rgba(99, 102, 241, 0.3)' : 'rgba(17, 17, 22, 0.85)',
+            border: `1px solid ${isSelected ? domain.color : 'rgba(255,255,255,0.12)'}`,
+            backdropFilter: 'blur(12px)',
+            borderRadius: '10px',
+            padding: '4px 10px',
+            color: '#FFFFFF',
+            fontSize: '11px',
+            fontWeight: '700',
+            whiteSpace: 'nowrap',
+            cursor: 'pointer',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.6)',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          {domain.name}
+        </div>
+      </Html>
     </group>
   );
 }
 
-function ContinuousCityScene({ scrollProgress = 0, onSelectZone }) {
-  const lookVector = useRef(new THREE.Vector3(0, 1.5, 0));
-  const sceneGroup = useRef();
+// Connecting Neural Constellation Lines between Galaxy Hubs
+function ConstellationLines() {
+  const linePositions = useMemo(() => {
+    const coords = [];
+    const n = GALAXY_DOMAINS.length;
+    for (let i = 0; i < n; i++) {
+      const p1 = GALAXY_DOMAINS[i].pos;
+      const p2 = GALAXY_DOMAINS[(i + 1) % n].pos;
+      coords.push(p1[0], p1[1], p1[2]);
+      coords.push(p2[0], p2[1], p2[2]);
 
-  useFrame(({ camera, clock }) => {
-    const target = getInterpolatedCamera(scrollProgress);
-    camera.position.lerp(target.pos, 0.065);
-    lookVector.current.lerp(target.look, 0.07);
-    camera.lookAt(lookVector.current);
-
-    if (sceneGroup.current) {
-      // Subtle breath of wind
-      sceneGroup.current.rotation.y = Math.sin(clock.elapsedTime * 0.1) * 0.008;
+      // Connect to center core
+      coords.push(p1[0], p1[1], p1[2]);
+      coords.push(0, 0, -8);
     }
-  });
-
-  const activeZoneIdx = Math.min(
-    ARCHITECTURAL_ZONES.length - 1,
-    Math.floor(scrollProgress * ARCHITECTURAL_ZONES.length)
-  );
+    return new Float32Array(coords);
+  }, []);
 
   return (
-    <>
-      {/* Warm Cinematic Natural Lighting */}
-      <ambientLight intensity={0.8} color="#faecd9" />
-      <directionalLight
-        position={[14, 22, 16]}
-        intensity={2.8}
-        color="#fbe4c7"
-        castShadow
-        shadow-mapSize={[1024, 1024]}
+    <lineSegments>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
+      </bufferGeometry>
+      <lineBasicMaterial
+        color="#818CF8"
+        transparent
+        opacity={0.18}
       />
-      <pointLight position={[-12, 8, -40]} intensity={1.8} color="#d99962" distance={80} />
-      <pointLight position={[10, 12, -90]} intensity={2.2} color="#e0aa75" distance={90} />
+    </lineSegments>
+  );
+}
 
-      {/* Warm Earth Atmospheric Fog */}
-      <fog attach="fog" args={['#14100d', 16, 115]} />
+// Ambient Floating Stardust Field
+function GalaxyStarDust() {
+  const points = useMemo(() => {
+    const count = 500;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const r = 6 + Math.random() * 16;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = r * Math.cos(phi) - 8;
+    }
+    return positions;
+  }, []);
 
-      <group ref={sceneGroup}>
-        <CityWorldLandscape />
-        <GrandViaductSystem />
-        {ARCHITECTURAL_ZONES.map((zone, idx) => (
-          <ArchitecturalPavilion
-            key={zone.id}
-            zone={zone}
-            isCurrent={activeZoneIdx === idx}
-            onSelect={onSelectZone}
+  const starRef = useRef();
+
+  useFrame((state) => {
+    if (starRef.current) {
+      starRef.current.rotation.y = state.clock.getElapsedTime() * 0.02;
+    }
+  });
+
+  return (
+    <points ref={starRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[points, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.03}
+        color="#A78BFA"
+        transparent
+        opacity={0.6}
+        sizeAttenuation
+      />
+    </points>
+  );
+}
+
+// Camera Orbit Coordinator
+function GalaxySceneManager({ selectedDomain }) {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    if (selectedDomain) {
+      const targetPos = new THREE.Vector3(
+        selectedDomain.pos[0] * 0.6,
+        selectedDomain.pos[1] * 0.6 + 1.5,
+        selectedDomain.pos[2] + 7
+      );
+      camera.position.lerp(targetPos, 0.04);
+      camera.lookAt(selectedDomain.pos[0], selectedDomain.pos[1], selectedDomain.pos[2]);
+    }
+  });
+
+  return null;
+}
+
+export default function CareerUniverse({ onSelectCategory }) {
+  const [selectedDomain, setSelectedDomain] = useState(GALAXY_DOMAINS[0]);
+
+  const handleSelect = (domain) => {
+    setSelectedDomain(domain);
+    if (onSelectCategory) {
+      onSelectCategory(domain.familyId);
+    }
+  };
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '620px', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#080809' }}>
+      <Canvas
+        camera={{ position: [0, 2, 11], fov: 50 }}
+        gl={{ antialias: true, alpha: true }}
+        dpr={[1, 2]}
+      >
+        <ambientLight intensity={0.3} />
+        <pointLight position={[10, 10, 10]} intensity={12} color="#6366F1" />
+        <pointLight position={[-10, -5, -5]} intensity={8} color="#4ADE80" />
+        <pointLight position={[0, -10, 5]} intensity={6} color="#A78BFA" />
+
+        <OrbitControls
+          enablePan={false}
+          enableZoom={true}
+          maxDistance={18}
+          minDistance={4}
+          autoRotate={!selectedDomain}
+          autoRotateSpeed={0.5}
+        />
+
+        <GalaxySceneManager selectedDomain={selectedDomain} />
+
+        <GalaxyStarDust />
+        <ConstellationLines />
+        <SupermassiveAtlasCore />
+
+        {GALAXY_DOMAINS.map((domain) => (
+          <DomainPlanetNode
+            key={domain.id}
+            domain={domain}
+            isSelected={selectedDomain?.id === domain.id}
+            onSelect={handleSelect}
           />
         ))}
-      </group>
-    </>
-  );
-}
-
-export default function CareerUniverse({ scrollProgress = 0, onSelectZone }) {
-  return (
-    <div className="canvas-container" aria-hidden="true">
-      <Canvas
-        shadows
-        dpr={[1, 1.6]}
-        camera={{ position: [4.5, 6.5, 11], fov: 46 }}
-        gl={{
-          antialias: true,
-          alpha: false,
-          powerPreference: 'high-performance',
-          stencil: false
-        }}
-      >
-        <color attach="background" args={['#14100d']} />
-        <ContinuousCityScene scrollProgress={scrollProgress} onSelectZone={onSelectZone} />
       </Canvas>
+
+      {/* HUD Telemetry Overlay on Bottom Left */}
+      {selectedDomain && (
+        <div style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '20px',
+          maxWidth: '380px',
+          background: 'rgba(17, 17, 22, 0.92)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(16px)',
+          borderRadius: '16px',
+          padding: '1.25rem',
+          color: '#FAFAFA',
+          zIndex: 20,
+          boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: selectedDomain.color, background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: '4px' }}>
+              {selectedDomain.tag}
+            </span>
+            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#4ADE80' }}>
+              {selectedDomain.growth}
+            </span>
+          </div>
+
+          <h3 style={{ fontSize: '1.2rem', fontWeight: '900', margin: '0 0 0.5rem 0' }}>
+            {selectedDomain.name}
+          </h3>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', background: 'rgba(0,0,0,0.3)', padding: '0.6rem 0.8rem', borderRadius: '10px', marginBottom: '0.75rem' }}>
+            <div>
+              <span style={{ fontSize: '0.65rem', color: '#64748B', display: 'block', textTransform: 'uppercase' }}>Avg Benchmark</span>
+              <strong style={{ fontSize: '0.92rem', color: '#4ADE80' }}>{selectedDomain.avgCTC}</strong>
+            </div>
+            <div>
+              <span style={{ fontSize: '0.65rem', color: '#64748B', display: 'block', textTransform: 'uppercase' }}>AI Resilience</span>
+              <strong style={{ fontSize: '0.92rem', color: '#A78BFA' }}>{selectedDomain.aiResilience}</strong>
+            </div>
+          </div>
+
+          <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginBottom: '0.75rem' }}>
+            <strong style={{ color: '#fff' }}>Key Roles: </strong>
+            {selectedDomain.sampleCareers.join(', ')}
+          </div>
+
+          <Link
+            to={`/explore?family=${selectedDomain.familyId}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.4rem',
+              width: '100%',
+              background: selectedDomain.color,
+              color: '#FFFFFF',
+              fontWeight: '700',
+              fontSize: '0.82rem',
+              padding: '0.55rem',
+              borderRadius: '10px',
+              textDecoration: 'none',
+              boxShadow: `0 4px 15px ${selectedDomain.color}40`
+            }}
+          >
+            Explore All Roles in {selectedDomain.name.split(' ')[0]} <ArrowRight size={14} />
+          </Link>
+        </div>
+      )}
+
+      {/* Quick Domain Filter Selector on Top */}
+      <div style={{
+        position: 'absolute',
+        top: '15px',
+        left: '15px',
+        right: '15px',
+        display: 'flex',
+        gap: '0.4rem',
+        overflowX: 'auto',
+        paddingBottom: '4px',
+        zIndex: 20
+      }}>
+        {GALAXY_DOMAINS.map(d => (
+          <button
+            key={d.id}
+            onClick={() => handleSelect(d)}
+            style={{
+              background: selectedDomain?.id === d.id ? d.color : 'rgba(17, 17, 22, 0.85)',
+              border: `1px solid ${selectedDomain?.id === d.id ? d.color : 'rgba(255,255,255,0.08)'}`,
+              color: selectedDomain?.id === d.id ? '#FFFFFF' : '#94A3B8',
+              padding: '4px 10px',
+              borderRadius: '9999px',
+              fontSize: '0.72rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            {d.name.split(' ')[0]}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
