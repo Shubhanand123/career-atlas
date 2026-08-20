@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, 
-  Calculator, HelpCircle, ArrowRight, Globe, ExternalLink, Search, MessageSquare
+  Calculator, HelpCircle, ArrowRight, Globe, ExternalLink, Search, MessageSquare, Zap
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { processCopilotQuery } from '../services/copilotEngine';
@@ -78,7 +78,7 @@ export default function CopilotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "Hello! I am your Career Atlas Intelligence Copilot, directly integrated with deep multi-domain AI reasoning and live Google Search & ChatGPT query engines. Ask me anything about careers, salaries, admission cutoffs, true study costs, or sports ecosystems worldwide."
+      text: "Hello! I am your Career Atlas Intelligence Copilot, directly linked with deep multi-domain AI reasoning, Google Search, and ChatGPT. Ask me anything about career salaries, 2026 university cutoffs, true study costs abroad, or sports ecosystems worldwide."
     }
   ]);
   const [input, setInput] = useState('');
@@ -94,7 +94,7 @@ export default function CopilotPage() {
   }, [messages, isTyping]);
 
   const handleSend = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (!input.trim()) return;
 
     const userText = input;
@@ -117,7 +117,17 @@ export default function CopilotPage() {
           sources: result.sources || []
         }
       ]);
-    }, 450);
+    }, 400);
+  };
+
+  const handleDirectGoogleSearch = () => {
+    const query = input.trim() || "Top careers and university cutoffs 2026";
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+  };
+
+  const handleDirectChatGPT = () => {
+    const query = input.trim() || "Provide detailed career analysis and salary benchmarks for 2026";
+    window.open(`https://chatgpt.com/?q=${encodeURIComponent(query)}`, '_blank');
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -129,19 +139,19 @@ export default function CopilotPage() {
       <Navbar />
 
       <main className="copilot-container">
-        {/* Header with Live Connected Badges */}
+        {/* Header with Live Direct Engine Badges */}
         <div className="copilot-header">
           <div className="copilot-badges-bar">
             <div className="badge-pill">✦ Career Intelligence Copilot</div>
             <div className="gemini-status-pill active">
-              <Globe size={13} className="text-green" />
-              <span>Google Search & ChatGPT Engine Connected</span>
+              <Zap size={13} className="text-green" />
+              <span>Direct Google Search & ChatGPT Link Active (No API Key Required)</span>
             </div>
           </div>
 
           <h1 className="copilot-title">AI Career & Admissions Advisor</h1>
           <p className="copilot-subtitle">
-            Directly integrated with Google Search and ChatGPT engines for instant, zero-friction career intelligence.
+            Directly connected with Google Search and ChatGPT engines for instant, zero-barrier career intelligence.
           </p>
         </div>
 
@@ -156,11 +166,11 @@ export default function CopilotPage() {
                 <div className="message-bubble">
                   <FormattedAiText text={msg.text} />
 
-                  {/* Google Search & ChatGPT Live Links */}
+                  {/* Google Search & ChatGPT Live Action Cards */}
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="grounding-sources-block">
                       <div className="grounding-title">
-                        <Globe size={13} className="text-cyan" /> Live Search & AI Query Triggers:
+                        <Globe size={13} className="text-cyan" /> Direct Search & AI Engines:
                       </div>
                       <div className="grounding-chips">
                         {msg.sources.map((src, i) => (
@@ -171,9 +181,9 @@ export default function CopilotPage() {
                             rel="noopener noreferrer" 
                             className={`source-chip ${src.type || ''}`}
                           >
-                            {src.type === 'google' && <Search size={12} />}
-                            {src.type === 'chatgpt' && <MessageSquare size={12} />}
-                            {src.type === 'scholar' && <GraduationCap size={12} />}
+                            {src.type === 'google' && <Search size={13} />}
+                            {src.type === 'chatgpt' && <MessageSquare size={13} />}
+                            {src.type === 'scholar' && <GraduationCap size={13} />}
                             <span>{src.title}</span>
                             <ExternalLink size={11} />
                           </a>
@@ -207,7 +217,7 @@ export default function CopilotPage() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Prompt Suggestions */}
+          {/* Prompt Suggestions Bar */}
           <div className="suggestions-bar">
             {SUGGESTIONS.map((s, idx) => (
               <button key={idx} className="suggestion-chip" onClick={() => handleSuggestionClick(s)}>
@@ -216,7 +226,7 @@ export default function CopilotPage() {
             ))}
           </div>
 
-          {/* Chat Input */}
+          {/* Chat Input Bar with Direct Launchers */}
           <form onSubmit={handleSend} className="chat-input-form">
             <input
               type="text"
@@ -224,7 +234,30 @@ export default function CopilotPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <button type="submit" className="btn-send" disabled={!input.trim()}>
+            
+            {/* Quick 1-Click Search Engine Launchers */}
+            <button 
+              type="button" 
+              className="btn-quick-engine google"
+              onClick={handleDirectGoogleSearch}
+              title="Search this query on Google"
+            >
+              <Search size={15} />
+              <span className="desktop-only">Google</span>
+            </button>
+
+            <button 
+              type="button" 
+              className="btn-quick-engine chatgpt"
+              onClick={handleDirectChatGPT}
+              title="Ask this query on ChatGPT"
+            >
+              <MessageSquare size={15} />
+              <span className="desktop-only">ChatGPT</span>
+            </button>
+
+            {/* In-App Send */}
+            <button type="submit" className="btn-send" disabled={!input.trim()} title="Ask Copilot">
               <Send size={18} />
             </button>
           </form>
