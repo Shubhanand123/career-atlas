@@ -68,8 +68,15 @@ export default function ComparePage() {
         return '$' + (c.salary?.entry?.max || 70000).toLocaleString();
       case 'salaryMid':
         return '$' + (c.salary?.mid?.max || 120000).toLocaleString();
-      case 'salaryIndia':
-        return c.salary?.byCountry?.IN ? `₹${(c.salary.byCountry.IN.mid[0]/100000).toFixed(1)} - ₹${(c.salary.byCountry.IN.mid[1]/100000).toFixed(1)} LPA` : '₹12 - ₹35 LPA';
+      case 'salaryIndia': {
+        const inr = c.salary?.byCountry?.IN?.mid;
+        if (Array.isArray(inr) && inr.length >= 2) {
+          return `₹${(inr[0] / 100000).toFixed(1)} - ₹${(inr[1] / 100000).toFixed(1)} LPA`;
+        } else if (typeof inr === 'number') {
+          return `₹${(inr / 100000).toFixed(1)} LPA`;
+        }
+        return '₹12 - ₹35 LPA';
+      }
       case 'workHours':
         return c.lifestyle?.workLifeBalance <= 4 ? '60 - 80 hrs/wk' : '40 - 45 hrs/wk';
       case 'salaryForWorkDone':

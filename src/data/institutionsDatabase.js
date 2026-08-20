@@ -451,6 +451,8 @@ export const globalInstitutions = [
 
 // Helper to compute granular True Cost of Study with scenarios
 export function calculateTrueCostOfStudy(institution, options = {}) {
+  if (!institution) return null;
+
   const {
     scenario = 'average', // 'low', 'average', 'high'
     isInternational = true,
@@ -458,27 +460,30 @@ export function calculateTrueCostOfStudy(institution, options = {}) {
   } = options;
 
   const tuitionAnnual = isInternational
-    ? institution.internationalTuitionAnnual
-    : institution.domesticTuitionAnnual;
+    ? (Number(institution.internationalTuitionAnnual) || Number(institution.domesticTuitionAnnual) || 15000)
+    : (Number(institution.domesticTuitionAnnual) || 8000);
 
   const multiplier = scenario === 'low' ? 0.78 : scenario === 'high' ? 1.35 : 1.0;
 
-  const living = institution.livingCosts;
-  const accommodationMonthly = Math.round(living.accommodationMonthly * multiplier);
-  const foodMonthly = Math.round(living.foodMonthly * multiplier);
-  const transportMonthly = Math.round(living.transportMonthly * multiplier);
-  const otherMonthly = Math.round(living.otherExpensesMonthly * multiplier);
-  const insuranceAnnual = living.insuranceAnnual;
+  const living = institution.livingCosts || {};
+  const accommodationMonthly = Math.round((Number(living.accommodationMonthly) || (institution.country === 'India' ? 4000 : 800)) * multiplier);
+  const foodMonthly = Math.round((Number(living.foodMonthly) || (institution.country === 'India' ? 5000 : 450)) * multiplier);
+  const transportMonthly = Math.round((Number(living.transportMonthly) || (institution.country === 'India' ? 1000 : 120)) * multiplier);
+  const otherMonthly = Math.round((Number(living.otherExpensesMonthly) || (institution.country === 'India' ? 2500 : 250)) * multiplier);
+  const insuranceAnnual = Number(living.insuranceAnnual) || (institution.country === 'India' ? 3000 : 1000);
+
+  const durationYears = Number(institution.durationYears) || 4;
+  const applicationFee = Number(institution.applicationFee) || (institution.country === 'India' ? 1500 : 100);
 
   const totalMonthlyLiving = accommodationMonthly + foodMonthly + transportMonthly + otherMonthly;
   const totalAnnualLiving = (totalMonthlyLiving * 12) + insuranceAnnual;
   const totalAnnualCost = tuitionAnnual + totalAnnualLiving;
-  const totalDegreeCost = (totalAnnualCost * institution.durationYears) + institution.applicationFee;
+  const totalDegreeCost = (totalAnnualCost * durationYears) + applicationFee;
 
   return {
     scenario,
-    currency: institution.currency,
-    durationYears: institution.durationYears,
+    currency: institution.currency || (institution.country === 'India' ? 'INR' : 'USD'),
+    durationYears,
     tuitionAnnual,
     breakdown: {
       accommodationMonthly,
@@ -489,8 +494,8 @@ export function calculateTrueCostOfStudy(institution, options = {}) {
       totalMonthlyLiving,
       totalAnnualLiving
     },
-    cityAverageLivingMonthly: living.cityAverageLivingMonthly,
-    countryAverageLivingMonthly: living.countryAverageLivingMonthly,
+    cityAverageLivingMonthly: living.cityAverageLivingMonthly || (totalMonthlyLiving * 1.5),
+    countryAverageLivingMonthly: living.countryAverageLivingMonthly || (totalMonthlyLiving * 1.2),
     totalAnnualCost,
     totalDegreeCost
   };

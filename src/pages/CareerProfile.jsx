@@ -66,12 +66,16 @@ export default function CareerProfile() {
   useEffect(() => {
     let active = true;
     setCareer(null);
-    getEnrichedCareerAsync(careerId).then(foundCareer => {
-      if (active) {
-        setCareer(foundCareer);
-        setReviews(getStoredFeedback(foundCareer.id));
-      }
-    });
+    getEnrichedCareerAsync(careerId)
+      .then(foundCareer => {
+        if (active && foundCareer) {
+          setCareer(foundCareer);
+          setReviews(getStoredFeedback(foundCareer.id || foundCareer.careerId || careerId));
+        }
+      })
+      .catch(err => {
+        console.error('Error loading career profile:', err);
+      });
     window.scrollTo(0, 0);
     return () => { active = false; };
   }, [careerId]);
