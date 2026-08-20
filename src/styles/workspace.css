@@ -1,7 +1,25 @@
+/* ==========================================================================
+   CAREER ATLAS — Workspace & CV Intelligence Studio (Gen Z Minimalist)
+   ========================================================================== */
+
+:root {
+  --w-bg: #080809;
+  --w-card: #111116;
+  --w-card-hover: #16161D;
+  --w-border: rgba(255, 255, 255, 0.08);
+  --w-accent: #6366F1;
+  --w-accent-light: #A78BFA;
+  --w-neon: #4ADE80;
+  --w-text: #FAFAFA;
+  --w-text-dim: #94A3B8;
+  --w-text-muted: #64748B;
+}
+
 .workspace-page {
   min-height: 100vh;
-  background: #17100b;
-  color: #fff8ec;
+  background: var(--w-bg);
+  color: var(--w-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
 }
 
 .workspace-main {
@@ -16,16 +34,17 @@
 }
 
 .workspace-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  font-weight: 800;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
   line-height: 1.05;
   margin: 0.5rem 0 0.75rem;
+  color: var(--w-text);
 }
 
 .workspace-subtitle {
-  color: #d8c4aa;
-  font-size: 1.05rem;
+  color: var(--w-text-dim);
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -42,35 +61,49 @@
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.65rem 1.1rem;
-  border-radius: 8px;
-  background: rgba(43, 29, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--text-secondary);
-  font-size: 0.88rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--w-border);
+  color: var(--w-text-dim);
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .w-tab:hover {
-  background: rgba(61, 40, 24, 0.85);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--w-text);
 }
 
 .w-tab.active {
-  background: var(--accent-gold);
-  color: #17100b;
-  border-color: var(--accent-gold);
+  background: var(--w-accent);
+  color: #FFFFFF;
+  border-color: var(--w-accent);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .workspace-tab-pane {
   margin-top: 1.5rem;
 }
 
-/* CV Version Selector & Actions */
-.cv-version-selector {
+/* Top Toolbar */
+.cv-top-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--w-card);
+  border: 1px solid var(--w-border);
+  border-radius: 14px;
+  padding: 0.85rem 1.25rem;
+}
+
+.cv-version-controls,
+.cv-style-controls {
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -78,159 +111,339 @@
 }
 
 .cv-v-label {
-  font-size: 0.82rem;
-  color: var(--text-muted);
+  font-size: 0.78rem;
+  color: var(--w-text-muted);
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 .cv-select {
-  background: #14100d;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
-  border-radius: 6px;
+  background: #181820;
+  border: 1px solid var(--w-border);
+  color: var(--w-text);
+  border-radius: 8px;
   padding: 0.4rem 0.75rem;
+  font-size: 0.84rem;
+  outline: none;
+}
+
+/* 1-Click 15,000+ Career Template Generator Banner */
+.career-template-banner {
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+}
+
+.banner-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0.35rem 0 0.2rem;
+  color: var(--w-text);
+}
+
+.banner-desc {
+  font-size: 0.82rem;
+  color: var(--w-text-dim);
+  margin: 0;
+}
+
+.template-search-wrap {
+  position: relative;
+  min-width: 320px;
+}
+
+.search-input-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--w-border);
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+}
+
+.search-input-field input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #fff;
   font-size: 0.85rem;
   outline: none;
+}
+
+.template-search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #181822;
+  border: 1px solid var(--w-accent);
+  border-radius: 10px;
+  padding: 0.35rem;
+  z-index: 60;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+}
+
+.template-drop-row {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-drop-row:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.drop-name { color: #fff; font-size: 0.84rem; font-weight: 600; }
+.drop-cat { color: var(--w-text-muted); font-size: 0.72rem; }
+
+.quick-template-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+}
+
+.chip-label { color: var(--w-text-muted); font-weight: 600; }
+
+.q-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--w-border);
+  color: var(--w-text-dim);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.q-pill:hover {
+  background: var(--w-accent);
+  color: #fff;
+  border-color: var(--w-accent);
 }
 
 /* CV Editor Grid */
 .cv-editor-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+  grid-template-columns: 1.15fr 0.95fr;
   gap: 1.5rem;
 }
 
 .cv-form-container {
-  background: rgba(38, 27, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
+.editor-group-card {
+  background: var(--w-card);
+  border: 1px solid var(--w-border);
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+.group-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin: 0 0 0.85rem;
+  color: var(--w-text);
+}
+
+.sub-entry-box {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--w-border);
+  border-radius: 10px;
+  padding: 0.85rem;
+}
+
+.btn-text-danger {
+  background: none;
+  border: none;
+  color: #EF4444;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 600;
+}
+
+/* CV Live Preview Sheets */
 .cv-live-preview-container {
   position: sticky;
-  top: 90px;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
 }
 
-/* Printable ATS Resume Sheet */
 .cv-ats-sheet {
-  background: #fdfaf6;
-  color: #1f1a17;
-  border-radius: 8px;
-  padding: 2.25rem 2rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
+  border-radius: 14px;
+  padding: 2.2rem 2.4rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
   line-height: 1.5;
 }
 
-.ats-header {
-  border-bottom: 2px solid #2b2018;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1rem;
+/* Theme 1: Gen Z Minimal Dark */
+.cv-ats-sheet.minimal-dark {
+  background: #0E0E12;
+  color: #FAFAFA;
+  border: 1px solid var(--w-border);
 }
 
-.ats-name {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #14100d;
-  margin: 0 0 0.25rem;
+.cv-ats-sheet.minimal-dark .ats-name { font-size: 1.5rem; font-weight: 900; color: #FFFFFF; }
+.cv-ats-sheet.minimal-dark .ats-target-title { font-size: 0.88rem; color: var(--w-accent-light); font-weight: 700; }
+.cv-ats-sheet.minimal-dark .ats-contact { font-size: 0.76rem; color: var(--w-text-muted); margin-bottom: 1.2rem; }
+.cv-ats-sheet.minimal-dark .ats-section-heading {
+  font-size: 0.74rem; font-weight: 800; letter-spacing: 0.08em; color: var(--w-accent);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.25); padding-bottom: 0.25rem; margin-bottom: 0.6rem;
+}
+.cv-ats-sheet.minimal-dark .ats-skills-line { font-size: 0.82rem; color: var(--w-text-dim); }
+
+/* Theme 2: Classic Crisp White ATS */
+.cv-ats-sheet.ats-classic {
+  background: #FFFFFF;
+  color: #111827;
+  border: 1px solid #E5E7EB;
 }
 
-.ats-contact {
-  font-size: 0.76rem;
-  color: #5a4e44;
-  margin: 0 0 0.25rem;
+.cv-ats-sheet.ats-classic .ats-name { font-size: 1.6rem; font-weight: 800; color: #111827; }
+.cv-ats-sheet.ats-classic .ats-target-title { font-size: 0.9rem; color: #4B5563; font-weight: 600; }
+.cv-ats-sheet.ats-classic .ats-contact { font-size: 0.76rem; color: #6B7280; margin-bottom: 1.2rem; }
+.cv-ats-sheet.ats-classic .ats-section-heading {
+  font-size: 0.76rem; font-weight: 800; letter-spacing: 0.08em; color: #111827;
+  border-bottom: 1.5px solid #111827; padding-bottom: 0.2rem; margin-bottom: 0.6rem;
+}
+.cv-ats-sheet.ats-classic .ats-skills-line { font-size: 0.82rem; color: #374151; }
+.cv-ats-sheet.ats-classic .ats-bullet { color: #374151; }
+
+/* Theme 3: Systems Monospace */
+.cv-ats-sheet.systems-mono {
+  background: #090B10;
+  color: #E2E8F0;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  font-family: monospace;
 }
 
-.ats-target-title {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #9c6838;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0;
+.cv-ats-sheet.systems-mono .ats-name { font-size: 1.4rem; color: #4ADE80; }
+.cv-ats-sheet.systems-mono .ats-section-heading { color: #4ADE80; border-bottom: 1px dashed rgba(74, 222, 128, 0.4); }
+
+.ats-entry { margin-bottom: 0.85rem; }
+.ats-entry-header { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.84rem; }
+.ats-tools { font-size: 0.75rem; color: var(--w-accent-light); margin-left: 0.35rem; }
+.ats-bullet { font-size: 0.78rem; margin: 0.2rem 0; }
+.ats-list { padding-left: 1.2rem; margin: 0.3rem 0 0; }
+.ats-list li { font-size: 0.78rem; margin-bottom: 0.2rem; }
+
+/* 1,000+ Company Explorer */
+.company-explorer-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.5rem;
 }
 
-.ats-section {
-  margin-bottom: 1rem;
+.company-sidebar-list {
+  background: var(--w-card);
+  border: 1px solid var(--w-border);
+  border-radius: 14px;
+  padding: 1rem;
+  max-height: 750px;
+  overflow-y: auto;
 }
 
-.ats-section-heading {
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #14100d;
-  border-bottom: 1px solid #d4c5b3;
-  padding-bottom: 0.2rem;
-  margin: 0 0 0.5rem;
-}
-
-.ats-skills-line {
-  font-size: 0.8rem;
-  color: #2b231d;
-  margin: 0;
-}
-
-.ats-entry {
-  margin-bottom: 0.6rem;
-}
-
-.ats-entry-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 0.82rem;
-}
-
-.ats-entry-header strong {
-  color: #14100d;
-}
-
-.ats-entry-header span {
+.list-count-badge {
   font-size: 0.74rem;
-  color: #6a5e54;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  text-transform: uppercase;
 }
 
-.ats-entry p {
-  margin: 0.15rem 0 0;
-  color: #3b3128;
-  font-size: 0.78rem;
+.company-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.ats-tools {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: #7d5e42;
-  margin-left: 0.4rem;
+.company-preview-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--w-border);
+  border-radius: 10px;
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.ats-list {
-  padding-left: 1.2rem;
-  margin: 0.35rem 0 0;
+.company-preview-card:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.4);
 }
 
-.ats-list li {
-  margin-bottom: 0.2rem;
-  color: #2e261f;
-  font-size: 0.78rem;
+.company-preview-card.active {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: var(--w-accent);
 }
 
-/* Kanban Board Layout (8 Columns) */
+.c-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
+.c-name { color: #fff; font-size: 0.88rem; }
+.c-badge-pill { font-size: 0.65rem; color: var(--w-accent-light); background: rgba(99,102,241,0.12); padding: 0.1rem 0.45rem; border-radius: 4px; }
+.c-loc { font-size: 0.72rem; color: var(--w-text-muted); display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.4rem; }
+.c-comp-line { display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 700; }
+
+.company-dossier-card {
+  background: var(--w-card);
+  border: 1px solid var(--w-border);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.dossier-name { font-size: 1.8rem; font-weight: 900; margin: 0.3rem 0; color: #fff; }
+.dossier-loc { font-size: 0.85rem; color: var(--w-text-muted); display: flex; align-items: center; gap: 0.35rem; }
+.hiring-status-badge { font-size: 0.78rem; font-weight: 700; color: var(--w-neon); background: rgba(74, 222, 128, 0.1); padding: 0.35rem 0.85rem; border-radius: 9999px; border: 1px solid rgba(74,222,128,0.25); display: flex; align-items: center; gap: 0.4rem; }
+.pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--w-neon); }
+
+.dossier-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.1rem;
+  border-radius: 12px;
+}
+
+.d-stat { display: flex; flex-direction: column; }
+.ds-label { font-size: 0.68rem; color: var(--w-text-muted); text-transform: uppercase; }
+.ds-val { font-size: 1.05rem; font-weight: 800; }
+
+.d-sec-title { font-size: 0.85rem; color: var(--w-text); margin: 0 0 0.6rem; font-weight: 700; }
+.roles-chips-wrap, .skills-chips-wrap, .culture-chips-wrap { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.role-tag-pill, .skill-tag-pill, .culture-tag-pill { font-size: 0.75rem; background: rgba(255,255,255,0.04); border: 1px solid var(--w-border); padding: 0.25rem 0.65rem; border-radius: 6px; }
+
+.dossier-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+
+/* Kanban Board Layout */
 .kanban-board-container {
   display: flex;
   gap: 0.85rem;
   overflow-x: auto;
   padding-bottom: 1rem;
-  min-height: 450px;
+  min-height: 480px;
 }
 
 .kanban-column {
-  min-width: 220px;
+  min-width: 230px;
   flex: 1;
-  background: rgba(38, 27, 18, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--w-card);
+  border: 1px solid var(--w-border);
   border-radius: 12px;
   padding: 0.85rem;
   display: flex;
@@ -243,350 +456,56 @@
   align-items: center;
   margin-bottom: 0.75rem;
   padding-bottom: 0.4rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--w-border);
 }
 
-.kch-name {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--accent-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
+.col-stage-name { font-size: 0.82rem; font-weight: 700; color: #fff; }
+.col-count-pill { font-size: 0.68rem; font-weight: 800; background: rgba(255,255,255,0.06); padding: 0.1rem 0.45rem; border-radius: 9999px; }
 
-.kch-count {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.1rem 0.45rem;
-  border-radius: 10px;
-  color: var(--text-secondary);
-}
-
-.kanban-cards-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
+.kanban-cards-list { display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
 
 .kanban-item-card {
-  background: #14100d;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 0.85rem;
-}
-
-.kic-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.4rem;
-}
-
-.kic-header strong {
-  font-size: 0.85rem;
-  color: var(--text-primary);
-}
-
-.kic-del {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.kic-company {
-  font-size: 0.78rem;
-  color: var(--accent-gold);
-  margin: 0.2rem 0 0.4rem;
-}
-
-.kic-date {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin: 0.2rem 0;
-}
-
-.kic-notes {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.02);
-  padding: 0.4rem;
-  border-radius: 4px;
-  margin-top: 0.4rem;
-}
-
-.stage-dropdown {
-  width: 100%;
-  background: #21170f;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  border-radius: 4px;
-  padding: 0.25rem 0.4rem;
-  outline: none;
-}
-
-/* Job Matching Card */
-.job-input-card, .match-analysis-card {
-  background: rgba(38, 27, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.75rem;
-}
-
-.match-score-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  padding-bottom: 1rem;
-}
-
-.msh-label {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.msh-val {
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0.2rem 0 0;
-}
-
-.fit-badge {
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.35rem 0.8rem;
-  border-radius: 20px;
-}
-
-.fit-badge.high {
-  background: rgba(147, 179, 123, 0.2);
-  color: var(--accent-green);
-  border: 1px solid var(--accent-green);
-}
-
-.fit-badge.medium {
-  background: rgba(240, 199, 120, 0.2);
-  color: var(--accent-gold);
-  border: 1px solid var(--accent-gold);
-}
-
-.tags-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.tag {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
-}
-
-.tag.strong {
-  background: rgba(147, 179, 123, 0.15);
-  color: #93b37b;
-  border: 1px solid rgba(147, 179, 123, 0.3);
-}
-
-.tag.partial {
-  background: rgba(240, 199, 120, 0.15);
-  color: #f0c778;
-  border: 1px solid rgba(240, 199, 120, 0.3);
-}
-
-.tag.missing {
-  background: rgba(217, 112, 85, 0.15);
-  color: #d97055;
-  border: 1px solid rgba(217, 112, 85, 0.3);
-}
-
-/* Interview Prep */
-.checklist-card {
-  background: rgba(38, 27, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.75rem;
-}
-
-.readiness-list {
-  list-style: none;
-  padding: 0;
-  margin: 0.75rem 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.readiness-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.questions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem;
-}
-
-.iq-card {
-  background: #1e1611;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-
-.iq-diff-badge {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--accent-gold);
-  background: rgba(240, 199, 120, 0.12);
-  padding: 0.15rem 0.5rem;
-  border-radius: 12px;
-  display: inline-block;
-  margin-bottom: 0.4rem;
-}
-
-.iq-title {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.iq-framework-box {
-  background: #14100d;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--w-border);
+  border-radius: 10px;
   padding: 0.75rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.45;
 }
 
-.iq-framework-box strong {
-  display: block;
-  color: var(--text-secondary);
-  margin-bottom: 0.2rem;
-}
+.k-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
+.k-company { font-size: 0.85rem; color: #fff; }
+.k-delete-btn { background: none; border: none; color: var(--w-text-muted); font-size: 1rem; cursor: pointer; }
+.k-pos { font-size: 0.76rem; color: var(--w-text-dim); margin: 0 0 0.35rem; }
+.k-stage-select { width: 100%; background: #14141A; border: 1px solid var(--w-border); color: var(--w-text); border-radius: 6px; padding: 0.25rem 0.5rem; font-size: 0.72rem; }
 
-/* Company Research Cards */
-.companies-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.25rem;
-}
+/* Global Utilities */
+.btn-primary { background: var(--w-accent); color: #fff; border: none; padding: 0.55rem 1.1rem; border-radius: 10px; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; }
+.btn-primary:hover { background: #4F46E5; }
+.btn-secondary { background: rgba(255,255,255,0.06); border: 1px solid var(--w-border); color: var(--w-text); padding: 0.55rem 1.1rem; border-radius: 10px; font-weight: 600; font-size: 0.84rem; cursor: pointer; }
+.btn-sm { padding: 0.4rem 0.75rem; font-size: 0.78rem; }
+.btn-icon { background: rgba(255,255,255,0.04); border: 1px solid var(--w-border); color: var(--w-text-dim); padding: 0.4rem; border-radius: 8px; cursor: pointer; }
+.btn-icon.danger:hover { background: rgba(239, 68, 68, 0.15); color: #EF4444; border-color: #EF4444; }
 
-.company-info-card {
-  background: rgba(38, 27, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.75rem;
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
+.form-group label { font-size: 0.76rem; font-weight: 600; color: var(--w-text-muted); }
+.form-group input, .form-group textarea, .form-group select {
+  background: rgba(0, 0, 0, 0.4); border: 1px solid var(--w-border); border-radius: 8px; padding: 0.55rem 0.75rem; color: #fff; font-size: 0.85rem; outline: none;
 }
+.form-group input:focus, .form-group textarea:focus { border-color: var(--w-accent); }
 
-.cic-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
+.grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-.cic-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 0.2rem;
-}
-
-.cic-industry {
-  font-size: 0.75rem;
-  color: var(--accent-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.cic-overview {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.cic-stats-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  background: #14100d;
-  padding: 0.75rem;
-  border-radius: 8px;
-}
-
-.cs-lbl {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  display: block;
-}
-
-.cs-val {
-  font-size: 0.86rem;
-  font-weight: 600;
-}
-
-/* Skill Gap Roadmap Grid */
-.skill-gap-roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-}
-
-.gap-card {
-  background: rgba(38, 27, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.75rem;
-}
-
-.gap-list {
-  list-style: none;
-  padding: 0;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
-
-@media (max-width: 900px) {
-  .cv-editor-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* Print Media Query */
 @media print {
-  .navbar,
-  .workspace-hero,
-  .workspace-tabs-bar,
-  .cv-form-container,
-  .cv-actions,
-  .cv-version-selector {
-    display: none !important;
-  }
-
-  .workspace-main {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .cv-live-preview-container {
-    position: static !important;
-  }
-
-  .cv-ats-sheet {
+  body * { visibility: hidden; }
+  .printable-resume, .printable-resume * { visibility: visible; }
+  .printable-resume {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #fff !important;
+    color: #000 !important;
     box-shadow: none !important;
-    padding: 0 !important;
+    border: none !important;
   }
 }
