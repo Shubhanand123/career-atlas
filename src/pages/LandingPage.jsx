@@ -1,731 +1,637 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
-  ArrowRight, Search, GraduationCap, Zap, TrendingDown, Layers, 
-  ChevronDown, ShieldCheck, Award, ArrowUpRight, Compass, Sparkles,
-  Trophy, DollarSign, Users, Briefcase, ChevronRight, CheckCircle2,
-  Globe, Calculator, FileText, CheckCircle, Clock, MapPin, Building2,
-  RotateCcw, ExternalLink
+  ArrowRight, Search, GraduationCap, Zap, ChevronRight, CheckCircle2,
+  Sparkles, DollarSign, Building2, MapPin, Award, Users, Compass,
+  TrendingUp, ShieldCheck, ArrowUpRight, CheckCircle, RotateCcw, Clock
 } from 'lucide-react';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import Navbar from '../components/Navbar';
-import CareerUniverse, { ARCHITECTURAL_ZONES } from '../components/CareerUniverse';
-import { parseNaturalLanguageQuery } from '../utils/naturalLanguageSearch';
+import TransformingAtlasCore from '../components/TransformingAtlasCore';
 import { searchCareerCatalog } from '../data/careerCatalog';
 import { globalInstitutions, calculateTrueCostOfStudy } from '../data/institutionsDatabase';
-import { searchInstitutionsCatalog } from '../data/institutionsCatalog';
-import { sportsRoles, sportsDisciplines } from '../data/sportsEcosystem';
-import { convertCurrency, formatCurrency } from '../utils/currencyConverter';
-import { quizQuestions, quizOptions, traits } from '../data/quizQuestions';
-import { salaryCombos } from '../data/salaryCombos';
-import { layoffSectorReports } from '../data/layoffReports';
 import { careerTwinsData } from '../data/careerTwins';
 import '../styles/landing.css';
 
-const STAGES = ['Saved', 'Interested', 'Preparing', 'Applied', 'Interview', 'Offer', 'Rejected', 'Accepted'];
+// 8 Core Sectors
+const CORE_SECTORS = [
+  { id: 'healthcare', label: 'Health & Medicine', icon: '🩺', desc: 'Clinical care, neuroscience, biotech', sample: 'Biomedical Engineer' },
+  { id: 'tech', label: 'Technology & AI', icon: '⚡', desc: 'Software, LLMs, quantum systems', sample: 'AI Research Scientist' },
+  { id: 'science', label: 'Pure Science & Space', icon: '🪐', desc: 'Astrophysics, genomics, chemistry', sample: 'Astrophysicist' },
+  { id: 'engineering', label: 'Engineering & Energy', icon: '⚙️', desc: 'Robotics, aerospace, green hydrogen', sample: 'Aerospace Propulsion Engineer' },
+  { id: 'business', label: 'Business & Finance', icon: '📈', desc: 'Quant trading, VC, strategic leadership', sample: 'Quantitative Portfolio Manager' },
+  { id: 'creative', label: 'Design & Media', icon: '🎨', desc: 'Product UX, architecture, film', sample: 'Lead UX Architect' },
+  { id: 'government', label: 'Law & Governance', icon: '⚖️', desc: 'Diplomacy, judiciary, public policy', sample: 'Appellate Court Judge' },
+  { id: 'trades', label: 'Skilled Trades', icon: '🛠️', desc: 'Master craftsmanship, precision machining', sample: 'Precision Underwater Welder' },
+];
+
+// Spotlight Career Profiles for Dynamic Exploration
+const SPOTLIGHT_CAREERS = {
+  'Biomedical Engineer': {
+    title: 'Biomedical Engineer',
+    category: 'Healthcare & Engineering',
+    tagline: 'Engineering the next generation of neural interfaces and life-saving medical devices.',
+    salaryINR: '₹6.5L – ₹24L / yr',
+    salaryUSD: '$78,000 – $165,000 / yr',
+    growth: '+17% YoY Global Demand',
+    duration: '4–5 Years Degree & Labs',
+    aiResilience: '9.2 / 10 · Very Low Risk',
+    skills: ['Biomaterials', 'Biomechanics', 'Neural Signal Processing', 'FDA Clinical Compliance'],
+    workStyle: 'High-tech Hospital R&D labs, cleanrooms, surgical validation suites.',
+    pathway: [
+      { step: '01 · Foundation', title: '10+2 Secondary School', desc: 'Focus on Physics, Chemistry, Math & Biology with 85%+ score.' },
+      { step: '02 · Undergraduate', title: 'B.Tech / B.S. Bioengineering', desc: '4-year engineering core with embedded electronics & anatomy.' },
+      { step: '03 · Research & Labs', title: 'Clinical Internship', desc: 'Hands-on device validation at Medtronic, GE Healthcare, or hospital R&D.' },
+      { step: '04 · Industry Entry', title: 'Junior Medical Device Engineer', desc: 'Entry compensation of ₹7.5L ($82k) working on sensor calibration.' },
+      { step: '05 · Specialization', title: 'Lead Neural Interface Architect', desc: 'Senior leadership commanding ₹28L+ ($190k) directing surgical systems.' }
+    ],
+    unis: [
+      { name: 'IIT Bombay', degree: 'B.Tech Biomedical', fee: '₹8.4L Total', avgCTC: '₹21.5L Avg CTC', roi: '96% ROI' },
+      { name: 'BITS Pilani', degree: 'B.E. Biotech & Devices', fee: '₹19.5L Total', avgCTC: '₹18.2L Avg CTC', roi: '92% ROI' },
+      { name: 'National University of Singapore', degree: 'B.Eng Bioengineering', fee: '$38,000 / yr', avgCTC: '$94,000 Avg CTC', roi: '98% ROI' },
+      { name: 'University of Toronto', degree: 'B.A.Sc Biomedical', fee: '$52,000 / yr', avgCTC: '$98,000 Avg CTC', roi: '94% ROI' }
+    ],
+    twin: {
+      name: 'Dr. Ananya Sen',
+      role: 'Staff Neural Device Architect',
+      org: 'BioSens Robotics · Zurich / Bengaluru',
+      story: 'Started in Class 12 with a dual interest in biology and electronics. Built first prosthetic hand prototype in year 3 of B.Tech. Now leads micro-electrode R&D.',
+      advice: 'Do not choose between biology and code. The modern world pays top premiums to people who speak both languages fluently.'
+    },
+    related: [
+      { name: 'Bioinformatics Scientist', comp: '₹12L – ₹32L', tag: 'Genomic Data' },
+      { name: 'Clinical Trial Specialist', comp: '₹8L – ₹22L', tag: 'FDA Operations' },
+      { name: 'Genetic Counselor', comp: '₹7L – ₹18L', tag: 'Patient Diagnostics' },
+      { name: 'Surgical Robotics Engineer', comp: '₹15L – ₹42L', tag: 'Automation' }
+    ]
+  },
+  'AI Research Scientist': {
+    title: 'AI Research Scientist',
+    category: 'Technology & Computing',
+    tagline: 'Designing frontier intelligence architectures, foundation models, and reasoning algorithms.',
+    salaryINR: '₹18L – ₹65L / yr',
+    salaryUSD: '$140,000 – $380,000 / yr',
+    growth: '+42% YoY Exponential Demand',
+    duration: '4–6 Years (B.Tech + M.S./Ph.D.)',
+    aiResilience: '9.8 / 10 · Creator Tier',
+    skills: ['Deep Reinforcement Learning', 'Transformer Architectures', 'Distributed GPU Clusters', 'Calculus & Probability'],
+    workStyle: 'High-compute research labs, asynchronous global teams, top-tier research compute clusters.',
+    pathway: [
+      { step: '01 · Foundation', title: 'Advanced High School Math', desc: 'Linear algebra, statistics, competitive programming foundations.' },
+      { step: '02 · Undergraduate', title: 'B.Tech Computer Science / Math', desc: 'Algorithms, data structures, neural network mathematics.' },
+      { step: '03 · Research & Labs', title: 'Pre-Doctoral Research Fellow', desc: 'Publishing at NeurIPS, ICML, CVPR under faculty guidance.' },
+      { step: '04 · Industry Entry', title: 'Applied Machine Learning Engineer', desc: 'Building scalable model training pipelines at ₹24L ($160k).' },
+      { step: '05 · Specialization', title: 'Principal Foundation Model Scientist', desc: 'Directing reasoning architectures at ₹80L+ ($450k+).' }
+    ],
+    unis: [
+      { name: 'IIT Delhi', degree: 'B.Tech CSE / AI Dept', fee: '₹8.6L Total', avgCTC: '₹28.4L Avg CTC', roi: '99% ROI' },
+      { name: 'IISc Bengaluru', degree: 'M.Tech / Ph.D. AI', fee: '₹2.4L Total', avgCTC: '₹34.0L Avg CTC', roi: '100% ROI' },
+      { name: 'Carnegie Mellon University', degree: 'M.S. Machine Learning', fee: '$58,000 / yr', avgCTC: '$175,000 Avg CTC', roi: '97% ROI' },
+      { name: 'ETH Zurich', degree: 'M.Sc Computer Science', fee: 'CHF 1,600 / yr', avgCTC: 'CHF 130,000 Avg CTC', roi: '100% ROI' }
+    ],
+    twin: {
+      name: 'Rohan Deshmukh',
+      role: 'Staff AI Researcher',
+      org: 'DeepMind / Meta FAIR · London',
+      story: 'Transitioned from competitive coding in college to self-supervised learning research. Spent 2 years optimizing attention kernels.',
+      advice: 'Master the first principles of linear algebra and loss landscapes. Frameworks change every 2 years, but math is eternal.'
+    },
+    related: [
+      { name: 'MLOps Infrastructure Architect', comp: '₹22L – ₹55L', tag: 'Distributed GPUs' },
+      { name: 'Quantum Algorithm Scientist', comp: '₹25L – ₹70L', tag: 'Quantum Computing' },
+      { name: 'Computer Vision Engineer', comp: '₹14L – ₹38L', tag: 'Spatial AI' },
+      { name: 'Robotics Perception Specialist', comp: '₹16L – ₹45L', tag: 'Autonomous Systems' }
+    ]
+  }
+};
 
 export default function LandingPage() {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeZone, setActiveZone] = useState('entrance');
-  const navigate = useNavigate();
-
-  // Natural Language Search State
+  const [selectedCareerKey, setSelectedCareerKey] = useState('Biomedical Engineer');
+  const [activeCategory, setActiveCategory] = useState('healthcare');
   const [searchQuery, setSearchQuery] = useState('');
-  const [parsedQuery, setParsedQuery] = useState(() => parseNaturalLanguageQuery(''));
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  // Embedded University & True Cost State
-  const [selectedInst, setSelectedInst] = useState(globalInstitutions[0]);
-  const [costScenario, setCostScenario] = useState('average');
-  const [isInternational, setIsInternational] = useState(true);
-  const [calcCurrency, setCalcCurrency] = useState('USD');
+  const containerRef = useRef(null);
+  const navigate = useNavigate();
 
-  // Embedded Stream State
-  const [selectedStream, setSelectedStream] = useState('science');
-
-  // Embedded Sports State
-  const [selectedSportRole, setSelectedSportRole] = useState(sportsRoles[0]);
-
-  // Embedded 30-Q Quiz State
-  const [quizStep, setQuizStep] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState({});
-  const [quizCompleted, setQuizCompleted] = useState(false);
-  const [quizRadarData, setQuizRadarData] = useState([]);
-
-  // Embedded Workspace Kanban State
-  const [kanbanApps, setKanbanApps] = useState([
-    { id: 'app-1', company: 'Google', position: 'Software Engineer — Distributed Systems', stage: 'Interview' },
-    { id: 'app-2', company: 'Jane Street / Citadel', position: 'Quant Systems Developer', stage: 'Preparing' },
-    { id: 'app-3', company: 'Apollo Hospitals', position: 'Sports Medicine Resident', stage: 'Applied' },
-    { id: 'app-4', company: 'McLaren Racing F1', position: 'Telemetry Data Analyst', stage: 'Offer' }
-  ]);
-
-  // Handle scroll tracking for 3D Camera
+  // Scroll Progress Calculation for Pinned Continuous Viewport
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        const progress = Math.max(0, Math.min(1, window.scrollY / totalHeight));
-        setScrollProgress(progress);
-
-        const zoneIdx = Math.min(
-          ARCHITECTURAL_ZONES.length - 1,
-          Math.floor(progress * ARCHITECTURAL_ZONES.length)
-        );
-        setActiveZone(ARCHITECTURAL_ZONES[zoneIdx].id);
-      }
+      if (!containerRef.current) return;
+      const el = containerRef.current;
+      const totalScroll = el.scrollHeight - window.innerHeight;
+      if (totalScroll <= 0) return;
+      const progress = Math.min(Math.max(window.scrollY / totalScroll, 0), 1);
+      setScrollProgress(progress);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Live natural language search handler
-  const handleSearchChange = (val) => {
-    setSearchQuery(val);
-    const parsed = parseNaturalLanguageQuery(val);
-    setParsedQuery(parsed);
+  // Compute Active Stage (1 to 8)
+  const currentStage = useMemo(() => {
+    const stage = Math.min(Math.floor(scrollProgress * 8) + 1, 8);
+    return stage;
+  }, [scrollProgress]);
 
-    if (val.trim().length > 1) {
-      setIsSearching(true);
-      searchCareerCatalog({ query: val, limit: 6 }).then(res => {
-        setSearchResults(res.items || []);
-        setIsSearching(false);
-      });
-    } else {
+  // Dynamic Live Search Handler
+  useEffect(() => {
+    if (!searchQuery.trim()) {
       setSearchResults([]);
+      setIsSearching(false);
+      return;
     }
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await searchCareerCatalog({ query: searchQuery, limit: 6 });
+        setSearchResults(res.items || []);
+      } catch (e) {
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const activeCareer = SPOTLIGHT_CAREERS[selectedCareerKey] || SPOTLIGHT_CAREERS['Biomedical Engineer'];
+
+  const scrollToStage = (stageNumber) => {
+    if (!containerRef.current) return;
+    const totalScroll = containerRef.current.scrollHeight - window.innerHeight;
+    const targetScroll = ((stageNumber - 1) / 7.2) * totalScroll;
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
   };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/explore?search=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
-      navigate('/explore');
-    }
-  };
-
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // True Cost calculation for selected institution
-  const trueCost = useMemo(() => {
-    return calculateTrueCostOfStudy(selectedInst, {
-      scenario: costScenario,
-      isInternational,
-      currency: calcCurrency
-    });
-  }, [selectedInst, costScenario, isInternational, calcCurrency]);
-
-  // Handle embedded quiz answers
-  const handleQuizAnswer = (score) => {
-    const q = quizQuestions[quizStep];
-    const newAnswers = { ...quizAnswers, [q.id]: score };
-    setQuizAnswers(newAnswers);
-
-    if (quizStep + 1 < quizQuestions.length) {
-      setQuizStep(quizStep + 1);
-    } else {
-      // Calculate Radar
-      const traitTotals = {};
-      traits.forEach(t => { traitTotals[t.id] = { score: 0, max: 0 }; });
-      quizQuestions.forEach(question => {
-        const val = newAnswers[question.id] || 3;
-        traitTotals[question.trait].score += val;
-        traitTotals[question.trait].max += 5;
-      });
-
-      const rData = traits.map(t => ({
-        trait: t.name,
-        score: Math.round((traitTotals[t.id].score / traitTotals[t.id].max) * 100)
-      }));
-
-      setQuizRadarData(rData);
-      setQuizCompleted(true);
-    }
-  };
-
-  const currentQ = quizQuestions[quizStep];
 
   return (
-    <div className="landing-3d-wrapper">
-      {/* 12-Zone Continuous 3D Architectural Canvas */}
-      <CareerUniverse
-        scrollProgress={scrollProgress}
-        onSelectZone={(zoneId) => scrollToSection(zoneId)}
-      />
-
-      {/* Global Navbar */}
+    <div className="scrolly-master-wrapper" ref={containerRef}>
       <Navbar />
 
-      {/* Quick Jump Architectural Floating HUD */}
-      <aside className="scroll-hud-rail" aria-label="12-Zone Navigation">
-        <div className="hud-line">
-          <div className="hud-line-fill" style={{ height: `${scrollProgress * 100}%` }} />
-        </div>
-        <div className="hud-stage-dots">
-          {ARCHITECTURAL_ZONES.map((zone, idx) => (
+      {/* Pinned Sticky Stage Viewport (100vh) */}
+      <div className="pinned-stage-viewport">
+        {/* 3D Transforming Sculpture Core */}
+        <TransformingAtlasCore scrollProgress={scrollProgress} activeCategory={activeCategory} />
+
+        {/* Global Floating Editorial Progress Rail */}
+        <div className="scrolly-stage-rail">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((st) => (
             <button
-              key={zone.id}
-              className={`hud-dot ${activeZone === zone.id ? 'active' : ''}`}
-              onClick={() => scrollToSection(zone.id)}
-              title={`${idx + 1} · ${zone.name}`}
+              key={st}
+              className={`stage-rail-dot ${currentStage === st ? 'active' : ''}`}
+              onClick={() => scrollToStage(st)}
+              title={`Stage 0${st}`}
             >
-              <span className="dot-label">{String(idx + 1).padStart(2, '0')}</span>
+              <span className="dot-label">0{st}</span>
+              <div className="dot-indicator" />
             </button>
           ))}
         </div>
-      </aside>
 
-      {/* CONTINUOUS ALL-IN-ONE SCROLL CONTAINER */}
-      <div className="scroll-height-spacer">
-
-        {/* ZONE 1: THE GRAND PORTAL & UNIVERSAL SEARCH */}
-        <section id="entrance" className="scroll-viewport-section">
-          <motion.div className="stage-content-card main-hub-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">01</span> // GRAND PORTAL & UNIVERSAL SEARCH
-            </div>
-            <h1 className="stage-main-title">THE CAREER CITY</h1>
-            <h2 className="stage-subtitle">15,000+ Careers · 10,000+ Universities · 35+ Sports Professions</h2>
-            <p className="stage-description">
-              One unified platform for every career, university, true living-cost calculation, sports pathway, and skill-multiplier roadmap.
-            </p>
-
-            {/* Universal Natural Language Search */}
-            <div className="search-module-container mt-3">
-              <form onSubmit={handleSearchSubmit} className="minimal-search-bar">
-                <Search size={18} className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Try: 'AI engineering in Germany under ₹20 lakh' or 'Sports careers other than athlete'..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                />
-                <button type="submit" className="search-btn">Discover</button>
-              </form>
-
-              {/* Parsed Badges */}
-              {parsedQuery.badges.length > 0 && (
-                <div className="nl-badges-preview">
-                  <span className="nl-badges-label">Parsed Filters:</span>
-                  {parsedQuery.badges.map((b, idx) => (
-                    <span key={idx} className="nl-badge">{b}</span>
-                  ))}
-                </div>
-              )}
-
-              {/* Live Search Results Dropdown */}
-              {searchResults.length > 0 && (
-                <div className="live-search-dropdown">
-                  {searchResults.map(c => (
-                    <Link key={c.id} to={`/career/${c.id}`} className="live-search-item">
-                      <div>
-                        <strong>{c.name}</strong>
-                        <span className="lsi-category">{c.category || c.family}</span>
-                      </div>
-                      <span className="lsi-salary font-mono text-green">
-                        ${((c.salaryUSD?.mid || 85000)/1000).toFixed(0)}k/yr
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-
-              {/* Quick Preset Queries */}
-              <div className="search-quick-suggestions mt-2">
-                <button type="button" onClick={() => handleSearchChange('AI engineering & machine learning in Germany')}>🇩🇪 AI in Germany</button>
-                <button type="button" onClick={() => handleSearchChange('Sports careers other than athlete')}>⚽ Sports Roles</button>
-                <button type="button" onClick={() => handleSearchChange('High paying careers without coding')}>📈 High-Pay Non-Coding</button>
-                <button type="button" onClick={() => handleSearchChange('Clinical surgery and medical research')}>🩺 Medicine</button>
-              </div>
-            </div>
-
-            <div className="stage-actions mt-4">
-              <button className="stage-btn-primary" onClick={() => scrollToSection('careers')}>
-                Explore 15,000+ Careers <ArrowDown size={16} />
-              </button>
-              <button className="stage-btn-secondary" onClick={() => scrollToSection('true-cost')}>
-                True Cost Calculator
-              </button>
-              <button className="stage-btn-secondary" onClick={() => scrollToSection('map')}>
-                Take 30-Question Quiz
-              </button>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 2: STREAMS QUADRANT */}
-        <section id="streams" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">02</span> // POST-10TH & 12TH FOUNDATIONS
-            </div>
-            <h2 className="stage-main-title">STREAMS QUADRANT</h2>
-            <p className="stage-description">
-              Explore how high school subjects connect directly into degrees, direct apprenticeships, and high-income careers.
-            </p>
-
-            <div className="stream-toggle-pills mt-3">
-              {[
-                ['science', '🔬 Science (PCM / PCB)'],
-                ['commerce', '📊 Commerce & Economics'],
-                ['arts', '🎨 Arts & Humanities'],
-                ['trades', '🔧 Vocational & Technical']
-              ].map(([id, label]) => (
-                <button
-                  key={id}
-                  className={`stream-pill ${selectedStream === id ? 'active' : ''}`}
-                  onClick={() => setSelectedStream(id)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <div className="stream-detail-box mt-3">
-              {selectedStream === 'science' && (
-                <div>
-                  <h4 className="text-gold font-bold">Science Stream Pathways</h4>
-                  <p className="text-sm text-secondary">Prerequisites: Physics, Chemistry, Mathematics / Biology</p>
-                  <div className="chips-grid mt-2">
-                    <span className="chip">B.Tech Software & Systems</span>
-                    <span className="chip">MBBS & Clinical Medicine</span>
-                    <span className="chip">B.Sc Data Science & AI</span>
-                    <span className="chip">Sports Physiotherapy</span>
-                    <span className="chip">Aerospace & Robotics</span>
-                  </div>
-                </div>
-              )}
-              {selectedStream === 'commerce' && (
-                <div>
-                  <h4 className="text-gold font-bold">Commerce & Business Pathways</h4>
-                  <p className="text-sm text-secondary">Prerequisites: Accountancy, Economics, Business Studies, Math</p>
-                  <div className="chips-grid mt-2">
-                    <span className="chip">Chartered Accountancy (CA)</span>
-                    <span className="chip">Investment Banking & Quant Analyst</span>
-                    <span className="chip">BBA + MBA (IIM IPM)</span>
-                    <span className="chip">Corporate Law</span>
-                  </div>
-                </div>
-              )}
-              {selectedStream === 'arts' && (
-                <div>
-                  <h4 className="text-gold font-bold">Arts & Humanities Pathways</h4>
-                  <p className="text-sm text-secondary">Prerequisites: Political Science, History, Psychology, Literature</p>
-                  <div className="chips-grid mt-2">
-                    <span className="chip">Civil Services (IAS / IFS)</span>
-                    <span className="chip">B.Des UX & Product Design</span>
-                    <span className="chip">Journalism & Media Strategy</span>
-                    <span className="chip">Sports Management</span>
-                  </div>
-                </div>
-              )}
-              {selectedStream === 'trades' && (
-                <div>
-                  <h4 className="text-gold font-bold">Vocational & Skilled Trades</h4>
-                  <p className="text-sm text-secondary">Prerequisites: 10th / 12th + Practical Technical Apprenticeship</p>
-                  <div className="chips-grid mt-2">
-                    <span className="chip">Industrial Electrician & Automation</span>
-                    <span className="chip">Precision CNC Machinist</span>
-                    <span className="chip">Renewable Solar Technician</span>
-                    <span className="chip">Aircraft Maintenance (AME)</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="stage-actions mt-3">
-              <Link to={`/explore?family=${selectedStream}`} className="stage-btn-primary">
-                Explore All {selectedStream.toUpperCase()} Careers →
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 3 & 4: 10,000+ UNIVERSITIES & INSTITUTIONS */}
-        <section id="institutions" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">03 & 04</span> // GLOBAL ACADEMIES
-            </div>
-            <h2 className="stage-main-title">10,000+ UNIVERSITIES</h2>
-            <p className="stage-description">
-              Unfiltered placement CTCs, admission criteria, and ratings across IITs, AIIMS, BITS, Oxford, TUM, Stanford, Toronto, and NUS.
-            </p>
-
-            {/* University Quick Selector */}
-            <div className="universities-quick-list mt-3">
-              {globalInstitutions.slice(0, 4).map(inst => (
-                <div
-                  key={inst.id}
-                  className={`uni-select-item ${selectedInst.id === inst.id ? 'active' : ''}`}
-                  onClick={() => setSelectedInst(inst)}
-                >
-                  <div className="d-flex justify-between items-center">
-                    <strong>{inst.name}</strong>
-                    <span className="badge verified">{inst.countryCode}</span>
-                  </div>
-                  <p className="text-xs text-muted">{inst.city}, {inst.country} · {inst.type}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="stage-actions mt-3">
-              <Link to="/placements" className="stage-btn-primary">
-                Search All 10,000+ Universities & Placement Reports <ArrowUpRight size={15} />
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 5: TRUE COST OF STUDY CALCULATOR */}
-        <section id="true-cost" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">05</span> // FINANCIAL AUDIT & TRUE COST
-            </div>
-            <h2 className="stage-main-title">TRUE COST OF STUDY</h2>
-            <p className="stage-description">
-              Calculate the real investment for <strong>{selectedInst.name}</strong> across Tuition, Rent, Food, Transport, and Health Insurance.
-            </p>
-
-            {/* Scenario & Currency Controls */}
-            <div className="d-flex justify-between items-center flex-wrap gap-2 mt-3">
-              <div className="toggle-pill-group">
-                <button className={costScenario === 'low' ? 'active' : ''} onClick={() => setCostScenario('low')}>Low Budget</button>
-                <button className={costScenario === 'average' ? 'active' : ''} onClick={() => setCostScenario('average')}>Average Budget</button>
-                <button className={costScenario === 'high' ? 'active' : ''} onClick={() => setCostScenario('high')}>High Budget</button>
-              </div>
-
-              <div className="toggle-pill-group">
-                <button className={isInternational ? 'active' : ''} onClick={() => setIsInternational(true)}>International</button>
-                <button className={!isInternational ? 'active' : ''} onClick={() => setIsInternational(false)}>Domestic</button>
-              </div>
-
-              <select value={calcCurrency} onChange={e => setCalcCurrency(e.target.value)} className="currency-dropdown">
-                <option value="USD">USD ($)</option>
-                <option value="INR">INR (₹)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="CAD">CAD (CA$)</option>
-              </select>
-            </div>
-
-            {/* Cost Breakdown Grid */}
-            <div className="cost-breakdown-grid mt-3">
-              <div className="cost-box">
-                <span className="cost-label">Annual Tuition</span>
-                <span className="cost-val text-green font-mono">
-                  {formatCurrency(convertCurrency(trueCost.tuitionAnnual, selectedInst.currency, calcCurrency), calcCurrency)}
-                </span>
-              </div>
-              <div className="cost-box">
-                <span className="cost-label">Accommodation / mo</span>
-                <span className="cost-val text-gold font-mono">
-                  {formatCurrency(convertCurrency(trueCost.breakdown.accommodationMonthly, selectedInst.currency, calcCurrency), calcCurrency)}
-                </span>
-              </div>
-              <div className="cost-box">
-                <span className="cost-label">Food & Transit / mo</span>
-                <span className="cost-val font-mono">
-                  {formatCurrency(convertCurrency(trueCost.breakdown.foodMonthly + trueCost.breakdown.transportMonthly, selectedInst.currency, calcCurrency), calcCurrency)}
-                </span>
-              </div>
-              <div className="cost-box">
-                <span className="cost-label">Total Annual Study Cost</span>
-                <span className="cost-val text-cyan font-mono font-bold">
-                  {formatCurrency(convertCurrency(trueCost.totalAnnualCost, selectedInst.currency, calcCurrency), calcCurrency)}
-                </span>
-              </div>
-            </div>
-
-            <div className="stage-actions mt-3">
-              <Link to="/placements" className="stage-btn-primary">
-                Open Full 10,000+ Institution Cost Calculator →
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 6: 15,000+ CAREERS & PAY COMPARISON */}
-        <section id="careers" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">06</span> // 15,000 CAREER TOWERS
-            </div>
-            <h2 className="stage-main-title">CAREER SPECIALIZATIONS</h2>
-            <p className="stage-description">
-              Traverse 15,000+ occupational nodes with cross-country pay tables, cognitive toughness ratings, and AI resilience indices.
-            </p>
-
-            <div className="sample-career-preview-row mt-3">
-              <div className="sc-box">
-                <span className="sc-cat">Technology</span>
-                <strong>Software Engineer</strong>
-                <p className="sc-pay text-green">$125,000 / ₹24 LPA</p>
-                <Link to="/career/software-engineer" className="sc-link">View Profile & Pay Table →</Link>
-              </div>
-              <div className="sc-box">
-                <span className="sc-cat">Healthcare</span>
-                <strong>Sports Physiotherapist</strong>
-                <p className="sc-pay text-gold">$95,000 / ₹16 LPA</p>
-                <Link to="/career/sports-physiotherapist" className="sc-link">View Profile & Pay Table →</Link>
-              </div>
-              <div className="sc-box">
-                <span className="sc-cat">Skilled Trades</span>
-                <strong>Master Carpenter</strong>
-                <p className="sc-pay text-cyan">$68,000 / ₹9 LPA</p>
-                <Link to="/career/carpenter" className="sc-link">View Profile & Pay Table →</Link>
-              </div>
-            </div>
-
-            <div className="stage-actions mt-4">
-              <Link to="/explore" className="stage-btn-primary">
-                Search All 15,000+ Careers <ArrowUpRight size={15} />
-              </Link>
-              <Link to="/compare" className="stage-btn-secondary">
-                Side-by-Side Comparator
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 7: STUDENT WORKSPACE & APPLICATION KANBAN */}
-        <section id="jobs" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">07</span> // STUDENT WORKSPACE & KANBAN
-            </div>
-            <h2 className="stage-main-title">CAREER OPS & TRACKER</h2>
-            <p className="stage-description">
-              Professional student CV builder, CV-to-job matching, and 8-stage Application Kanban.
-            </p>
-
-            {/* Mini Kanban View */}
-            <div className="mini-kanban-row mt-3">
-              {['Saved', 'Preparing', 'Applied', 'Interview', 'Offer'].map(stage => {
-                const appsInStage = kanbanApps.filter(a => a.stage === stage);
-                return (
-                  <div key={stage} className="mk-col">
-                    <div className="mk-header">
-                      <span>{stage}</span>
-                      <span className="mk-count">{appsInStage.length}</span>
-                    </div>
-                    {appsInStage.map(app => (
-                      <div key={app.id} className="mk-card">
-                        <strong>{app.position.split('—')[0]}</strong>
-                        <p>{app.company}</p>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="stage-actions mt-3">
-              <Link to="/workspace" className="stage-btn-primary">
-                Open Full Student Workspace & ATS Resume Builder →
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 8: COMPLETE SPORTS ECOSYSTEM */}
-        <section id="sports" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">08</span> // 35+ SPORTS PROFESSIONS
-            </div>
-            <h2 className="stage-main-title">THE SPORTS ECOSYSTEM</h2>
-            <p className="stage-description">
-              Explore full economic pathways: Athletes, Coaches, S&C Specialists, Sports Doctors, Data Analysts, and Agents across 25+ disciplines.
-            </p>
-
-            <div className="sports-roles-horizontal-list mt-3">
-              {sportsRoles.slice(0, 4).map(role => (
-                <div
-                  key={role.id}
-                  className={`sports-role-pill-card ${selectedSportRole.id === role.id ? 'active' : ''}`}
-                  onClick={() => setSelectedSportRole(role)}
-                >
-                  <span className="sr-icon">{role.icon}</span>
-                  <div>
-                    <strong>{role.title}</strong>
-                    <span className="sr-sub">{role.category}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="sport-role-detail-box mt-3">
-              <h4 className="text-gold font-bold">{selectedSportRole.icon} {selectedSportRole.title}</h4>
-              <p className="text-sm text-secondary">{selectedSportRole.description}</p>
-              <div className="d-flex justify-between items-center mt-2 flex-wrap gap-2">
-                <span className="text-xs">Entry: <strong>{selectedSportRole.educationReq}</strong></span>
-                <span className="text-xs font-mono text-green">Median: <strong>{selectedSportRole.medianSalaryUSD}</strong></span>
-              </div>
-            </div>
-
-            <div className="stage-actions mt-3">
-              <Link to="/explore?family=sports" className="stage-btn-primary">
-                Explore All 35+ Sports Careers →
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 9 & 10: STUDENT REVIEWS & CAREER TWINS */}
-        <section id="twins" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">09 & 10</span> // SECTION 150 VERIFIED TWINS
-            </div>
-            <h2 className="stage-main-title">VERIFIED CAREER TWINS</h2>
-            <p className="stage-description">
-              No fabricated testimonials. Real practitioners documenting their actual degrees, salary milestones, surprises, and retrospective advice.
-            </p>
-
-            <div className="twins-preview-card mt-3">
-              {careerTwinsData.slice(0, 1).map(twin => (
-                <div key={twin.id}>
-                  <div className="d-flex justify-between items-start">
-                    <div>
-                      <h4 className="text-gold font-bold">{twin.name}</h4>
-                      <p className="text-xs text-muted">{twin.currentTitle} · {twin.location}</p>
-                    </div>
-                    <span className="badge verified">{twin.verificationBadge}</span>
-                  </div>
-                  <p className="text-sm mt-2 text-secondary"><strong>Actual Journey:</strong> {twin.actualPath}</p>
-                  <p className="text-xs mt-1 text-muted"><strong>Surprise:</strong> "{twin.whatSurprisedThem}"</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="stage-actions mt-3">
-              <Link to="/career/software-engineer" className="stage-btn-primary">
-                Read All Career Twins & Reviews →
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ZONE 11: 30-QUESTION CAREER DNA ASSESSMENT */}
-        <section id="map" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">11</span> // EXACT 30-QUESTION QUIZ
-            </div>
-            <h2 className="stage-main-title">CAREER DNA ASSESSMENT</h2>
-            <p className="stage-description">
-              Answer 30 structured questions to unlock your personal trait radar and recommended pathways.
-            </p>
-
-            {!quizCompleted ? (
-              <div className="embedded-quiz-box mt-3">
-                <div className="d-flex justify-between items-center text-xs text-muted mb-2">
-                  <span>Question <strong>{quizStep + 1}</strong> of <strong>30</strong></span>
-                  <span>{Math.round(((quizStep + 1) / 30) * 100)}% Complete</span>
-                </div>
-                <div className="progress-bar-bg mb-3">
-                  <div className="progress-bar-fill" style={{ width: `${((quizStep + 1) / 30) * 100}%` }} />
-                </div>
-
-                <h4 className="quiz-q-text">{currentQ?.text}</h4>
-
-                <div className="quiz-options-stack mt-3">
-                  {quizOptions.map(opt => (
-                    <button
-                      key={opt.score}
-                      className="quiz-opt-btn"
-                      onClick={() => handleQuizAnswer(opt.score)}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="quiz-completed-box mt-3">
-                <h4 className="text-green font-bold flex items-center gap-1">
-                  <CheckCircle size={18} /> Assessment Completed!
-                </h4>
-                <div style={{ height: 260 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="68%" data={quizRadarData}>
-                      <PolarGrid stroke="rgba(255,255,255,0.12)" />
-                      <PolarAngleAxis dataKey="trait" tick={{ fill: '#d8c4aa', fontSize: 10 }} />
-                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                      <Radar name="You" dataKey="score" stroke="#f0c778" fill="#f0c778" fillOpacity={0.45} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="d-flex justify-between mt-2">
-                  <button className="btn-secondary btn-sm" onClick={() => { setQuizStep(0); setQuizAnswers({}); setQuizCompleted(false); }}>
-                    <RotateCcw size={14} /> Retake
-                  </button>
-                  <Link to="/quiz" className="btn-primary btn-sm">
-                    Open Full Career Map & Recommendations →
-                  </Link>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        </section>
-
-        {/* ZONE 12: FUTURE AI & HIGH-YIELD COMBOS */}
-        <section id="future" className="scroll-viewport-section">
-          <motion.div className="stage-content-card">
-            <div className="stage-tag-badge">
-              <span className="stage-num">12</span> // HORIZON 2035 & SKILL MULTIPLIERS
-            </div>
-            <h2 className="stage-main-title">HIGH-YIELD COMBOS & AI</h2>
-            <p className="stage-description">
-              Stack complementary domain skills for 2x–5x salary multipliers and near-zero AI vulnerability.
-            </p>
-
-            <div className="combos-preview-grid mt-3">
-              {salaryCombos.slice(0, 2).map(combo => (
-                <div key={combo.id} className="combo-mini-box">
-                  <div className="d-flex justify-between items-center">
-                    <strong className="text-gold">{combo.title}</strong>
-                    <span className="combo-multiplier-pill">{combo.comboMultiplier}</span>
-                  </div>
-                  <p className="text-xs text-secondary mt-1">{combo.synergyRationale}</p>
-                  <span className="text-xs font-mono text-green mt-2 block">Target: {combo.targetSalaryUSD}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="stage-actions mt-4">
-              <Link to="/combos" className="stage-btn-primary">
-                Explore All Skill Combos <Zap size={15} />
-              </Link>
-              <Link to="/layoffs" className="stage-btn-secondary">
-                Inspect AI Layoff Risk Audit <TrendingDown size={15} />
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-      </div>
-
-      {/* Floating Scroll Indicator */}
-      {scrollProgress < 0.05 && (
-        <div className="scroll-indicator-prompt" onClick={() => scrollToSection('streams')}>
-          <span>Scroll through the 12 Architectural Zones of Career City</span>
-          <ChevronDown size={18} className="animate-bounce" />
+        {/* Stage Progress Bar */}
+        <div className="scrolly-bottom-bar">
+          <div className="progress-track">
+            <div className="progress-fill" style={{ width: `${(scrollProgress * 100).toFixed(1)}%` }} />
+          </div>
+          <div className="stage-caption-flex">
+            <span className="stage-num-badge">STAGE 0{currentStage} / 08</span>
+            <span className="stage-name-text">
+              {currentStage === 1 && 'Possibility — What Could You Become?'}
+              {currentStage === 2 && 'Sectors & Core Disciplines'}
+              {currentStage === 3 && `Career Spotlight — ${activeCareer.title}`}
+              {currentStage === 4 && 'Compensation, Skills & AI Exposure'}
+              {currentStage === 5 && 'Step-by-Step Educational Trajectory'}
+              {currentStage === 6 && 'Target Academies, Fees & ROI'}
+              {currentStage === 7 && `Verified Human Career Twin`}
+              {currentStage === 8 && 'Branching Trajectories & Launch Gateway'}
+            </span>
+            <span className="scroll-indicator-text">Scroll to Transform ↓</span>
+          </div>
         </div>
-      )}
+
+        {/* Continuous Dynamic Overlays */}
+        <div className="editorial-stage-overlay">
+          <AnimatePresence mode="wait">
+            {/* STAGE 01: POSSIBILITY */}
+            {currentStage === 1 && (
+              <motion.div
+                key="stage-1"
+                className="stage-card-panel hero-center-stage"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="hero-eyebrow">
+                  <span className="badge-pill pulse-lime">15,000+ CAREERS INDEXED</span>
+                  <span className="badge-pill">10,000+ UNIVERSITIES</span>
+                </div>
+                <h1 className="hero-editorial-title">
+                  WHAT COULD<br />YOU BECOME?
+                </h1>
+                <p className="hero-editorial-subtitle">
+                  The definitive global atlas of human professions. Explore salaries, true-cost degrees,
+                  educational trajectories, and verified human career paths.
+                </p>
+
+                {/* Integrated Universal Search */}
+                <div className="hero-search-box">
+                  <div className="search-input-wrapper">
+                    <Search className="search-icon" size={20} />
+                    <input
+                      type="text"
+                      placeholder="Search any career (e.g. Cardiologist, Quantum Engineer, Carpenter, Politician)..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {searchQuery && (
+                      <button className="clear-btn" onClick={() => setSearchQuery('')}>×</button>
+                    )}
+                  </div>
+
+                  {searchResults.length > 0 && (
+                    <div className="hero-search-dropdown">
+                      {searchResults.map((item) => (
+                        <Link key={item.id} to={`/career/${item.id}`} className="search-result-row">
+                          <div className="row-main">
+                            <span className="item-title">{item.name}</span>
+                            <span className="item-cat">{item.category} · {item.typicalEducation}</span>
+                          </div>
+                          <span className="item-salary">{item.salaryINR ? `₹${(item.salaryINR.mid / 100000).toFixed(1)}L` : '$85k'}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="hero-quick-pills">
+                  <span className="pill-title">Trending Paths:</span>
+                  <button onClick={() => { setSelectedCareerKey('Biomedical Engineer'); scrollToStage(3); }}>Biomedical Engineer</button>
+                  <button onClick={() => { setSelectedCareerKey('AI Research Scientist'); scrollToStage(3); }}>AI Research Scientist</button>
+                  <Link to="/explore">All 15k Careers →</Link>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 02: SECTOR CATEGORIES */}
+            {currentStage === 2 && (
+              <motion.div
+                key="stage-2"
+                className="stage-card-panel sectors-stage"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag">STAGE 02 · SECTORS</span>
+                  <h2>Choose Your Domain Matrix</h2>
+                  <p>Select an industry archetype to reveal specialized roles and career blueprints.</p>
+                </div>
+
+                <div className="sectors-grid-container">
+                  {CORE_SECTORS.map((sec) => (
+                    <div
+                      key={sec.id}
+                      className={`sector-chip ${activeCategory === sec.id ? 'active-chip' : ''}`}
+                      onClick={() => {
+                        setActiveCategory(sec.id);
+                        if (SPOTLIGHT_CAREERS[sec.sample]) {
+                          setSelectedCareerKey(sec.sample);
+                        }
+                      }}
+                    >
+                      <span className="chip-icon">{sec.icon}</span>
+                      <div className="chip-meta">
+                        <strong className="chip-title">{sec.label}</strong>
+                        <span className="chip-desc">{sec.desc}</span>
+                      </div>
+                      <span className="chip-sample">e.g. {sec.sample}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="stage-actions-bar">
+                  <button className="cta-primary-btn" onClick={() => scrollToStage(3)}>
+                    Continue into Selected Career <ChevronRight size={18} />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 03: CAREER SPOTLIGHT */}
+            {currentStage === 3 && (
+              <motion.div
+                key="stage-3"
+                className="stage-card-panel spotlight-stage"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag accent-lime">STAGE 03 · CAREER SPOTLIGHT</span>
+                  <h1 className="career-big-title">{activeCareer.title}</h1>
+                  <p className="career-big-tagline">{activeCareer.tagline}</p>
+                </div>
+
+                <div className="spotlight-metric-cards">
+                  <div className="metric-box">
+                    <span className="metric-label">Typical Compensation</span>
+                    <strong className="metric-val text-lime">{activeCareer.salaryINR}</strong>
+                    <span className="metric-sub">{activeCareer.salaryUSD}</span>
+                  </div>
+                  <div className="metric-box">
+                    <span className="metric-label">Market Demand</span>
+                    <strong className="metric-val text-sky">{activeCareer.growth}</strong>
+                    <span className="metric-sub">High Placement Velocity</span>
+                  </div>
+                  <div className="metric-box">
+                    <span className="metric-label">Preparation Horizon</span>
+                    <strong className="metric-val text-purple">{activeCareer.duration}</strong>
+                    <span className="metric-sub">B.Tech + Practical Lab</span>
+                  </div>
+                </div>
+
+                <div className="stage-actions-bar">
+                  <button className="cta-secondary-btn" onClick={() => scrollToStage(4)}>
+                    View Granular Skills & AI Defense ↓
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 04: CAREER DETAILS & METRICS */}
+            {currentStage === 4 && (
+              <motion.div
+                key="stage-4"
+                className="stage-card-panel details-stage"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag accent-purple">STAGE 04 · CAPABILITIES & METRICS</span>
+                  <h2>{activeCareer.title} — Professional Anatomy</h2>
+                </div>
+
+                <div className="details-two-col">
+                  <div className="detail-card">
+                    <h3>Core Technical Competencies</h3>
+                    <div className="skills-badge-list">
+                      {activeCareer.skills.map((sk, i) => (
+                        <span key={i} className="skill-pill">
+                          <CheckCircle size={14} className="text-lime" /> {sk}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="ai-resilience-box">
+                      <div className="ai-head">
+                        <span>AI Automation Defense Rating</span>
+                        <strong className="text-lime">{activeCareer.aiResilience}</strong>
+                      </div>
+                      <p className="ai-desc">
+                        Physical clinical hardware calibration, human patient safety certification, and surgical integration require irreplaceable in-person judgment.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="detail-card">
+                    <h3>Operational Work Environment</h3>
+                    <p className="workstyle-text">{activeCareer.workStyle}</p>
+
+                    <div className="salary-tier-ladder">
+                      <div className="ladder-step">
+                        <span>Entry Level</span>
+                        <strong>₹6.5L - ₹9.0L</strong>
+                      </div>
+                      <div className="ladder-step highlight">
+                        <span>Median (3-6 yrs)</span>
+                        <strong>₹14.8L - ₹18.5L</strong>
+                      </div>
+                      <div className="ladder-step">
+                        <span>Staff / Lead (8+ yrs)</span>
+                        <strong>₹24.0L - ₹38.0L+</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="stage-actions-bar">
+                  <button className="cta-primary-btn" onClick={() => scrollToStage(5)}>
+                    Explore Educational Trajectory ↓
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 05: CAREER PATHWAY */}
+            {currentStage === 5 && (
+              <motion.div
+                key="stage-5"
+                className="stage-card-panel pathway-stage"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.04 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag accent-pink">STAGE 05 · CONTINUOUS PATHWAY</span>
+                  <h2>The Step-by-Step Trajectory</h2>
+                  <p>From foundational 10+2 high school subjects to senior industry leadership.</p>
+                </div>
+
+                <div className="pathway-step-cards">
+                  {activeCareer.pathway.map((p, idx) => (
+                    <div key={idx} className="pathway-card-node">
+                      <div className="node-badge">{p.step}</div>
+                      <div className="node-body">
+                        <strong className="node-title">{p.title}</strong>
+                        <p className="node-desc">{p.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="stage-actions-bar">
+                  <button className="cta-primary-btn" onClick={() => scrollToStage(6)}>
+                    View Target Universities & Fees ↓
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 06: UNIVERSITIES & TRUE-COST */}
+            {currentStage === 6 && (
+              <motion.div
+                key="stage-6"
+                className="stage-card-panel unis-stage"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag accent-sky">STAGE 06 · TARGET ACADEMIES</span>
+                  <h2>Top Universities for {activeCareer.title}</h2>
+                  <p>Filtered from our 10,000+ audited institutions database with verified placement statistics.</p>
+                </div>
+
+                <div className="unis-horizontal-grid">
+                  {activeCareer.unis.map((u, i) => (
+                    <div key={i} className="uni-spotlight-card">
+                      <div className="uni-head">
+                        <Building2 size={24} className="text-sky" />
+                        <div>
+                          <strong className="uni-name">{u.name}</strong>
+                          <span className="uni-degree">{u.degree}</span>
+                        </div>
+                      </div>
+                      <div className="uni-stats">
+                        <div className="u-stat">
+                          <span>Tuition Fee</span>
+                          <strong>{u.fee}</strong>
+                        </div>
+                        <div className="u-stat">
+                          <span>Average CTC</span>
+                          <strong className="text-lime">{u.avgCTC}</strong>
+                        </div>
+                        <div className="u-stat">
+                          <span>Placement ROI</span>
+                          <strong className="text-purple">{u.roi}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="stage-actions-bar">
+                  <Link to="/reports" className="cta-secondary-btn">
+                    Open 10,000+ University True-Cost Explorer <ArrowUpRight size={16} />
+                  </Link>
+                  <button className="cta-primary-btn" onClick={() => scrollToStage(7)}>
+                    Meet Verified Career Twin ↓
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 07: CAREER TWIN */}
+            {currentStage === 7 && (
+              <motion.div
+                key="stage-7"
+                className="stage-card-panel twin-stage"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag accent-teal">STAGE 07 · VERIFIED CAREER TWIN</span>
+                  <h2>Real Human Journey & Advice</h2>
+                </div>
+
+                <div className="twin-editorial-card">
+                  <div className="twin-identity">
+                    <div className="twin-avatar-badge">
+                      <Users size={32} className="text-teal" />
+                    </div>
+                    <div>
+                      <strong className="twin-name">{activeCareer.twin.name}</strong>
+                      <span className="twin-role">{activeCareer.twin.role}</span>
+                      <span className="twin-org">{activeCareer.twin.org}</span>
+                    </div>
+                    <span className="verified-pill">
+                      <ShieldCheck size={14} /> Verified Practitioner
+                    </span>
+                  </div>
+
+                  <div className="twin-story-body">
+                    <h4>The Journey:</h4>
+                    <p>{activeCareer.twin.story}</p>
+
+                    <blockquote className="twin-quote">
+                      "{activeCareer.twin.advice}"
+                    </blockquote>
+                  </div>
+                </div>
+
+                <div className="stage-actions-bar">
+                  <button className="cta-primary-btn" onClick={() => scrollToStage(8)}>
+                    Explore Branching Possibilities ↓
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STAGE 08: RELATED CAREERS & LAUNCH PORTAL */}
+            {currentStage === 8 && (
+              <motion.div
+                key="stage-8"
+                className="stage-card-panel related-stage"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="stage-header">
+                  <span className="stage-tag accent-purple">STAGE 08 · BRANCHING POSSIBILITIES</span>
+                  <h2>Where Can You Branch Next?</h2>
+                  <p>Adjacent high-yield career paths sharing your core skills and interests.</p>
+                </div>
+
+                <div className="related-cards-grid">
+                  {activeCareer.related.map((rel, idx) => (
+                    <div
+                      key={idx}
+                      className="related-branch-card"
+                      onClick={() => {
+                        if (SPOTLIGHT_CAREERS[rel.name]) {
+                          setSelectedCareerKey(rel.name);
+                          scrollToStage(3);
+                        } else {
+                          navigate(`/explore?search=${encodeURIComponent(rel.name)}`);
+                        }
+                      }}
+                    >
+                      <div className="rel-tag">{rel.tag}</div>
+                      <strong className="rel-name">{rel.name}</strong>
+                      <span className="rel-comp">{rel.comp}</span>
+                      <span className="rel-cta">Explore Blueprint →</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="portal-action-cluster">
+                  <div className="cluster-header">
+                    <h3>Ready to Map Your Complete Trajectory?</h3>
+                    <p>Access our complete suite of deep AI tools, comparison engines, and 10k university audits.</p>
+                  </div>
+                  <div className="cluster-buttons">
+                    <Link to="/explore" className="btn-solid-lime">
+                      <Compass size={18} /> Search 15,000+ Careers
+                    </Link>
+                    <Link to="/quiz" className="btn-solid-purple">
+                      <Zap size={18} /> 30-Question Assessment
+                    </Link>
+                    <Link to="/reports" className="btn-solid-sky">
+                      <GraduationCap size={18} /> 10,000 Universities
+                    </Link>
+                    <Link to="/compare" className="btn-outline-cream">
+                      Compare Trajectories
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
-}
-
-function ArrowDown({ size = 16 }) {
-  return <ChevronDown size={size} />;
 }
