@@ -10,6 +10,16 @@ const PATHWAY_LENSES = [
   'Global Mobility Pathway'
 ];
 
+const SEARCH_SYNONYMS = {
+  'politician': ['politician', 'politics', 'parliament', 'senator', 'minister', 'legislator', 'council member', 'mayor', 'governor'],
+  'bureaucrat': ['civil service', 'administrator', 'cabinet secretary', 'director', 'officer', 'regulator', 'public administration'],
+  'labourer': ['laborer', 'construction laborer', 'worker', 'operator', 'helper'],
+  'laborer': ['labourer', 'construction laborer', 'worker', 'operator', 'helper'],
+  'doctor': ['physician', 'surgeon', 'medicine', 'cardiologist', 'oncologist', 'pediatrician', 'dermatologist'],
+  'lawyer': ['attorney', 'prosecutor', 'public defender', 'advocate', 'legal counsel', 'judge'],
+  'designer': ['product designer', 'ux architect', 'interaction designer', 'industrial product designer', 'fashion designer', 'game designer', 'sound designer']
+};
+
 let catalogPromise;
 
 async function loadCatalog() {
@@ -49,19 +59,42 @@ export async function getCareerFromCatalogById(id) {
 export async function searchCareerCatalog({ query = '', limit = 24, offset = 0, filters = {} } = {}) {
   const q = query.toLowerCase().trim();
   const catalog = await loadCatalog();
+  
+  const queryTerms = q ? (SEARCH_SYNONYMS[q] ? SEARCH_SYNONYMS[q] : [q]) : [];
+
   const results = catalog.filter(career => {
-    if (q && ![career.name, career.category, career.subcategory, career.shortDescription]
-      .some(value => value?.toLowerCase().includes(q))) return false;
+    if (queryTerms.length > 0) {
+      const titleText = `${career.name}`.toLowerCase();
+      const metaText = `${career.category} ${career.family} ${career.subcategory} ${career.shortDescription}`.toLowerCase();
+      
+      const titleMatch = queryTerms.some(term => titleText.includes(term));
+      const metaMatch = queryTerms.some(term => metaText.includes(term));
+      
+      if (!titleMatch && !metaMatch) return false;
+    }
+
     if (filters.family && filters.family !== 'all' && career.family !== filters.family) return false;
     if (filters.skillLevel && filters.skillLevel !== 'all' && career.skillLevel?.toLowerCase() !== filters.skillLevel.toLowerCase()) return false;
     const toughness = Number(career.toughness) || 7;
     if (filters.toughness === 'high' && toughness < 8) return false;
     if (filters.toughness === 'moderate' && (toughness < 6 || toughness >= 8)) return false;
     if (filters.toughness === 'accessible' && toughness >= 6) return false;
-    const aiRisk = Number(career.aiRisk) || 3.5;
-    if (filters.aiRisk === 'low' && aiRisk > 3.5) return false;
-    if (filters.aiRisk === 'high' && aiRisk <= 6) return false;
     return true;
   });
-  return { total: results.length, items: results.slice(offset, offset + limit), hasMore: offset + limit < results.length };
+
+  // Sort: title match first
+  if (queryTerms.length > 0) {
+    results.sort((a, b) => {
+      const aTitle = queryTerms.some(term => a.name.toLowerCase().includes(term));
+      const bTitle = queryTerms.some(term => b.name.toLowerCase().includes(term));
+      if (aTitle && !bTitle) return -1;
+      if (!aTitle && bTitle) return 1;
+      return 0;
+    });
+  }
+
+  return {
+    total: results.length,
+    items: results.slice(offset, offset + limit)
+  };
 }
