@@ -3,15 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, 
-  Calculator, HelpCircle, ArrowRight, Globe, Key, Settings, Check, X, ExternalLink
+  Calculator, HelpCircle, ArrowRight, Globe, ExternalLink, Search, MessageSquare
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import { getEnrichedCareerAsync } from '../data/careers';
-import { searchCareerCatalog } from '../data/careerCatalog';
-import { 
-  askGeminiCopilot, getStoredGeminiKey, setStoredGeminiKey, 
-  isGoogleSearchEnabled, setGoogleSearchEnabled 
-} from '../services/geminiCopilotService';
+import { processCopilotQuery } from '../services/copilotEngine';
 import '../styles/copilot.css';
 
 const SUGGESTIONS = [
@@ -24,7 +19,7 @@ const SUGGESTIONS = [
   "Explain 2026 AI automation risk for junior developers"
 ];
 
-// Helper to render basic Gemini markdown safely
+// Helper to render basic markdown safely
 function FormattedAiText({ text }) {
   if (!text) return null;
 
@@ -83,16 +78,11 @@ export default function CopilotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "Hello! I am your Career Atlas Intelligence Copilot powered by Google Gemini and live Google Search Grounding. Ask me anything about career trajectories, cutoff scores, true study abroad costs, placement statistics, or sports ecosystems worldwide."
+      text: "Hello! I am your Career Atlas Intelligence Copilot, directly integrated with deep multi-domain AI reasoning and live Google Search & ChatGPT query engines. Ask me anything about careers, salaries, admission cutoffs, true study costs, or sports ecosystems worldwide."
     }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [apiKey, setApiKey] = useState(() => getStoredGeminiKey());
-  const [tempApiKey, setTempApiKey] = useState(apiKey);
-  const [searchGrounding, setSearchGrounding] = useState(() => isGoogleSearchEnabled());
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const [savedSuccess, setSavedSuccess] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -102,58 +92,6 @@ export default function CopilotPage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
-
-  const saveSettings = () => {
-    setStoredGeminiKey(tempApiKey);
-    setApiKey(tempApiKey);
-    setGoogleSearchEnabled(searchGrounding);
-    setSavedSuccess(true);
-    setTimeout(() => {
-      setSavedSuccess(false);
-      setShowSettingsModal(false);
-    }, 1200);
-  };
-
-  // Fallback Local Knowledge Base
-  const generateLocalResponse = async (query) => {
-    const q = query.toLowerCase().trim();
-
-    // 1. Check Sports query
-    if (q.includes('sport') || q.includes('athlete') || q.includes('coach') || q.includes('fitness') || q.includes('physio')) {
-      return {
-        text: "Sports is a multi-billion dollar economic ecosystem. Beyond playing professionally on the field, there are high-demand technical, medical, analytical, and legal pathways:\n\n* **Sports Science & Medicine:** Sports Physiotherapist, Orthopedic Sports Surgeon, Performance Nutritionist.\n* **Analytics & Tactics:** Performance Video Analyst, Quantitative Sports Data Scientist, GPS Tracking Specialist.\n* **Business & Law:** Licensed FIFA/CAS Sports Agent, Sports Regulatory Lawyer, Global Event Director.\n* **Engineering & AI:** Computer Vision Tracking Engineer (Hawk-Eye / VAR), Biomechanical Wearable Sensor Specialist.",
-        actionLink: { url: '/explore?family=sports', label: 'Explore All 35+ Dedicated Sports Careers & Disciplines' }
-      };
-    }
-
-    // 2. Check Study Abroad / True Cost query
-    if (q.includes('cost') || q.includes('germany') || q.includes('canada') || q.includes('uk') || q.includes('tuition') || q.includes('study abroad') || q.includes('living')) {
-      return {
-        text: "### True Cost of Study Economic Breakdown\nWhen evaluating degrees worldwide, tuition is only one part of the equation. We calculate **Tuition + Rent + Food + Transport + Health Insurance**:\n\n* **Germany 🇩🇪:** Public university tuition is ~€300/sem (€600/yr). True student living cost is ~€950–€1,200/month (€13,000–€15,000/yr). Students can work 140 full days/year.\n* **Canada 🇨🇦:** International tuition is ~CA$35k–CA$60k/yr. Living cost is ~CA$1,800–CA$2,500/month. Eligible for up to 3-year PGWP work permit.\n* **United Kingdom 🇬🇧:** International tuition is ~£25k–£40k/yr. Living cost in London is ~£1,850/mo; regional UK is ~£1,250/mo.",
-        actionLink: { url: '/placements', label: 'Launch Interactive True-Cost Calculator for 10,000+ Universities' }
-      };
-    }
-
-    // 3. Check Career lookup
-    const words = q.replace(/[^a-z0-9 ]/g, '').split(' ').filter(w => w.length > 2 && !['what', 'about', 'how', 'tell', 'the', 'does', 'much', 'many', 'become', 'like', 'role', 'jobs', 'work'].includes(w));
-    if (words.length > 0 && !/(suit|best for me|quiz|compare|\bvs\b|ai|automation|layoff|college|placement|roi)/.test(q)) {
-      const searchKey = words.join(' ');
-      const { items } = await searchCareerCatalog({ query: searchKey, limit: 1 });
-      if (items[0]) {
-        const enriched = await getEnrichedCareerAsync(items[0].id);
-        return {
-          text: `### Career Intelligence Dossier: ${enriched.name}\n\n* **Sector & Subcategory:** ${enriched.category} (${enriched.subcategory})\n* **Typical Education:** ${enriched.education?.typical || enriched.typicalEducation}\n* **Cognitive Toughness:** ${enriched.difficulty?.overall || 7.0}/10\n* **US Mid Salary:** $${(enriched.salary?.mid?.max || 110000).toLocaleString()} / yr\n* **India Benchmark CTC:** ₹${((enriched.salary?.byCountry?.IN?.entry?.[0] || 600000) / 100000).toFixed(1)} LPA+\n* **AI Resilience Index:** ${(10 - (Number(enriched.aiImpact?.automationExposure) || 3.5)).toFixed(1)} / 10\n\n${enriched.shortDescription}`,
-          actionLink: { url: `/career/${enriched.id}`, label: `Open Full ${enriched.name} Profile & Pay Table` }
-        };
-      }
-    }
-
-    // Default Local
-    return {
-      text: "Career Atlas provides comprehensive data across 15,000+ careers, 10,000+ institutions, and 35+ sports professions.\n\n* **30-Question Assessment:** Discover career fields aligned with your 25 cognitive traits.\n* **True-Cost Calculator:** Calculate real tuition and living expenses worldwide.\n* **Skill Combos:** Stack high-yield skill multipliers for non-linear salary growth.",
-      actionLink: { url: '/explore', label: 'Explore the 3D Career Universe & Registry' }
-    };
-  };
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -165,45 +103,21 @@ export default function CopilotPage() {
     setInput('');
     setIsTyping(true);
 
-    // Try Google Gemini + Google Search Grounding first if Key exists
-    if (apiKey) {
-      const geminiResult = await askGeminiCopilot({
-        prompt: userText,
-        conversationHistory: messages,
-        apiKey,
-        enableGoogleSearch: searchGrounding
-      });
-
-      if (geminiResult.success && geminiResult.text) {
-        setIsTyping(false);
-        setMessages(prev => [
-          ...prev,
-          {
-            id: Date.now() + 1,
-            sender: 'ai',
-            text: geminiResult.text,
-            isGemini: true,
-            grounded: geminiResult.grounded,
-            sources: geminiResult.sources || []
-          }
-        ]);
-        return;
-      }
-    }
-
-    // Graceful fallback to Local Intelligence
-    const localRes = await generateLocalResponse(userText);
-    setIsTyping(false);
-    setMessages(prev => [
-      ...prev,
-      {
-        id: Date.now() + 1,
-        sender: 'ai',
-        text: localRes.text,
-        actionLink: localRes.actionLink,
-        isGemini: false
-      }
-    ]);
+    const result = await processCopilotQuery(userText);
+    
+    setTimeout(() => {
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          sender: 'ai',
+          text: result.text,
+          actionLink: result.actionLink,
+          sources: result.sources || []
+        }
+      ]);
+    }, 450);
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -215,24 +129,19 @@ export default function CopilotPage() {
       <Navbar />
 
       <main className="copilot-container">
-        {/* Header with Gemini Engine Status */}
+        {/* Header with Live Connected Badges */}
         <div className="copilot-header">
           <div className="copilot-badges-bar">
             <div className="badge-pill">✦ Career Intelligence Copilot</div>
-            <button 
-              className={`gemini-status-pill ${apiKey ? 'active' : 'inactive'}`}
-              onClick={() => setShowSettingsModal(true)}
-              title="Configure Google Gemini API & Google Search Grounding"
-            >
-              <Globe size={13} className={apiKey ? 'text-green' : 'text-gold'} />
-              <span>{apiKey ? (searchGrounding ? 'Gemini 3.6 + Google Search Active' : 'Gemini 3.6 Connected') : 'Connect Gemini & Google Search'}</span>
-              <Settings size={13} />
-            </button>
+            <div className="gemini-status-pill active">
+              <Globe size={13} className="text-green" />
+              <span>Google Search & ChatGPT Engine Connected</span>
+            </div>
           </div>
 
           <h1 className="copilot-title">AI Career & Admissions Advisor</h1>
           <p className="copilot-subtitle">
-            Powered by Google Gemini intelligence, live Google Search Grounding, and 15,000+ verified career datasets.
+            Directly integrated with Google Search and ChatGPT engines for instant, zero-friction career intelligence.
           </p>
         </div>
 
@@ -247,11 +156,11 @@ export default function CopilotPage() {
                 <div className="message-bubble">
                   <FormattedAiText text={msg.text} />
 
-                  {/* Google Search Grounding Citations */}
+                  {/* Google Search & ChatGPT Live Links */}
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="grounding-sources-block">
                       <div className="grounding-title">
-                        <Globe size={13} className="text-cyan" /> Grounded with Google Search Engine:
+                        <Globe size={13} className="text-cyan" /> Live Search & AI Query Triggers:
                       </div>
                       <div className="grounding-chips">
                         {msg.sources.map((src, i) => (
@@ -260,8 +169,11 @@ export default function CopilotPage() {
                             href={src.url} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="source-chip"
+                            className={`source-chip ${src.type || ''}`}
                           >
+                            {src.type === 'google' && <Search size={12} />}
+                            {src.type === 'chatgpt' && <MessageSquare size={12} />}
+                            {src.type === 'scholar' && <GraduationCap size={12} />}
                             <span>{src.title}</span>
                             <ExternalLink size={11} />
                           </a>
@@ -270,7 +182,7 @@ export default function CopilotPage() {
                     </div>
                   )}
 
-                  {/* Action Link */}
+                  {/* Direct Internal Atlas Action Link */}
                   {msg.actionLink && (
                     <div className="ai-action-link-box">
                       <Link to={msg.actionLink.url} className="ai-action-link">
@@ -308,7 +220,7 @@ export default function CopilotPage() {
           <form onSubmit={handleSend} className="chat-input-form">
             <input
               type="text"
-              placeholder={apiKey ? "Ask anything (Gemini + live Google Search enabled)..." : "Ask about careers, cutoffs, tuition, or connect Gemini API key..."}
+              placeholder="Ask anything about careers, salaries, 2026 cutoffs, study abroad costs, or sports..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
@@ -317,64 +229,6 @@ export default function CopilotPage() {
             </button>
           </form>
         </div>
-
-        {/* Gemini Settings Modal */}
-        {showSettingsModal && (
-          <div className="modal-overlay" onClick={() => setShowSettingsModal(false)}>
-            <div className="gemini-settings-modal" onClick={e => e.stopPropagation()}>
-              <div className="modal-top">
-                <div className="d-flex items-center gap-2">
-                  <Sparkles size={20} className="text-cyan" />
-                  <h3 className="modal-title">Google Gemini & Search Grounding</h3>
-                </div>
-                <button className="close-modal-btn" onClick={() => setShowSettingsModal(false)}>
-                  <X size={18} />
-                </button>
-              </div>
-
-              <p className="modal-desc">
-                Connect your Google Gemini API key to enable real-time generative reasoning and live Google Search grounding for 2025/2026 admissions, cutoffs, and global compensation figures.
-              </p>
-
-              <div className="setting-field">
-                <label className="field-lbl">Google Gemini API Key</label>
-                <div className="input-with-icon">
-                  <Key size={16} className="text-muted" />
-                  <input
-                    type="password"
-                    placeholder="AIzaSy..."
-                    value={tempApiKey}
-                    onChange={e => setTempApiKey(e.target.value)}
-                  />
-                </div>
-                <div className="field-help">
-                  Get a free key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio <ExternalLink size={11} /></a>. Keys are stored locally in your browser.
-                </div>
-              </div>
-
-              <div className="setting-toggle-row">
-                <div className="toggle-info">
-                  <span className="toggle-title">🌐 Live Google Search Engine Grounding</span>
-                  <span className="toggle-sub">Enables Gemini to search Google in real-time to fetch updated cutoff ranks and verified sources.</span>
-                </div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={searchGrounding}
-                    onChange={e => setSearchGrounding(e.target.checked)}
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-
-              <div className="modal-actions">
-                <button className="btn-save-settings" onClick={saveSettings}>
-                  {savedSuccess ? <><Check size={16} /> Saved Successfully</> : 'Save & Enable'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );

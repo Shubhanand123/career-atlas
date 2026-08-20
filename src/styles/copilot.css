@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CAREER ATLAS — Copilot Intelligence (Google Gemini & Search Grounding)
+   CAREER ATLAS — Copilot Intelligence (Google Search & ChatGPT Connected)
    ========================================================================== */
 
 .copilot-page {
@@ -44,14 +44,6 @@
   border-radius: 9999px;
   font-size: 0.76rem;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.gemini-status-pill:hover {
-  border-color: var(--accent-cyan);
-  color: var(--text-primary);
-  transform: translateY(-1px);
 }
 
 .gemini-status-pill.active {
@@ -255,22 +247,40 @@
 .source-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   background: var(--bg-card);
   border: 1px solid var(--border-medium);
-  color: var(--accent-cyan);
-  padding: 0.25rem 0.65rem;
+  color: var(--text-primary);
+  padding: 0.35rem 0.75rem;
   border-radius: 8px;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-decoration: none;
   transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .source-chip:hover {
-  background: var(--accent-cyan-dim);
-  border-color: var(--accent-cyan);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.source-chip.google {
+  border-color: rgba(66, 133, 244, 0.4);
+  color: #60A5FA;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.source-chip.chatgpt {
+  border-color: rgba(16, 163, 127, 0.4);
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.source-chip.scholar {
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #FBBF24;
+  background: rgba(245, 158, 11, 0.08);
 }
 
 .ai-action-link-box {
@@ -407,213 +417,4 @@
 .btn-send:disabled {
   opacity: 0.35;
   cursor: not-allowed;
-}
-
-/* ==========================================================================
-   GEMINI SETTINGS MODAL
-   ========================================================================== */
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-
-.gemini-settings-modal {
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: 24px;
-  padding: 2.25rem;
-  max-width: 540px;
-  width: 100%;
-  box-shadow: var(--shadow-xl);
-  position: relative;
-}
-
-.modal-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.modal-title {
-  font-size: 1.35rem;
-  font-weight: 900;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.close-modal-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 6px;
-  transition: all 0.15s ease;
-}
-
-.close-modal-btn:hover {
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-}
-
-.modal-desc {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  margin-bottom: 1.5rem;
-}
-
-.setting-field {
-  margin-bottom: 1.5rem;
-}
-
-.field-lbl {
-  display: block;
-  font-size: 0.76rem;
-  font-weight: 800;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.45rem;
-}
-
-.input-with-icon {
-  display: flex;
-  align-items: center;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-medium);
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-  gap: 0.65rem;
-}
-
-.input-with-icon input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  width: 100%;
-}
-
-.field-help {
-  font-size: 0.76rem;
-  color: var(--text-muted);
-  margin-top: 0.45rem;
-}
-
-.field-help a {
-  color: var(--accent-cyan);
-  text-decoration: underline;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.setting-toggle-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-medium);
-  border-radius: 14px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.75rem;
-}
-
-.toggle-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  max-width: 80%;
-}
-
-.toggle-title {
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.toggle-sub {
-  font-size: 0.76rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
-
-/* Switch */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 24px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--border-medium);
-  transition: .2s;
-  border-radius: 24px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .2s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-green);
-}
-
-input:checked + .slider:before {
-  transform: translateX(20px);
-}
-
-.btn-save-settings {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  width: 100%;
-  background: var(--accent-cyan);
-  color: #FFFFFF;
-  padding: 0.85rem;
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 0.92rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-save-settings:hover {
-  background: var(--accent-blue);
-  transform: translateY(-1px);
 }
