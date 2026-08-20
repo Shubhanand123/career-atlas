@@ -7,9 +7,10 @@ import {
   TrendingUp, ShieldCheck, ArrowUpRight, CheckCircle, RotateCcw, Clock,
   ChevronDown, Layers, Target, BookOpen, UserCheck, GitBranch, Briefcase,
   Star, ExternalLink, Cpu, HeartPulse, Scale, Wrench, Microscope, Palette,
-  BadgeCheck, TrendingDown, ArrowDownRight, Compass as CompassIcon
+  BadgeCheck, TrendingDown, ArrowDownRight
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import RealisticAtlasInstrument from '../components/RealisticAtlasInstrument';
 import { searchCareerCatalog } from '../data/careerCatalog';
 import '../styles/landing.css';
 
@@ -37,7 +38,7 @@ const SPOTLIGHT_CAREERS = {
     salaryMid: '₹14.5L / yr',
     salarySenior: '₹28.0L+ / yr',
     growth: '+17% YoY Global Demand',
-    growthBadge: 'Very High Growth',
+    growthBadge: 'High Growth',
     duration: '4–5 Years Degree & Labs',
     aiResilience: '9.2 / 10',
     aiRiskLevel: 'Very Low Risk (AI-Resilient)',
@@ -202,16 +203,15 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="editorial-master-page">
+    <div className="gold-master-page">
       <Navbar />
 
-      {/* FIXED AMBIENT BACKGROUND ACCENT */}
-      <div className="ambient-backdrop">
-        <div className="ambient-glow glow-top" />
-        <div className="ambient-glow glow-bottom" />
+      {/* FIXED 3D REALISTIC GOLDEN ASTROLABE INSTRUMENT */}
+      <div className="fixed-3d-backdrop">
+        <RealisticAtlasInstrument scrollProgress={scrollProgress} />
       </div>
 
-      {/* FLOATING STAGE STEPPER */}
+      {/* FLOATING STAGE STEPPER (Gold & Obsidian) */}
       <nav className="fixed-stage-stepper" aria-label="Stages">
         <div className="stepper-header">
           <span className="stepper-title">CAREER ATLAS</span>
@@ -229,7 +229,7 @@ export default function LandingPage() {
         ))}
       </nav>
 
-      {/* FLOATING PROGRESS BAR */}
+      {/* FLOATING TELEMETRY BAR */}
       <div className="fixed-telemetry-bar">
         <div className="telemetry-track">
           <div className="telemetry-fill" style={{ width: `${(scrollProgress * 100).toFixed(1)}%` }} />
@@ -246,29 +246,29 @@ export default function LandingPage() {
             {activeStage === 7 && `Verified Real Practitioner Story`}
             {activeStage === 8 && 'Branching Trajectories & Complete Tool Access'}
           </span>
-          <span className="telemetry-scroll-hint">Scroll down to continue ↓</span>
+          <span className="telemetry-scroll-hint">Scroll to navigate astrolabe ↓</span>
         </div>
       </div>
 
-      {/* 8 CONTINUOUS EDITORIAL STAGES */}
+      {/* 8 CONTINUOUS EDITORIAL DOSSIER STAGES */}
       <main className="stages-container">
 
         {/* STAGE 01: HERO & POSSIBILITY */}
         <section id="stage-1" className="stage-section">
           <div className="stage-card hero-dossier-card">
             <div className="hero-eyebrow">
-              <span className="badge-pill pulse-lime">15,000+ VERIFIED CAREERS</span>
+              <span className="badge-pill pulse-gold">15,000+ VERIFIED CAREERS</span>
               <span className="badge-pill">10,000+ AUDITED UNIVERSITIES</span>
               <span className="badge-pill">REAL SALARY DATA</span>
             </div>
 
             <h1 className="hero-main-heading">
-              WHAT COULD<br /><span className="text-highlight-lime">YOU BECOME?</span>
+              WHAT COULD<br /><span className="text-highlight-gold">YOU BECOME?</span>
             </h1>
 
             <p className="hero-main-subtitle">
-              The world’s most comprehensive career discovery atlas. Explore authentic compensation bands,
-              true-cost degrees, educational blueprints, and verified human trajectories.
+              The definitive navigational atlas of global professions. Explore verified compensation bands,
+              true-cost degrees, educational blueprints, and real human trajectories.
             </p>
 
             {/* Live Search Input */}
@@ -302,7 +302,7 @@ export default function LandingPage() {
             </div>
 
             <div className="hero-quick-pills">
-              <span className="pill-title">Popular Blueprints:</span>
+              <span className="pill-title">Featured Blueprints:</span>
               <button className="pill-btn" onClick={() => { setSelectedCareerKey('Biomedical Engineer'); scrollToStage(3); }}>🩺 Biomedical Engineer</button>
               <button className="pill-btn" onClick={() => { setSelectedCareerKey('AI Research Scientist'); scrollToStage(3); }}>⚡ AI Research Scientist</button>
               <Link to="/explore" className="pill-link">Explore All 15,000+ Careers →</Link>
@@ -310,7 +310,7 @@ export default function LandingPage() {
 
             <div className="stage-actions-bar center-actions">
               <button className="cta-primary-btn" onClick={() => scrollToStage(2)}>
-                Start Career Journey <ChevronDown size={18} />
+                Start Astrolabe Journey <ChevronDown size={18} />
               </button>
             </div>
           </div>
@@ -363,10 +363,10 @@ export default function LandingPage() {
         <section id="stage-3" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <div className="stage-tag-badge accent-lime">STAGE 03 · CAREER SPOTLIGHT</div>
+              <div className="stage-tag-badge accent-gold">STAGE 03 · CAREER SPOTLIGHT</div>
               <div className="title-with-pill">
                 <h1 className="career-big-title">{activeCareer.title}</h1>
-                <span className="status-pill-lime">{activeCareer.growthBadge}</span>
+                <span className="status-pill-gold">{activeCareer.growthBadge}</span>
               </div>
               <p className="career-big-tagline">{activeCareer.tagline}</p>
             </div>
@@ -374,24 +374,24 @@ export default function LandingPage() {
             <div className="spotlight-metric-cards">
               <div className="metric-box">
                 <span className="metric-label">Annual Compensation</span>
-                <strong className="metric-val text-lime">{activeCareer.salaryINR}</strong>
+                <strong className="metric-val text-gold">{activeCareer.salaryINR}</strong>
                 <span className="metric-sub">{activeCareer.salaryUSD}</span>
               </div>
               <div className="metric-box">
                 <span className="metric-label">Market Demand Velocity</span>
-                <strong className="metric-val text-sky">{activeCareer.growth}</strong>
+                <strong className="metric-val text-white">{activeCareer.growth}</strong>
                 <span className="metric-sub">94% Placement Stability</span>
               </div>
               <div className="metric-box">
                 <span className="metric-label">Education Horizon</span>
-                <strong className="metric-val text-purple">{activeCareer.duration}</strong>
+                <strong className="metric-val text-gold-dim">{activeCareer.duration}</strong>
                 <span className="metric-sub">Undergraduate + Hands-on Labs</span>
               </div>
             </div>
 
             <div className="stage-actions-bar">
               <button className="cta-secondary-btn" onClick={() => scrollToStage(4)}>
-                Inspect Skills & AI Exposure ↓
+                Inspect Skills & AI Defense ↓
               </button>
               <button className="cta-primary-btn" onClick={() => scrollToStage(5)}>
                 View 5-Step Trajectory <ChevronRight size={18} />
@@ -404,7 +404,7 @@ export default function LandingPage() {
         <section id="stage-4" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <div className="stage-tag-badge accent-purple">STAGE 04 · PROFESSIONAL ANATOMY</div>
+              <div className="stage-tag-badge accent-gold">STAGE 04 · PROFESSIONAL ANATOMY</div>
               <h2 className="stage-title">{activeCareer.title} — Skills & AI Resilience</h2>
               <p className="stage-desc">Verified competency requirements and real compensation progression.</p>
             </div>
@@ -412,7 +412,7 @@ export default function LandingPage() {
             <div className="details-two-col">
               {/* Technical Stack */}
               <div className="detail-card">
-                <h3 className="card-subhead"><Cpu size={18} className="text-purple" /> Technical Competencies</h3>
+                <h3 className="card-subhead"><Cpu size={18} className="text-gold" /> Technical Competencies</h3>
                 <div className="skills-stack-list">
                   {activeCareer.skills.map((sk, i) => (
                     <div key={i} className="skill-meter-row">
@@ -430,7 +430,7 @@ export default function LandingPage() {
                 <div className="ai-resilience-box">
                   <div className="ai-head">
                     <span className="ai-title">🛡️ AI Defense Score</span>
-                    <strong className="ai-rating text-lime">{activeCareer.aiResilience}</strong>
+                    <strong className="ai-rating text-gold">{activeCareer.aiResilience}</strong>
                   </div>
                   <span className="ai-tag">{activeCareer.aiRiskLevel}</span>
                   <p className="ai-desc">
@@ -441,7 +441,7 @@ export default function LandingPage() {
 
               {/* Salary Progression Ladder */}
               <div className="detail-card">
-                <h3 className="card-subhead"><DollarSign size={18} className="text-lime" /> Compensation Progression</h3>
+                <h3 className="card-subhead"><DollarSign size={18} className="text-gold" /> Compensation Progression</h3>
                 <div className="salary-tier-ladder">
                   <div className="ladder-step">
                     <div className="ladder-meta">
@@ -455,14 +455,14 @@ export default function LandingPage() {
                       <span className="ladder-rank">Mid Level (3–6 yrs)</span>
                       <span className="ladder-role">Senior Systems Specialist</span>
                     </div>
-                    <strong className="ladder-amt text-lime">{activeCareer.salaryMid}</strong>
+                    <strong className="ladder-amt text-gold">{activeCareer.salaryMid}</strong>
                   </div>
                   <div className="ladder-step">
                     <div className="ladder-meta">
                       <span className="ladder-rank">Lead / Principal (7+ yrs)</span>
                       <span className="ladder-role">Staff Architect / Director</span>
                     </div>
-                    <strong className="ladder-amt text-purple">{activeCareer.salarySenior}</strong>
+                    <strong className="ladder-amt text-white">{activeCareer.salarySenior}</strong>
                   </div>
                 </div>
 
@@ -485,7 +485,7 @@ export default function LandingPage() {
         <section id="stage-5" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <div className="stage-tag-badge accent-pink">STAGE 05 · EDUCATIONAL ROADMAP</div>
+              <div className="stage-tag-badge accent-gold">STAGE 05 · EDUCATIONAL ROADMAP</div>
               <h2 className="stage-title">The 5-Step Trajectory to Mastery</h2>
               <p className="stage-desc">From secondary high school foundational subjects to senior industry leadership.</p>
             </div>
@@ -520,7 +520,7 @@ export default function LandingPage() {
         <section id="stage-6" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <div className="stage-tag-badge accent-sky">STAGE 06 · TARGET ACADEMIES</div>
+              <div className="stage-tag-badge accent-gold">STAGE 06 · TARGET ACADEMIES</div>
               <h2 className="stage-title">Top Audited Universities for {activeCareer.title}</h2>
               <p className="stage-desc">Audited from our 10,000+ global higher education database with verified placement statistics.</p>
             </div>
@@ -530,7 +530,7 @@ export default function LandingPage() {
                 <div key={i} className="uni-spotlight-card">
                   <div className="uni-head">
                     <div className="uni-icon-box">
-                      <Building2 size={24} className="text-sky" />
+                      <Building2 size={24} className="text-gold" />
                     </div>
                     <div className="uni-titles">
                       <div className="uni-name-row">
@@ -548,11 +548,11 @@ export default function LandingPage() {
                     </div>
                     <div className="u-stat">
                       <span className="u-stat-lbl">Average CTC</span>
-                      <strong className="u-stat-val text-lime">{u.avgCTC}</strong>
+                      <strong className="u-stat-val text-gold">{u.avgCTC}</strong>
                     </div>
                     <div className="u-stat">
                       <span className="u-stat-lbl">Placement ROI</span>
-                      <strong className="u-stat-val text-purple">{u.roi}</strong>
+                      <strong className="u-stat-val text-white">{u.roi}</strong>
                     </div>
                   </div>
                 </div>
@@ -574,7 +574,7 @@ export default function LandingPage() {
         <section id="stage-7" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <div className="stage-tag-badge accent-teal">STAGE 07 · VERIFIED CAREER TWIN</div>
+              <div className="stage-tag-badge accent-gold">STAGE 07 · VERIFIED CAREER TWIN</div>
               <h2 className="stage-title">Real Human Journey & Tactical Advice</h2>
               <p className="stage-desc">Verified real-world experience, career pivot points, and guidance.</p>
             </div>
@@ -587,7 +587,7 @@ export default function LandingPage() {
                 <div className="twin-text-meta">
                   <div className="twin-title-flex">
                     <strong className="twin-name">{activeCareer.twin.name}</strong>
-                    <span className="verified-badge"><BadgeCheck size={16} className="text-teal" /> Verified Practitioner</span>
+                    <span className="verified-badge"><BadgeCheck size={16} className="text-gold" /> Verified Practitioner</span>
                   </div>
                   <span className="twin-role">{activeCareer.twin.role} · <span className="text-cream">{activeCareer.twin.org}</span></span>
                   <span className="twin-edu">{activeCareer.twin.education} · {activeCareer.twin.exp}</span>
@@ -599,7 +599,7 @@ export default function LandingPage() {
                 <p className="story-para">{activeCareer.twin.story}</p>
 
                 <div className="advice-callout">
-                  <span className="advice-badge">Practitioner Advice:</span>
+                  <span className="advice-badge">Practitioner Guidance:</span>
                   <blockquote className="twin-quote">
                     "{activeCareer.twin.advice}"
                   </blockquote>
@@ -619,7 +619,7 @@ export default function LandingPage() {
         <section id="stage-8" className="stage-section">
           <div className="stage-card">
             <div className="stage-header">
-              <div className="stage-tag-badge accent-purple">STAGE 08 · BRANCHING POSSIBILITIES</div>
+              <div className="stage-tag-badge accent-gold">STAGE 08 · BRANCHING POSSIBILITIES</div>
               <h2 className="stage-title">Where Can You Branch Next?</h2>
               <p className="stage-desc">Connected high-yield career paths sharing your core competencies and interests.</p>
             </div>
@@ -652,16 +652,16 @@ export default function LandingPage() {
                 <p>Access our complete suite of deep AI tools, comparison engines, and 10,000+ university audits.</p>
               </div>
               <div className="cluster-buttons">
-                <Link to="/explore" className="btn-solid-lime">
+                <Link to="/explore" className="btn-solid-gold">
                   <Compass size={18} /> Search 15,000+ Careers
                 </Link>
-                <Link to="/quiz" className="btn-solid-purple">
+                <Link to="/quiz" className="btn-solid-white">
                   <Zap size={18} /> 30-Question Assessment
                 </Link>
-                <Link to="/reports" className="btn-solid-sky">
+                <Link to="/reports" className="btn-solid-gold-dim">
                   <GraduationCap size={18} /> 10,000 Universities
                 </Link>
-                <Link to="/compare" className="btn-outline-cream">
+                <Link to="/compare" className="btn-outline-gold">
                   <Layers size={18} /> Compare Trajectories
                 </Link>
               </div>
