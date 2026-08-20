@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, 
-  Calculator, HelpCircle, ArrowRight, Globe, ExternalLink, Search, MessageSquare, Zap
+  Calculator, HelpCircle, ArrowRight, Globe, Search, Zap, CheckCircle2
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { processCopilotQuery } from '../services/copilotEngine';
@@ -19,7 +19,7 @@ const SUGGESTIONS = [
   "Explain 2026 AI automation risk for junior developers"
 ];
 
-// Helper to render basic markdown safely
+// Helper to render basic markdown safely in-app
 function FormattedAiText({ text }) {
   if (!text) return null;
 
@@ -55,7 +55,9 @@ function FormattedAiText({ text }) {
       currentList.push(trimmed.replace(/^\d+\.\s/, ''));
     } else {
       flushList(i);
-      if (trimmed.startsWith('### ')) {
+      if (trimmed.startsWith('#### ')) {
+        elements.push(<h5 key={i} className="ai-markdown-h5">{trimmed.substring(5)}</h5>);
+      } else if (trimmed.startsWith('### ')) {
         elements.push(<h4 key={i} className="ai-markdown-h4">{trimmed.substring(4)}</h4>);
       } else if (trimmed.startsWith('## ')) {
         elements.push(<h3 key={i} className="ai-markdown-h3">{trimmed.substring(3)}</h3>);
@@ -78,7 +80,7 @@ export default function CopilotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "Hello! I am your Career Atlas Intelligence Copilot, directly linked with deep multi-domain AI reasoning, Google Search, and ChatGPT. Ask me anything about career salaries, 2026 university cutoffs, true study costs abroad, or sports ecosystems worldwide."
+      text: "### ✦ Career Atlas Instant Intelligence & Search Engine\nHello! I am your in-app Copilot. Ask me any question about career pathways, true study costs abroad, 2026 college cutoffs, salary benchmarks, or sports professions. All data and search analysis are delivered **directly right here in this chat** without leaving the application."
     }
   ]);
   const [input, setInput] = useState('');
@@ -113,21 +115,10 @@ export default function CopilotPage() {
           id: Date.now() + 1,
           sender: 'ai',
           text: result.text,
-          actionLink: result.actionLink,
-          sources: result.sources || []
+          actionLink: result.actionLink
         }
       ]);
-    }, 400);
-  };
-
-  const handleDirectGoogleSearch = () => {
-    const query = input.trim() || "Top careers and university cutoffs 2026";
-    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-  };
-
-  const handleDirectChatGPT = () => {
-    const query = input.trim() || "Provide detailed career analysis and salary benchmarks for 2026";
-    window.open(`https://chatgpt.com/?q=${encodeURIComponent(query)}`, '_blank');
+    }, 350);
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -139,19 +130,19 @@ export default function CopilotPage() {
       <Navbar />
 
       <main className="copilot-container">
-        {/* Header with Live Direct Engine Badges */}
+        {/* Header with Direct In-App Intelligence Badges */}
         <div className="copilot-header">
           <div className="copilot-badges-bar">
             <div className="badge-pill">✦ Career Intelligence Copilot</div>
             <div className="gemini-status-pill active">
               <Zap size={13} className="text-green" />
-              <span>Direct Google Search & ChatGPT Link Active (No API Key Required)</span>
+              <span>Direct In-App Search & AI Synthesis Active</span>
             </div>
           </div>
 
           <h1 className="copilot-title">AI Career & Admissions Advisor</h1>
           <p className="copilot-subtitle">
-            Directly connected with Google Search and ChatGPT engines for instant, zero-barrier career intelligence.
+            Instant, direct answers for 15,000+ careers, 10,000+ university cutoffs, true costs, and salary benchmarks — delivered right in this chat.
           </p>
         </div>
 
@@ -165,32 +156,6 @@ export default function CopilotPage() {
                 </div>
                 <div className="message-bubble">
                   <FormattedAiText text={msg.text} />
-
-                  {/* Google Search & ChatGPT Live Action Cards */}
-                  {msg.sources && msg.sources.length > 0 && (
-                    <div className="grounding-sources-block">
-                      <div className="grounding-title">
-                        <Globe size={13} className="text-cyan" /> Direct Search & AI Engines:
-                      </div>
-                      <div className="grounding-chips">
-                        {msg.sources.map((src, i) => (
-                          <a 
-                            key={i} 
-                            href={src.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className={`source-chip ${src.type || ''}`}
-                          >
-                            {src.type === 'google' && <Search size={13} />}
-                            {src.type === 'chatgpt' && <MessageSquare size={13} />}
-                            {src.type === 'scholar' && <GraduationCap size={13} />}
-                            <span>{src.title}</span>
-                            <ExternalLink size={11} />
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
 
                   {/* Direct Internal Atlas Action Link */}
                   {msg.actionLink && (
@@ -226,37 +191,16 @@ export default function CopilotPage() {
             ))}
           </div>
 
-          {/* Chat Input Bar with Direct Launchers */}
+          {/* Chat Input Bar */}
           <form onSubmit={handleSend} className="chat-input-form">
             <input
               type="text"
-              placeholder="Ask anything about careers, salaries, 2026 cutoffs, study abroad costs, or sports..."
+              placeholder="Ask anything (e.g. top CS colleges, Germany tuition, sports physiotherapist salary, AI layoff risk)..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
             
-            {/* Quick 1-Click Search Engine Launchers */}
-            <button 
-              type="button" 
-              className="btn-quick-engine google"
-              onClick={handleDirectGoogleSearch}
-              title="Search this query on Google"
-            >
-              <Search size={15} />
-              <span className="desktop-only">Google</span>
-            </button>
-
-            <button 
-              type="button" 
-              className="btn-quick-engine chatgpt"
-              onClick={handleDirectChatGPT}
-              title="Ask this query on ChatGPT"
-            >
-              <MessageSquare size={15} />
-              <span className="desktop-only">ChatGPT</span>
-            </button>
-
-            {/* In-App Send */}
+            {/* In-App Send Button */}
             <button type="submit" className="btn-send" disabled={!input.trim()} title="Ask Copilot">
               <Send size={18} />
             </button>

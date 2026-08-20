@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CAREER ATLAS — Copilot Intelligence (Google Search & ChatGPT Connected)
+   CAREER ATLAS — Copilot Intelligence (Direct In-App Search & AI Synthesis)
    ========================================================================== */
 
 .copilot-page {
@@ -96,7 +96,7 @@
 .message-row {
   display: flex;
   gap: 0.85rem;
-  max-width: 88%;
+  max-width: 90%;
   align-items: flex-start;
 }
 
@@ -132,10 +132,10 @@
 }
 
 .message-bubble {
-  padding: 1.15rem 1.4rem;
-  border-radius: 18px;
-  line-height: 1.6;
-  font-size: 0.92rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 20px;
+  line-height: 1.65;
+  font-size: 0.94rem;
   box-shadow: var(--shadow-sm);
   max-width: 100%;
   overflow-wrap: break-word;
@@ -163,12 +163,13 @@
 .ai-markdown-container {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
-.ai-markdown-h2 { font-size: 1.35rem; font-weight: 900; color: var(--text-primary); margin: 0.4rem 0 0.2rem; }
-.ai-markdown-h3 { font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0.35rem 0 0.2rem; }
-.ai-markdown-h4 { font-size: 1.02rem; font-weight: 800; color: var(--accent-cyan); margin: 0.25rem 0 0.15rem; }
+.ai-markdown-h2 { font-size: 1.35rem; font-weight: 900; color: var(--text-primary); margin: 0.5rem 0 0.2rem; }
+.ai-markdown-h3 { font-size: 1.2rem; font-weight: 900; color: var(--text-primary); margin: 0.4rem 0 0.2rem; }
+.ai-markdown-h4 { font-size: 1.05rem; font-weight: 800; color: var(--accent-cyan); margin: 0.35rem 0 0.15rem; }
+.ai-markdown-h5 { font-size: 0.95rem; font-weight: 800; color: #F59E0B; margin: 0.25rem 0 0.1rem; }
 
 .ai-markdown-p {
   margin: 0;
@@ -212,80 +213,9 @@
   font-weight: 800;
 }
 
-/* Grounding Sources Block */
-.grounding-sources-block {
-  margin-top: 1.1rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border-subtle);
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-}
-
-[data-theme="light"] .grounding-sources-block {
-  background: rgba(0, 0, 0, 0.03);
-}
-
-.grounding-title {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.74rem;
-  font-weight: 800;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.grounding-chips {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.source-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  color: var(--text-primary);
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-.source-chip:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.source-chip.google {
-  border-color: rgba(66, 133, 244, 0.4);
-  color: #60A5FA;
-  background: rgba(59, 130, 246, 0.08);
-}
-
-.source-chip.chatgpt {
-  border-color: rgba(16, 163, 127, 0.4);
-  color: #34D399;
-  background: rgba(16, 185, 129, 0.08);
-}
-
-.source-chip.scholar {
-  border-color: rgba(245, 158, 11, 0.4);
-  color: #FBBF24;
-  background: rgba(245, 158, 11, 0.08);
-}
-
 .ai-action-link-box {
-  margin-top: 0.85rem;
-  padding-top: 0.65rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -365,7 +295,7 @@
 }
 
 /* ==========================================================================
-   CHAT INPUT FORM & ENGINE LAUNCHERS
+   CHAT INPUT FORM
    ========================================================================== */
 
 .chat-input-form {
@@ -392,42 +322,6 @@
 .chat-input-form input:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 0 3px var(--accent-cyan-dim);
-}
-
-.btn-quick-engine {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.75rem 0.9rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.btn-quick-engine.google {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  color: #60A5FA;
-}
-
-.btn-quick-engine.google:hover {
-  background: rgba(59, 130, 246, 0.2);
-  transform: translateY(-1px);
-}
-
-.btn-quick-engine.chatgpt {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34D399;
-}
-
-.btn-quick-engine.chatgpt:hover {
-  background: rgba(16, 185, 129, 0.2);
-  transform: translateY(-1px);
 }
 
 .btn-send {
