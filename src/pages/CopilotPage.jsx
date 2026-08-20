@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, 
   Calculator, HelpCircle, ArrowRight, Globe, Search, MessageSquare, Zap, ExternalLink,
-  CheckCircle2, TrendingUp, ShieldCheck
+  CheckCircle2, TrendingUp, ShieldCheck, ArrowUpRight
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { processCopilotQuery } from '../services/copilotEngine';
@@ -170,11 +170,11 @@ export default function CopilotPage() {
                 <div className="message-bubble">
                   <FormattedAiText text={msg.text} />
 
-                  {/* Google Search & ChatGPT Quick Action Chips */}
+                  {/* Google Search & ChatGPT Verification Dock */}
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="grounding-sources-block">
                       <div className="grounding-title">
-                        <Globe size={13} className="text-cyan" /> Instant Search & AI Query Triggers:
+                        <Globe size={13} className="text-cyan" /> Verify on Live Engines:
                       </div>
                       <div className="grounding-chips">
                         {msg.sources.map((src, i) => (
@@ -185,11 +185,18 @@ export default function CopilotPage() {
                             rel="noopener noreferrer" 
                             className={`source-chip ${src.type || ''}`}
                           >
-                            {src.type === 'google' && <Search size={13} />}
-                            {src.type === 'chatgpt' && <MessageSquare size={13} />}
-                            {src.type === 'scholar' && <GraduationCap size={13} />}
-                            <span>{src.title}</span>
-                            <ExternalLink size={11} />
+                            <span className="chip-icon">
+                              {src.type === 'google' && <Search size={14} />}
+                              {src.type === 'chatgpt' && <MessageSquare size={14} />}
+                              {src.type === 'scholar' && <GraduationCap size={14} />}
+                            </span>
+                            <span className="chip-text">
+                              {src.type === 'google' && 'Search on Google'}
+                              {src.type === 'chatgpt' && 'Ask ChatGPT'}
+                              {src.type === 'scholar' && 'Google Scholar'}
+                              {!['google', 'chatgpt', 'scholar'].includes(src.type) && src.title}
+                            </span>
+                            <ArrowUpRight size={13} className="chip-arrow" />
                           </a>
                         ))}
                       </div>
@@ -230,7 +237,7 @@ export default function CopilotPage() {
             ))}
           </div>
 
-          {/* Chat Input Bar */}
+          {/* Chat Input Bar with Executive Google & ChatGPT Launchers */}
           <form onSubmit={handleSend} className="chat-input-form">
             <input
               type="text"
@@ -239,25 +246,27 @@ export default function CopilotPage() {
               onChange={(e) => setInput(e.target.value)}
             />
             
-            {/* Quick 1-Click Launchers */}
+            {/* Quick 1-Click Search Engine Launchers */}
             <button 
               type="button" 
               className="btn-quick-engine google"
               onClick={handleDirectGoogleSearch}
-              title="Search this query on Google"
+              title="Search query directly on Google in a new tab"
             >
               <Search size={15} />
-              <span className="desktop-only">Google</span>
+              <span className="engine-label">Search Google</span>
+              <ArrowUpRight size={12} className="engine-sub-icon" />
             </button>
 
             <button 
               type="button" 
               className="btn-quick-engine chatgpt"
               onClick={handleDirectChatGPT}
-              title="Ask this query on ChatGPT"
+              title="Prompt ChatGPT with this query in a new tab"
             >
               <MessageSquare size={15} />
-              <span className="desktop-only">ChatGPT</span>
+              <span className="engine-label">Ask ChatGPT</span>
+              <ArrowUpRight size={12} className="engine-sub-icon" />
             </button>
 
             {/* In-App Send Button */}
