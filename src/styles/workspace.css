@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CAREER ATLAS — Workspace & CV Intelligence Studio (Theme-Aware & High Contrast)
+   CAREER ATLAS — Workspace & CV Intelligence Studio (Executive Grade / High Contrast)
    ========================================================================== */
 
 .workspace-page {
@@ -81,7 +81,10 @@
   margin-top: 1.5rem;
 }
 
-/* Top Toolbar Card Box */
+/* ==========================================================================
+   CV BUILDER & EDITOR CONTROLS
+   ========================================================================== */
+
 .cv-top-toolbar {
   display: flex;
   justify-content: space-between;
@@ -112,11 +115,11 @@
 }
 
 .cv-select {
-  background: var(--bg-secondary);
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border-medium);
   color: var(--text-primary);
   border-radius: 10px;
-  padding: 0.45rem 2rem 0.45rem 0.85rem;
+  padding: 0.45rem 2.2rem 0.45rem 0.85rem;
   font-size: 0.84rem;
   font-weight: 600;
   outline: none;
@@ -129,6 +132,7 @@
   border-radius: 18px;
   padding: 1.5rem 1.75rem;
   box-shadow: var(--shadow-md);
+  margin: 1.25rem 0;
 }
 
 .banner-title {
@@ -233,14 +237,18 @@
   border-color: var(--accent-cyan);
 }
 
-/* CV Editor Grid */
+/* ==========================================================================
+   CV EDITOR FORM & TEXTBOXES
+   ========================================================================== */
+
 .cv-editor-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.95fr;
+  grid-template-columns: 1.1fr 1fr;
   gap: 1.75rem;
+  align-items: flex-start;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   .cv-editor-grid {
     grid-template-columns: 1fr;
   }
@@ -260,35 +268,35 @@
   box-shadow: var(--shadow-md);
 }
 
-.editor-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.editor-card-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.group-title {
   font-size: 1.05rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.form-grid-2 {
+.grid-2-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  .grid-2-col {
+    grid-template-columns: 1fr;
+  }
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  margin-bottom: 0.85rem;
 }
 
 .form-group label {
@@ -300,7 +308,10 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.sub-entry-box input,
+.sub-entry-box textarea {
+  width: 100%;
   background: var(--bg-secondary);
   border: 1px solid var(--border-medium);
   border-radius: 10px;
@@ -313,60 +324,283 @@
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.sub-entry-box input:focus,
+.sub-entry-box textarea:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 0 3px var(--accent-cyan-dim);
 }
 
-.bullet-item-card {
+.sub-entry-box {
   background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
-}
-
-.bullet-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-/* CV Preview Container Box */
-.cv-preview-shell {
-  background: var(--bg-card);
   border: 1px solid var(--border-medium);
-  border-radius: 18px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-lg);
+  border-radius: 14px;
+  padding: 1.15rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-text-danger {
+  background: transparent;
+  border: none;
+  color: var(--accent-red);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  display: inline-block;
+  transition: opacity 0.15s ease;
+}
+
+.btn-text-danger:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   POLISHED ATS RESUME LIVE PREVIEW SHEET
+   ========================================================================== */
+
+.cv-live-preview-container {
   position: sticky;
   top: 5.5rem;
-  height: fit-content;
-  max-height: calc(100vh - 7rem);
+  max-height: calc(100vh - 6.5rem);
   overflow-y: auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow-xl);
 }
 
-.cv-preview-paper {
+.cv-ats-sheet {
+  border-radius: 16px;
+  padding: 2.5rem 2.25rem;
+  min-height: 800px;
+  box-shadow: var(--shadow-lg);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+}
+
+/* 1. Gen Z Minimal Dark Theme */
+.cv-ats-sheet.minimal-dark {
+  background: #0E0F15;
+  color: #F1F5F9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-body);
+}
+
+.cv-ats-sheet.minimal-dark .ats-name {
+  color: #FFFFFF;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.cv-ats-sheet.minimal-dark .ats-target-title {
+  color: var(--accent-cyan);
+  font-weight: 800;
+  font-size: 1rem;
+  margin: 0.15rem 0 0.4rem;
+}
+
+.cv-ats-sheet.minimal-dark .ats-contact {
+  color: #94A3B8;
+  font-size: 0.78rem;
+}
+
+.cv-ats-sheet.minimal-dark .ats-section-heading {
+  color: var(--accent-gold);
+  border-bottom: 1.5px solid rgba(167, 139, 250, 0.25);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding-bottom: 0.35rem;
+  margin: 1.25rem 0 0.65rem;
+  text-transform: uppercase;
+}
+
+.cv-ats-sheet.minimal-dark .ats-entry-header strong {
+  color: #FFFFFF;
+  font-weight: 800;
+}
+
+.cv-ats-sheet.minimal-dark .ats-entry-header span {
+  color: #94A3B8;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.cv-ats-sheet.minimal-dark .ats-loc {
+  color: #64748B;
+  font-size: 0.75rem;
+}
+
+.cv-ats-sheet.minimal-dark .ats-bullet {
+  color: #CBD5E1;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 0.35rem;
+}
+
+/* 2. Classic ATS White Paper Theme */
+.cv-ats-sheet.ats-classic {
   background: #FFFFFF;
-  color: #111827;
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  font-family: 'Inter', -apple-system, sans-serif;
-  line-height: 1.45;
-  font-size: 0.84rem;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 }
 
-/* Dark theme monospace override when chosen */
-.cv-preview-paper.theme-mono {
-  background: #0D0F14;
+.cv-ats-sheet.ats-classic .ats-name {
+  color: #0F172A;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.cv-ats-sheet.ats-classic .ats-target-title {
+  color: #4338CA;
+  font-weight: 700;
+  font-size: 0.98rem;
+  text-align: center;
+  margin: 0.15rem 0 0.35rem;
+}
+
+.cv-ats-sheet.ats-classic .ats-contact {
+  color: #475569;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.cv-ats-sheet.ats-classic .ats-section-heading {
+  color: #1E293B;
+  border-bottom: 1.5px solid #0F172A;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding-bottom: 0.25rem;
+  margin: 1.25rem 0 0.65rem;
+  text-transform: uppercase;
+}
+
+.cv-ats-sheet.ats-classic .ats-entry-header strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+.cv-ats-sheet.ats-classic .ats-entry-header span {
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.cv-ats-sheet.ats-classic .ats-loc {
+  color: #64748B;
+  font-size: 0.75rem;
+}
+
+.cv-ats-sheet.ats-classic .ats-bullet {
+  color: #334155;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 0.35rem;
+}
+
+/* 3. Systems & Quant Monospace Theme */
+.cv-ats-sheet.systems-mono {
+  background: #090B10;
   color: #E2E8F0;
   border: 1px solid #1E293B;
   font-family: var(--font-mono);
 }
 
-/* COMPANY RESEARCH TAB STYLES */
+.cv-ats-sheet.systems-mono .ats-name {
+  color: #4ADE80;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.cv-ats-sheet.systems-mono .ats-target-title {
+  color: #38BDF8;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin: 0.2rem 0;
+}
+
+.cv-ats-sheet.systems-mono .ats-contact {
+  color: #64748B;
+  font-size: 0.75rem;
+}
+
+.cv-ats-sheet.systems-mono .ats-section-heading {
+  color: #38BDF8;
+  border-bottom: 1px dashed #334155;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding-bottom: 0.3rem;
+  margin: 1.25rem 0 0.65rem;
+  letter-spacing: 0.05em;
+}
+
+.cv-ats-sheet.systems-mono .ats-bullet {
+  color: #94A3B8;
+  font-size: 0.78rem;
+  margin-bottom: 0.3rem;
+}
+
+.ats-header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ats-entry {
+  margin-bottom: 0.85rem;
+}
+
+.ats-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.15rem;
+}
+
+.ats-skills-line {
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.ats-tools {
+  font-size: 0.76rem;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.ats-desc-p {
+  font-size: 0.82rem;
+  color: inherit;
+  line-height: 1.5;
+  margin-top: 0.25rem;
+}
+
+.ats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ats-list li {
+  font-size: 0.82rem;
+  color: inherit;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   COMPANY RESEARCH & EXPLORER
+   ========================================================================== */
+
 .company-explorer-header {
   display: flex;
   justify-content: space-between;
@@ -480,7 +714,10 @@
   color: var(--accent-green);
 }
 
-/* APPLICATION TRACKER KANBAN */
+/* ==========================================================================
+   APPLICATION TRACKER KANBAN
+   ========================================================================== */
+
 .kanban-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -581,7 +818,10 @@
   color: var(--text-muted);
 }
 
-/* INTERVIEW PREP & QA */
+/* ==========================================================================
+   INTERVIEW PREP & QA CARDS
+   ========================================================================== */
+
 .interview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
