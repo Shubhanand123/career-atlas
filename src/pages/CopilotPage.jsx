@@ -3,23 +3,24 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Bot, User, Sparkles, Compass, GraduationCap, Trophy, Briefcase, 
-  Calculator, HelpCircle, ArrowRight, Globe, Search, MessageSquare, Zap, ExternalLink
+  Calculator, HelpCircle, ArrowRight, Globe, Search, MessageSquare, Zap, ExternalLink,
+  CheckCircle2, TrendingUp, ShieldCheck
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { processCopilotQuery } from '../services/copilotEngine';
 import '../styles/copilot.css';
 
 const SUGGESTIONS = [
-  "What career suits my strengths? (30-Q Quiz)",
-  "How much does studying in Germany actually cost?",
-  "Explore sports careers other than athlete",
-  "How do I bridge skill gaps for AI engineering?",
-  "Compare Software Engineering vs Quant Finance",
-  "Top universities with high placement ROI",
-  "Explain 2026 AI automation risk for junior developers"
+  "🎯 What career suits my strengths? (30-Q Quiz)",
+  "🇩🇪 How much does studying in Germany actually cost?",
+  "🏅 Explore sports careers other than athlete",
+  "⚡ High-yield skill combos for ₹50L+ salary",
+  "📈 Compare Software Engineering vs Quant Finance",
+  "🏛️ Top engineering universities & 2026 cutoffs",
+  "🤖 Explain 2026 AI automation risk for junior roles"
 ];
 
-// Helper to render basic markdown safely in-app
+// Helper to render basic markdown safely with executive UI typography
 function FormattedAiText({ text }) {
   if (!text) return null;
 
@@ -80,7 +81,7 @@ export default function CopilotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "### ✦ Career Atlas Intelligence & Live Search Engine\nHello! I am your Copilot. Ask me any question about career compensation, 2026 university admissions, true living costs abroad, or sports professions. All data and analysis are generated **directly right inside this chat** with instant Google & ChatGPT search links."
+      text: "### ✦ Career Atlas Intelligence & Search Engine\nHello! I am your Copilot. Ask me any question about career compensation, 2026 university admissions, true living costs abroad, sports professions, or skill multipliers. All data and analysis are generated **directly right inside this chat** with instant Google & ChatGPT search links."
     }
   ]);
   const [input, setInput] = useState('');
@@ -133,7 +134,8 @@ export default function CopilotPage() {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setInput(suggestion);
+    const cleanText = suggestion.replace(/^[^\w\s]+\s*/, '');
+    setInput(cleanText);
   };
 
   return (
@@ -153,7 +155,7 @@ export default function CopilotPage() {
 
           <h1 className="copilot-title">AI Career & Admissions Advisor</h1>
           <p className="copilot-subtitle">
-            Direct in-app answers and live Google Search & ChatGPT triggers for 15,000+ careers, 10,000+ universities, and real-world economics.
+            Instant multidimensional intelligence for 15,000+ careers, 10,000+ campuses, placement statistics, true living costs, and market resilience.
           </p>
         </div>
 
