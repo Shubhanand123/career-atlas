@@ -2,7 +2,7 @@
 
 :root {
   --bg-deep: #0B0D11;
-  --bg-card: rgba(18, 22, 28, 0.78);
+  --bg-card: rgba(18, 22, 28, 0.82);
   --bg-card-border: rgba(255, 255, 255, 0.1);
   --text-cream: #FBF9F5;
   --text-muted: #9CA3AF;
@@ -18,120 +18,124 @@
   --accent-teal: #14B8A6;
 }
 
-.scrolly-master-wrapper {
+.scrolly-master-page {
   position: relative;
-  height: 800vh;
   background: var(--bg-deep);
   color: var(--text-cream);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* 100vh Pinned Viewport */
-.pinned-stage-viewport {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
+/* FIXED 3D BACKDROP (Pinned across all stages) */
+.fixed-3d-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
   background: radial-gradient(circle at 50% 40%, #151A23 0%, #0B0D11 80%);
 }
 
-/* 3D Canvas Layer */
 .transforming-canvas-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
-  pointer-events: none;
 }
 
-/* Vertical Stage Navigation Rail (Right) */
-.scrolly-stage-rail {
-  position: absolute;
+/* FLOATING STAGE STEPPER (Top / Right) */
+.fixed-stage-stepper {
+  position: fixed;
   right: 2rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  z-index: 30;
+  gap: 0.5rem;
+  z-index: 50;
+  background: rgba(18, 22, 28, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 18px;
+  padding: 0.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.stage-rail-dot {
+.stepper-btn {
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.25rem;
-  outline: none;
-}
-
-.dot-label {
-  font-size: 0.72rem;
-  font-family: monospace;
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
   color: var(--text-muted);
-  opacity: 0.4;
-  transition: all 0.3s ease;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left;
 }
 
-.dot-indicator {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.stepper-tag {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.72rem;
+  opacity: 0.6;
 }
 
-.stage-rail-dot.active .dot-label {
+.stepper-name {
+  white-space: nowrap;
+}
+
+.stepper-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-cream);
-  opacity: 1;
+}
+
+.stepper-btn.active {
+  background: rgba(163, 230, 53, 0.15);
+  border: 1px solid rgba(163, 230, 53, 0.3);
+  color: var(--accent-lime);
   font-weight: 700;
 }
 
-.stage-rail-dot.active .dot-indicator {
-  width: 8px;
-  height: 24px;
-  border-radius: 4px;
-  background: var(--accent-lime);
-  box-shadow: 0 0 12px var(--accent-lime-glow);
+.stepper-btn.active .stepper-tag {
+  opacity: 1;
 }
 
-/* Bottom Progress Bar & Telemetry */
-.scrolly-bottom-bar {
-  position: absolute;
+/* FLOATING TELEMETRY BAR (Bottom) */
+.fixed-telemetry-bar {
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 30;
-  background: linear-gradient(to top, rgba(11, 13, 17, 0.95), transparent);
-  padding: 1.25rem 2.5rem;
+  z-index: 50;
+  background: linear-gradient(to top, rgba(11, 13, 17, 0.96), rgba(11, 13, 17, 0.4));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.85rem 2.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.progress-track {
+.telemetry-track {
   width: 100%;
   height: 3px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 
-.progress-fill {
+.telemetry-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent-purple), var(--accent-sky), var(--accent-lime));
   transition: width 0.1s linear;
 }
 
-.stage-caption-flex {
+.telemetry-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -139,7 +143,7 @@
   color: var(--text-muted);
 }
 
-.stage-num-badge {
+.telemetry-badge {
   font-family: monospace;
   font-weight: 700;
   color: var(--accent-lime);
@@ -149,46 +153,48 @@
   border: 1px solid rgba(163, 230, 53, 0.2);
 }
 
-.stage-name-text {
+.telemetry-caption {
   color: var(--text-cream);
   font-weight: 500;
 }
 
-.scroll-indicator-text {
+.telemetry-scroll-hint {
   font-size: 0.78rem;
   opacity: 0.7;
 }
 
-/* Editorial Stage Cards & Layout */
-.editorial-stage-overlay {
-  position: absolute;
-  inset: 0;
+/* STAGES CONTAINER & INDIVIDUAL SECTIONS */
+.stages-container {
+  position: relative;
   z-index: 10;
+  padding-bottom: 6rem;
+}
+
+.stage-section {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4.5rem 2rem 5rem 2rem;
-  pointer-events: none;
+  padding: 6rem 2rem 5rem 2rem;
+  box-sizing: border-box;
 }
 
-.stage-card-panel {
-  pointer-events: auto;
+.stage-card {
   max-width: 960px;
   width: 100%;
   background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--bg-card-border);
   border-radius: 24px;
   padding: 2.5rem 3rem;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* STAGE 01: HERO CENTER */
-.hero-center-stage {
+/* HERO SECTION (Stage 1) */
+.hero-card {
   text-align: center;
   max-width: 840px;
-  background: rgba(18, 22, 28, 0.65);
 }
 
 .hero-eyebrow {
@@ -927,6 +933,10 @@
   margin-top: 1.5rem;
 }
 
+.stage-actions-bar.center-actions {
+  justify-content: center;
+}
+
 .cta-primary-btn {
   display: inline-flex;
   align-items: center;
@@ -971,10 +981,8 @@
 
 /* Responsive Rules */
 @media (max-width: 900px) {
-  .stage-card-panel {
+  .stage-card {
     padding: 1.5rem;
-    max-height: 80vh;
-    overflow-y: auto;
   }
   .spotlight-metric-cards,
   .details-two-col,
@@ -982,7 +990,13 @@
   .related-cards-grid {
     grid-template-columns: 1fr;
   }
-  .scrolly-stage-rail {
+  .fixed-stage-stepper {
+    display: none;
+  }
+  .fixed-telemetry-bar {
+    padding: 0.75rem 1rem;
+  }
+  .telemetry-caption {
     display: none;
   }
 }
